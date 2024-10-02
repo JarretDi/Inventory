@@ -11,7 +11,7 @@ public class Inventory {
 
     // MODIFIES: this
     // EFFECT: adds given item to this inventory, if already inside increases item quantity
-    public void addItem(){
+    public void addItem(Item item){
 
     }
 
@@ -26,6 +26,12 @@ public class Inventory {
     // MODIFIES: this
     // EFFECT: removes ALL instances of given item from the inventory
     public void removeAllItem(Item item){
+
+    }
+
+    // MODIFIES: this
+    // EFFECT: removes all items from inventory
+    public void clearInventory(){
 
     }
 
