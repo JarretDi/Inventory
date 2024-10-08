@@ -6,16 +6,20 @@ import java.util.ArrayList;
 // arbitrary amount of items as well as the count of each identical element
 public class Inventory {
     private ArrayList<Item> inventory;
+    private Sort sort;
 
     // EFFECT: creates an unsorted Inventory with no items inside of it
     public Inventory() {
         this.inventory = new ArrayList<>();
+        this.sort = new Sort();
     }
 
-    // MODIFIES: this
-    // EFFECT: adds given item to this inventory, if already inside increases item quantity
+    // MODIFIES: this, Sort
+    // EFFECT: adds given item to this inventory
+    //         additionally, changes the inventory's type to unsorted
     public void addItem(Item item) {
         this.inventory.add(item);
+        this.sort.setUnsorted();
     }
 
     // MODIFIES: this
@@ -27,7 +31,7 @@ public class Inventory {
     // MODIFIES: this
     // EFFECT: removes ALL instances of given item from the inventory
     public void removeAllItem(Item item) {
-        while (inventory.contains(item)){
+        while (inventory.contains(item)) {
             inventory.remove(item);
         }
     }
@@ -38,12 +42,17 @@ public class Inventory {
         inventory.clear();
     }
 
-    // REQUIRES: sort is one of "Name", "Type", "Value", "Weight"
+    // REQUIRES: sort is not the Unsort (empty sort)
     // MODIFIES: this
     // EFFECT: sorts an inventory according to sort, and order is whether
     //         ascending(true) or descending(false)
-    public void sort(String sort, Boolean order) {
+    //         additionally changes the sort type to given sort
+    public void sort(Sort sort) {
         // stub
+    }
+
+    public Sort getSort() {
+        return this.sort;
     }
 
     public Item getItem(int index) {
@@ -53,8 +62,8 @@ public class Inventory {
     // EFFECT: returns number of times given item appears in Inventory
     public int getItemCount(Item item) {
         int count = 0;
-        for (Item i:inventory){
-            if (i.equals(item)){
+        for (Item i:inventory) {
+            if (i.equals(item)) {
                 count += 1;
             }
         }
@@ -63,7 +72,7 @@ public class Inventory {
 
     public int getNumItems() {
         int count = 0;
-        for (Item i:inventory){
+        for (Item i:inventory) {
             count += 1;
         }
         return count;
