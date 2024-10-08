@@ -14,8 +14,8 @@ public class InventoryTest {
     @BeforeEach
     void runBefore() {
         testInventory = new Inventory();
-        testItem = new Item("Test Item", "Misc", 1, "A test item.");
-        testWeapon = new Item("Test Weapon", "Weapon", 10, "A test weapon.");
+        testItem = new Item("Test Item", "Misc", 1, 5, "A test item.");
+        testWeapon = new Item("Test Weapon", "Weapon", 10, 15, "A test weapon.");
     }
 
     @Test

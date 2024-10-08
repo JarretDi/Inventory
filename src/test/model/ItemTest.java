@@ -9,15 +9,16 @@ public class ItemTest {
     Item testItem;
 
     @BeforeEach
-    void setup(){
-        testItem = new Item("Test Item", "Misc", 1, "A test item.");
+    void setup() {
+        testItem = new Item("Test Item", "Misc", 1, 5, "A test item.");
     }
 
     @Test
-    void testConstructor(){
+    void testConstructor() {
         assertEquals("Test Item", testItem.getName());
         assertEquals("Misc", testItem.getType());
         assertEquals(1, testItem.getValue());
+        assertEquals(5, testItem.getWeight());
         assertEquals("A test item.", testItem.getDescription());
     }
 }
