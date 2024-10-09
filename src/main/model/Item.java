@@ -2,7 +2,7 @@ package model;
 
 // Represents an item with a specific type, having a:
 // Name, type, value, weight, description
-// Type can be a currency, weapon, armour, consumable or misc
+// Type can be a weapon, armour, consumable, misc or currency
 public class Item {
     private String name;
     private String type;
@@ -25,6 +25,26 @@ public class Item {
 
     public String getType() {
         return this.type;
+    }
+
+    // EFFECT: used for sorting, returns intended priority for types, misc is default
+    public int getTypePriority() {
+        int priority = 4; // value for misc
+        switch(this.type){
+            case "Weapon":
+                priority = 1;
+                break;
+            case "Armour":
+                priority = 2;
+                break;
+            case "Consumable":
+                priority = 3;
+                break;
+            case "Currency":
+                priority = 5;
+                break;
+        }
+        return priority;
     }
 
     public int getValue() {

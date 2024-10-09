@@ -108,75 +108,113 @@ public class InventoryTest {
         assertEquals(testSortInventory.getItem(1), testSort2);
         assertEquals(testSortInventory.getItem(2), testSort3);
         assertEquals(testSortInventory.getItem(3), testSort4);
+
+        assertEquals(testSortInventory.getSort().getSort(), "Name");
+        assertEquals(testSortInventory.getSort().getOrder(), true);
     }
 
     @Test
     void testSortReverseAlphabetical() {
+        assertEquals(emptySort.getSort(), testInventory.getSort().getSort());
+        assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         testSortInventory.sort(new Sort("Name", false));
 
         assertEquals(testSortInventory.getItem(0), testSort4);
         assertEquals(testSortInventory.getItem(1), testSort3);
         assertEquals(testSortInventory.getItem(2), testSort2);
         assertEquals(testSortInventory.getItem(3), testSort1);
+
+        assertEquals(testSortInventory.getSort().getSort(), "Name");
+        assertEquals(testSortInventory.getSort().getOrder(), false);
     }
 
     @Test
     void testSortType() {
+        assertEquals(emptySort.getSort(), testInventory.getSort().getSort());
+        assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         testSortInventory.sort(new Sort("Type", true));
 
         assertEquals(testSortInventory.getItem(0), testSort1);
         assertEquals(testSortInventory.getItem(1), testSort3);
         assertEquals(testSortInventory.getItem(2), testSort2);
         assertEquals(testSortInventory.getItem(3), testSort4);
+
+        assertEquals(testSortInventory.getSort().getSort(), "Type");
+        assertEquals(testSortInventory.getSort().getOrder(), true);
     }
 
     @Test
     void testSortReverseType() {
+        assertEquals(emptySort.getSort(), testInventory.getSort().getSort());
+        assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         testSortInventory.sort(new Sort("Type", false));
 
         assertEquals(testSortInventory.getItem(0), testSort4);
         assertEquals(testSortInventory.getItem(1), testSort2);
         assertEquals(testSortInventory.getItem(2), testSort3);
         assertEquals(testSortInventory.getItem(3), testSort1);
+
+        assertEquals(testSortInventory.getSort().getSort(), "Type");
+        assertEquals(testSortInventory.getSort().getOrder(), false);
     }
 
     @Test
     void testSortValue() {
+        assertEquals(emptySort.getSort(), testInventory.getSort().getSort());
+        assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         testSortInventory.sort(new Sort("Value", true));
 
         assertEquals(testSortInventory.getItem(0), testSort4);
         assertEquals(testSortInventory.getItem(1), testSort3);
         assertEquals(testSortInventory.getItem(2), testSort2);
         assertEquals(testSortInventory.getItem(3), testSort1);
+
+        assertEquals(testSortInventory.getSort().getSort(), "Value");
+        assertEquals(testSortInventory.getSort().getOrder(), true);
     }
 
     @Test
     void testSortReverseValue() {
+        assertEquals(emptySort.getSort(), testInventory.getSort().getSort());
+        assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         testSortInventory.sort(new Sort("Value", false));
 
         assertEquals(testSortInventory.getItem(0), testSort1);
         assertEquals(testSortInventory.getItem(1), testSort2);
         assertEquals(testSortInventory.getItem(2), testSort3);
         assertEquals(testSortInventory.getItem(3), testSort4);
+
+        assertEquals(testSortInventory.getSort().getSort(), "Value");
+        assertEquals(testSortInventory.getSort().getOrder(), false);
     }
 
     @Test
     void testSortWeight() {
+        assertEquals(emptySort.getSort(), testInventory.getSort().getSort());
+        assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         testSortInventory.sort(new Sort("Weight", true));
 
         assertEquals(testSortInventory.getItem(0), testSort2);
         assertEquals(testSortInventory.getItem(1), testSort1);
         assertEquals(testSortInventory.getItem(2), testSort3);
         assertEquals(testSortInventory.getItem(3), testSort4);
+
+        assertEquals(testSortInventory.getSort().getSort(), "Weight");
+        assertEquals(testSortInventory.getSort().getOrder(), true);
     }
 
     @Test
     void testSortReverseWeight() {
+        assertEquals(emptySort.getSort(), testInventory.getSort().getSort());
+        assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         testSortInventory.sort(new Sort("Weight", false));
 
         assertEquals(testSortInventory.getItem(0), testSort4);
         assertEquals(testSortInventory.getItem(1), testSort3);
-        assertEquals(testSortInventory.getItem(2), testSort1);
-        assertEquals(testSortInventory.getItem(3), testSort2);
+        assertEquals(testSortInventory.getItem(2), testSort2);
+        assertEquals(testSortInventory.getItem(3), testSort1);
+
+        assertEquals(testSortInventory.getSort().getSort(), "Weight");
+        assertEquals(testSortInventory.getSort().getOrder(), false);
     }
 }

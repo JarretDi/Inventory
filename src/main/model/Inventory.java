@@ -43,12 +43,52 @@ public class Inventory {
     }
 
     // REQUIRES: sort is not the Unsort (empty sort)
-    // MODIFIES: this
+    // MODIFIES: this, Sort
     // EFFECT: sorts an inventory according to sort, and order is whether
     //         ascending(true) or descending(false)
     //         additionally changes the sort type to given sort
     public void sort(Sort sort) {
-        // stub
+        Boolean order = sort.getOrder();
+        switch(sort.getSort()) {
+            case "Name":
+                if (order) {
+                    inventory.sort((item1, item2) -> {return (item1.getName().compareTo(item2.getName()));});
+                } else {
+                    inventory.sort((item1, item2) -> {return (item2.getName().compareTo(item1.getName()));});
+                }
+                break;
+
+            case "Type":
+                if (order) {
+                    inventory.sort((item1, item2) -> {return (item1.getTypePriority() - (item2.getTypePriority()));});
+                } else {
+                    inventory.sort((item1, item2) -> {return (item2.getTypePriority() - (item1.getTypePriority()));});
+                }
+                break;
+
+            case "Value":
+                if (order) {
+                    inventory.sort((item1, item2) -> {return (item1.getValue() - (item2.getValue()));});
+                } else {
+                    inventory.sort((item1, item2) -> {return (item2.getValue() - (item1.getValue()));});
+                }
+                break;
+
+            case "Weight":
+                if (order) {
+                    inventory.sort((item1, item2) -> {return (item1.getWeight() - (item2.getWeight()));});
+                } else {
+                    inventory.sort((item1, item2) -> {return (item2.getWeight() - (item1.getWeight()));});
+                }
+        }
+        this.sort = sort;
+    }
+
+    // REQUIRES: Inventory is already sorted
+    // MODIFIES: this
+    // EFFECT: adds given item to this inventory in its correct position
+    //         according to sort
+    public void addItemSorted(Item item) {
     }
 
     public Sort getSort() {
