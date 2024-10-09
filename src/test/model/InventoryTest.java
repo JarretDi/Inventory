@@ -217,4 +217,27 @@ public class InventoryTest {
         assertEquals(testSortInventory.getSort().getSort(), "Weight");
         assertEquals(testSortInventory.getSort().getOrder(), false);
     }
+
+    @Test
+    void testAddItemSorted(){
+        Item testAddItem = new Item("Bc", "Consumable", 9, 10, "");
+        testSortInventory.sort(new Sort("Name", true));
+        testSortInventory.addItemSorted(testAddItem);
+
+        assertEquals(testSortInventory.getNumItems(), 5);
+        assertEquals(testSortInventory.getItem(2), testAddItem);
+    }
+
+    @Test
+    void testAdd2ItemSorted(){
+        Item testAddItem = new Item("Bc", "Weapon", 9, 10, "");
+        Item testAddItem2 = new Item("DC", "Currency", 9, 10, "");
+        testSortInventory.sort(new Sort("Type", true));
+        testSortInventory.addItemSorted(testAddItem);
+        testSortInventory.addItemSorted(testAddItem2);
+
+        assertEquals(testSortInventory.getNumItems(), 6);
+        assertEquals(testSortInventory.getItem(1), testAddItem);
+        assertEquals(testSortInventory.getItem(5), testAddItem2);
+    }
 }
