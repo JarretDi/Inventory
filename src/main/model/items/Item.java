@@ -1,5 +1,7 @@
 package model.items;
 
+import model.Sort;
+
 // Represents an item having a:
 // Name, type, value, weight, description
 public abstract class Item {
@@ -24,6 +26,13 @@ public abstract class Item {
     //         Weapon, Armour, Consumable, Misc, Currency
     //         1       2       3           4     5
     public abstract int getTypePriority();
+
+    // REQUIRES: given sort != unsort
+    // EFFECT: returns a 'priority' integer of this item given a specific sort
+    //         priority affects the order of the sort
+    public int getPriority(Sort currentSort) {
+        return 0;
+    }
 
     public String getName() {
         return this.name;

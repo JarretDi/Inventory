@@ -17,14 +17,14 @@ public class ItemTest {
 
     @BeforeEach
     void setup() {
-        testItem = new Misc("Test Item", 1, 5, "A test item.");
+        testItem = new Misc("Test Item", 20, 5, "A test item.");
     }
 
     @Test
     void testConstructor() {
         assertEquals("Test Item", testItem.getName());
         assertEquals("Misc", testItem.getType());
-        assertEquals(1, testItem.getValue());
+        assertEquals(20, testItem.getValue());
         assertEquals(5, testItem.getWeight());
         assertEquals("A test item.", testItem.getDescription());
     }
@@ -45,7 +45,7 @@ public class ItemTest {
     }
 
     @Test
-    void testPriority() {
+    void testGetTypePriority() {
         Item testItem1 = new Weapon("A");
         Item testItem2 = new Armour("B");
         Item testItem3 = new Consumable("C");
@@ -57,5 +57,20 @@ public class ItemTest {
         assertEquals(testItem3.getTypePriority(), 3);
         assertEquals(testItem4.getTypePriority(), 4);
         assertEquals(testItem5.getTypePriority(), 5);
+    }
+
+    @Test
+    void testGetPriority() {
+        assertEquals(testItem.getPriority(new Sort("Name", true)), testItem.getName().compareTo(""));
+        assertEquals(testItem.getPriority(new Sort("Name", false)), -testItem.getName().compareTo(""));
+
+        assertEquals(testItem.getPriority(new Sort("Type", true)), 4);
+        assertEquals(testItem.getPriority(new Sort("Type", false)), -4);
+
+        assertEquals(testItem.getPriority(new Sort("Value", true)), 20);
+        assertEquals(testItem.getPriority(new Sort("Value", false)), -20);
+
+        assertEquals(testItem.getPriority(new Sort("Weight", true)), 5);
+        assertEquals(testItem.getPriority(new Sort("Weight", false)), -5);
     }
 }
