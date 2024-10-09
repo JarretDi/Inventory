@@ -50,55 +50,9 @@ public class Inventory {
     // ascending(true) or descending(false)
     // additionally changes the sort type to given sort
     public void sort(Sort sort) {
-        Boolean order = sort.getOrder();
-        switch (sort.getSort()) {
-            case "Name":
-                if (order) {
-                    inventory.sort((item1, item2) -> {
-                        return (item1.getName().compareTo(item2.getName()));
-                    });
-                } else {
-                    inventory.sort((item1, item2) -> {
-                        return (item2.getName().compareTo(item1.getName()));
-                    });
-                }
-                break;
-
-            case "Type":
-                if (order) {
-                    inventory.sort((item1, item2) -> {
-                        return (item1.getTypePriority() - (item2.getTypePriority()));
-                    });
-                } else {
-                    inventory.sort((item1, item2) -> {
-                        return (item2.getTypePriority() - (item1.getTypePriority()));
-                    });
-                }
-                break;
-
-            case "Value":
-                if (order) {
-                    inventory.sort((item1, item2) -> {
-                        return (item1.getValue() - (item2.getValue()));
-                    });
-                } else {
-                    inventory.sort((item1, item2) -> {
-                        return (item2.getValue() - (item1.getValue()));
-                    });
-                }
-                break;
-
-            case "Weight":
-                if (order) {
-                    inventory.sort((item1, item2) -> {
-                        return (item1.getWeight() - (item2.getWeight()));
-                    });
-                } else {
-                    inventory.sort((item1, item2) -> {
-                        return (item2.getWeight() - (item1.getWeight()));
-                    });
-                }
-        }
+        inventory.sort((item1, item2) -> {
+            return item1.getPriority(sort) - item2.getPriority(sort);
+        });
         this.sort = sort;
     }
 
@@ -108,67 +62,18 @@ public class Inventory {
     // according to sort. If two are identical, inserts at the next point
     // where they aren't
     public void addItemSorted(Item item) {
-        if (this.sort.getSort() == "Name") {
-            addItemSortedName(item);
-        } else {
-            addItemSortedInt(item);
-        }
-    }
-
-    private void addItemSortedName(Item item) {
         int len = inventory.size();
-        Boolean order = this.sort.getOrder();
 
-        String itemName = item.getName();
+        int itemPriority = item.getPriority(sort);
 
         for (int i = 0; i < len; i++) {
-            String currentItemName = inventory.get(i).getName();
+            int currentItemPriority = inventory.get(i).getPriority(sort);
 
-            if (itemName.compareTo(currentItemName) < 0 && order) {
+            if (itemPriority < currentItemPriority) {
                 inventory.add(i, item);
                 break;
-            } else if (itemName.compareTo(currentItemName) > 0 && !order) {
-                inventory.add(i, item);
-                break;
-            } else if (i + 1 == len) {
+            } else if (i+1 == len) {
                 inventory.add(item);
-                break;
-            } else if (itemName.compareTo(currentItemName) == 0) {
-                continue;
-            }
-        }
-    }
-
-    private void addItemSortedInt(Item item) {
-        int len = inventory.size();
-        Boolean order = this.sort.getOrder();
-        int itemPriority = 0;
-        int currentItemPriority = 0;
-
-        for (int i = 0; i < len; i++) {
-            switch (sort.getSort()) {
-                case "Type":
-                    itemPriority = item.getTypePriority();
-                    currentItemPriority = inventory.get(i).getTypePriority();
-                    break;
-                case "Value":
-                    itemPriority = item.getValue();
-                    currentItemPriority = inventory.get(i).getValue();
-                    break;
-                case "Weight":
-                    itemPriority = item.getWeight();
-                    currentItemPriority = inventory.get(i).getWeight();
-                    break;
-            }
-            if (itemPriority - currentItemPriority < 0 && order) {
-                inventory.add(i, item);
-                break;
-            } else if (itemPriority - currentItemPriority > 0 && !order) {
-                inventory.add(i, item);
-                break;
-            } else if (i + 1 == len) {
-                inventory.add(item);
-                break;
             } else if (itemPriority - currentItemPriority == 0) {
                 continue;
             }

@@ -61,8 +61,8 @@ public class ItemTest {
 
     @Test
     void testGetPriority() {
-        assertEquals(testItem.getPriority(new Sort("Name", true)), testItem.getName().compareTo(""));
-        assertEquals(testItem.getPriority(new Sort("Name", false)), -testItem.getName().compareTo(""));
+        assertEquals(testItem.getPriority(new Sort("Name", true)), testItem.getName().compareTo(" "));
+        assertEquals(testItem.getPriority(new Sort("Name", false)), -testItem.getName().compareTo(" "));
 
         assertEquals(testItem.getPriority(new Sort("Type", true)), 4);
         assertEquals(testItem.getPriority(new Sort("Type", false)), -4);
