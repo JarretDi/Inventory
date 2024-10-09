@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import model.items.Item;
+
 // Represents the inventory of a character, consisting of an
 // arbitrary amount of items as well as the count of each identical element
 public class Inventory {

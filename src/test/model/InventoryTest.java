@@ -6,6 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import model.items.Armour;
+import model.items.Consumable;
+import model.items.Currency;
+import model.items.Item;
+import model.items.Misc;
+import model.items.Weapon;
+
 public class InventoryTest {
     Inventory testInventory;
     Item testItem;
@@ -22,15 +29,15 @@ public class InventoryTest {
     @BeforeEach
     void runBefore() {
         testInventory = new Inventory();
-        testItem = new Item("Test Item", "Misc", 1, 5, "A test item.");
-        testWeapon = new Item("Test Weapon", "Weapon", 10, 15, "A test weapon.");
+        testItem = new Misc("Test Item", 1, 5, "A test item.");
+        testWeapon = new Weapon("Test Weapon", 10, 15, "A test weapon.");
 
         testSortInventory = new Inventory();
         emptySort = new Sort();
-        testSort1 = new Item("A", "Weapon", 40, 2, "A test item.");
-        testSort2 = new Item("B", "Consumable", 30, 2, "A test item.");
-        testSort3 = new Item("C", "Armour", 20, 3, "A test item.");
-        testSort4 = new Item("D", "Misc", 10, 4, "A test item.");
+        testSort1 = new Weapon("A", 40, 2, "A test item.");
+        testSort2 = new Consumable("B", 30, 2, "A test item.");
+        testSort3 = new Armour("C", 20, 3, "A test item.");
+        testSort4 = new Currency("D", 10, 4, "A test item.");
         testSortInventory.addItem(testSort2);
         testSortInventory.addItem(testSort4);
         testSortInventory.addItem(testSort1);
@@ -275,7 +282,7 @@ public class InventoryTest {
 
     @Test
     void testAddItemSorted() {
-        Item testAddItem = new Item("Bc", "Consumable", 9, 10, "");
+        Item testAddItem = new Consumable("Bc", 9, 10, "");
         testSortInventory.sort(new Sort("Name", true));
         testSortInventory.addItemSorted(testAddItem);
 
@@ -285,8 +292,8 @@ public class InventoryTest {
 
     @Test
     void testAdd2ItemSorted() {
-        Item testAddItem = new Item("Bc", "Weapon", 9, 10, "");
-        Item testAddItem2 = new Item("DC", "Currency", 9, 10, "");
+        Item testAddItem = new Weapon("Bc", 9, 10, "");
+        Item testAddItem2 = new Currency("DC", 9, 10, "");
         testSortInventory.sort(new Sort("Type", true));
         testSortInventory.addItemSorted(testAddItem);
         testSortInventory.addItemSorted(testAddItem2);
@@ -298,7 +305,7 @@ public class InventoryTest {
 
     @Test
     void testAddItemReverseSorted() {
-        Item testAddItem = new Item("Bc", "Consumable", 15, 10, "");
+        Item testAddItem = new Consumable("Bc", 15, 10, "");
         testSortInventory.sort(new Sort("Value", false));
         testSortInventory.addItemSorted(testAddItem);
 
@@ -308,8 +315,8 @@ public class InventoryTest {
 
     @Test
     void testAdd2ItemReverseSorted() {
-        Item testAddItem = new Item("Bc", "Weapon", 9, 100, "");
-        Item testAddItem2 = new Item("DC", "Currency", 9, 0, "");
+        Item testAddItem = new Weapon("Bc", 9, 100, "");
+        Item testAddItem2 = new Currency("DC", 9, 0, "");
         testSortInventory.sort(new Sort("Weight", false));
         testSortInventory.addItemSorted(testAddItem);
         testSortInventory.addItemSorted(testAddItem2);

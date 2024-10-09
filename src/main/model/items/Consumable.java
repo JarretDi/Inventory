@@ -14,14 +14,14 @@ public class Consumable extends Item {
         super(name, 0, 0, "");
         this.type = "Consumable";
     }
-    
+
     @Override
     public String getType() {
         return this.type;
     }
 
     public int getTypePriority() {
-        return 5;
+        return 3;
     }
 }
 

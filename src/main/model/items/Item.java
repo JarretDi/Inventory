@@ -7,13 +7,15 @@ public abstract class Item {
     protected int value;
     protected int weight;
     protected String desc;
+    protected Boolean favourite;
 
-    // EFFECT: creates an item with given name, type, value and description
+    // EFFECT: creates an unfavourited item with given name, value and description
     public Item(String name, int value, int weight, String desc) {
         this.name = name;
         this.value = value;
         this.weight = weight;
         this.desc = desc;
+        this.favourite = false;
     }
 
     public abstract String getType();
@@ -37,5 +39,17 @@ public abstract class Item {
 
     public String getDescription() {
         return this.desc;
+    }
+
+    public Boolean getFavourite() {
+        return this.favourite;
+    }
+
+    public void setFavourite() {
+        this.favourite = true;
+    }
+
+    public void setUnfavourite() {
+        this.favourite = false;
     }
 }
