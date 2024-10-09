@@ -5,12 +5,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import model.items.Armour;
+import model.items.Consumable;
+import model.items.Currency;
+import model.items.Item;
+import model.items.Misc;
+import model.items.Weapon;
+
 public class ItemTest {
     Item testItem;
 
     @BeforeEach
     void setup() {
-        testItem = new Item("Test Item", "Misc", 1, 5, "A test item.");
+        testItem = new Misc("Test Item", 1, 5, "A test item.");
     }
 
     @Test
@@ -23,12 +30,28 @@ public class ItemTest {
     }
 
     @Test
+    void testCorrectTypes() {
+        Item testItem1 = new Weapon("A");
+        Item testItem2 = new Armour("B");
+        Item testItem3 = new Consumable("C");
+        Item testItem4 = new Misc("D");
+        Item testItem5 = new Currency("E");
+
+        assertEquals(testItem1.getType(), "Weapon");
+        assertEquals(testItem2.getType(), "Armour");
+        assertEquals(testItem3.getType(), "Consumable");
+        assertEquals(testItem4.getType(), "Misc");
+        assertEquals(testItem5.getType(), "Currency");
+    }
+
+    @Test
     void testPriority() {
-        Item testItem1 = new Item("A", "Weapon", 0, 0, "A test item.");
-        Item testItem2 = new Item("A", "Armour", 0, 0, "A test item.");
-        Item testItem3 = new Item("A", "Consumable", 0, 0, "A test item.");
-        Item testItem4 = new Item("A", "Misc", 0, 0, "A test item.");
-        Item testItem5 = new Item("A", "Currency", 0, 0, "A test item.");
+        Item testItem1 = new Weapon("A");
+        Item testItem2 = new Armour("B");
+        Item testItem3 = new Consumable("C");
+        Item testItem4 = new Misc("D");
+        Item testItem5 = new Currency("E");
+        
         assertEquals(testItem1.getTypePriority(), 1);
         assertEquals(testItem2.getTypePriority(), 2);
         assertEquals(testItem3.getTypePriority(), 3);
