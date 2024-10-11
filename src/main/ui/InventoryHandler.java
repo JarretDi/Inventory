@@ -179,7 +179,8 @@ public class InventoryHandler {
             case "q":
                 return;
             default:
-                // TODO: add way to interact with individual items when entering a number
+                int index = Integer.parseInt(input);
+                processItem(items.get(index - 1));
         }
         printDivider();
         viewInventory();
@@ -217,6 +218,71 @@ public class InventoryHandler {
 
         System.out.println("Inventory has been successfully sorted by " + sortType);
         printDivider();
+    }
+
+    // MODIFIES: Inventory, Item
+    // EFFECT: given an individual item, displays possible user interactions such as:
+    //         expand/shrink this item, increase/decrease the quantity of the item
+    private void processItem(Item item) {
+        printItem(item);
+        displayItemCommands();
+
+        String input = this.scanner.nextLine();
+        processItemCommands(input, item);
+    }
+
+    // EFFECT: prints all the  info of the expanded form of the item, even if it is not favourited
+    private void printItem(Item item) {
+        System.out
+                .println(item.getName() + " x " + inventory.getItemCount(item) + ": " + item.getType());
+        System.out.println("Value: " + item.getValue() + " | Weight: " + item.getWeight());
+        System.out.println('"' + item.getDescription() + '"');
+
+        printDivider();
+    }
+
+    // EFFECT: prints out all available commands for this item
+    private void displayItemCommands() {
+        System.out.println("Please select an item number or a command below:\n");
+        System.out.println("e: Favourite this item");
+        System.out.println("s: Unfavourite this item");
+        System.out.println("a: Increase the quantity of this item");
+        System.out.println("r: Decrease the quantity of this item");
+        System.out.println("q: Exit this menu");
+    }
+
+    // MODIFIES: Inventory, Item
+    // EFFECT: Processes user input for the items 
+    //         can set/unset favourite and increase/decrease quantity of item
+    private void processItemCommands(String input, Item item) {
+        switch (input) {
+            case "e":
+                item.setFavourite();
+                break;
+            case "s":
+                item.setUnfavourite();
+                break;
+            case "a":
+                increaseQuantity(item);
+                break;
+            case "r":
+                decreaseQuantity(item);
+                break;
+            case "q":
+                return;
+        }
+    }
+
+    // MODIFIES: inventory
+    // EFFECT: given a user input, will add that number more to inventory
+    private void increaseQuantity(Item item) {
+
+    }
+
+    // MODIFIES: inventory
+    // EFFECT: given a user input, will add that number more to inventory
+    private void decreaseQuantity(Item item) {
+
     }
 
     // MODIFIES: Inventory
