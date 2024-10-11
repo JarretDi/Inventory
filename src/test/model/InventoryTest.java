@@ -49,6 +49,8 @@ public class InventoryTest {
         assertEquals(0, testInventory.getNumItems());
         assertEquals(emptySort.getSort(), testInventory.getSort().getSort());
         assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
+
+        assertEquals(testInventory.getInventory().size(), 0);
     }
 
     @Test

@@ -56,14 +56,16 @@ public class Inventory {
         this.sort = sort;
     }
 
-    // REQUIRES: Inventory is already sorted
     // MODIFIES: this
     // EFFECT: adds given item to this inventory in its correct position
     // according to sort. If two are identical, inserts at the next point
-    // where they aren't
+    // where they aren't. If list is unsorted, simply adds to end
     public void addItemSorted(Item item) {
+        if (this.sort.isUnsorted()) {
+            addItem(item);
+            return;
+        }
         int len = inventory.size();
-
         int itemPriority = item.getPriority(sort);
 
         for (int i = 0; i < len; i++) {
@@ -82,6 +84,10 @@ public class Inventory {
 
     public Sort getSort() {
         return this.sort;
+    }
+
+    public ArrayList<Item> getInventory() {
+        return this.inventory;
     }
 
     public Item getItem(int index) {

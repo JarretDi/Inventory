@@ -31,6 +31,8 @@ public abstract class Item {
     // EFFECT: returns a 'priority' integer of this item given a specific sort
     //         priority affects the order of the sort
     public int getPriority(Sort currentSort) {
+        int priority = 0;
+
         String sort = currentSort.getSort();
         Boolean order = currentSort.getOrder();
         int mod;
@@ -43,16 +45,20 @@ public abstract class Item {
 
         switch(sort) {
             case "Name":
-                return this.name.compareTo(" ") * mod;
+                priority = this.name.compareTo(" ") * mod;
+                break;
             case "Type":
-                return getTypePriority() * mod;
+                priority = getTypePriority() * mod;
+                break;
             case "Value":
-                return this.value * mod;
+                priority = this.value * mod;
+                break;
             case "Weight":
-                return this.weight * mod;
+                priority = this.weight * mod;
+                break;
         }
 
-        return 0;
+        return priority;
     }
 
     public String getName() {
@@ -71,7 +77,7 @@ public abstract class Item {
         return this.desc;
     }
 
-    public Boolean getFavourite() {
+    public Boolean isFavourite() {
         return this.favourite;
     }
 

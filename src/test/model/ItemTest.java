@@ -27,6 +27,7 @@ public class ItemTest {
         assertEquals(20, testItem.getValue());
         assertEquals(5, testItem.getWeight());
         assertEquals("A test item.", testItem.getDescription());
+        assertEquals(testItem.isFavourite(), false);
     }
 
     @Test
@@ -72,5 +73,18 @@ public class ItemTest {
 
         assertEquals(testItem.getPriority(new Sort("Weight", true)), 5);
         assertEquals(testItem.getPriority(new Sort("Weight", false)), -5);
+    }
+
+    @Test
+    void testSetFavourite() {
+        testItem.setFavourite();
+        assertEquals(testItem.isFavourite(), true);
+    }
+
+    @Test
+    void testUnsetFavourite() {
+        testItem.setFavourite();
+        testItem.setUnfavourite();
+        assertEquals(testItem.isFavourite(), false);
     }
 }

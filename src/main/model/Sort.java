@@ -29,6 +29,10 @@ public class Sort {
         this.order = null;
     }
 
+    public Boolean isUnsorted() {
+        return this.sort == null;
+    }
+
     public String getSort() {
         return this.sort;
     }
