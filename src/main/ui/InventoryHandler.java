@@ -276,14 +276,41 @@ public class InventoryHandler {
     // MODIFIES: inventory
     // EFFECT: given a user input, will add that number more to inventory
     private void increaseQuantity(Item item) {
+        System.out.println("Please enter how much more you wish to add (default 1):");
 
+        String input = scanner.nextLine();
+        if (input.equals("")) {
+            input = "1";
+        }
+
+        int intInput = Integer.parseInt(input);
+        for (int i = 0; i < intInput; i++) {
+            inventory.addItemSorted(item);
+        }
+
+        System.out.println(input + " items were succesfully added!");
     }
 
     // MODIFIES: inventory
     // EFFECT: given a user input, will add that number more to inventory
     private void decreaseQuantity(Item item) {
+        System.out.println("Please enter how much more you wish to remove (default all):");
 
+        String input = scanner.nextLine();
+        if (input.equals("")) {
+            inventory.removeAllItem(item);
+            System.out.println("All items were succesfully removed!");
+            return;
+        }
+
+        int intInput = Integer.parseInt(input);
+        for (int i = 0; i < intInput; i++) {
+            inventory.removeItem(item);
+        }
+
+        System.out.println(input + " items were succesfully removed!");
     }
+
 
     // MODIFIES: Inventory
     // EFFECT: Creates and adds an item using user input
@@ -312,7 +339,7 @@ public class InventoryHandler {
             itemValue = Integer.parseInt(value);
         }
 
-        System.out.println("Please enter the value of the item, or default 0:");
+        System.out.println("Please enter the weight of the item, or default 0:");
         String weight = this.scanner.nextLine();
         int itemWeight;
         if (weight.equals("")) {
