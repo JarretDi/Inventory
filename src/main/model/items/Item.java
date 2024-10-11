@@ -23,27 +23,24 @@ public abstract class Item {
     public abstract String getType();
 
     // EFFECT: returns an items priority in terms of types,
-    //         Weapon, Armour, Consumable, Misc, Currency
-    //         1       2       3           4     5
+    // Weapon, Armour, Consumable, Misc, Currency
+    // 1 2 3 4 5
     public abstract int getTypePriority();
 
     // REQUIRES: given sort != unsort
     // EFFECT: returns a 'priority' integer of this item given a specific sort
-    //         priority affects the order of the sort
+    // priority affects the order of the sort
     public int getPriority(Sort currentSort) {
         int priority = 0;
-
-        String sort = currentSort.getSort();
-        Boolean order = currentSort.getOrder();
         int mod;
 
-        if (order) {
+        if (currentSort.getOrder()) {
             mod = 1;
         } else {
             mod = -1;
         }
 
-        switch(sort) {
+        switch (currentSort.getSort()) {
             case "Name":
                 priority = this.name.compareTo(" ") * mod;
                 break;
@@ -57,7 +54,6 @@ public abstract class Item {
                 priority = this.weight * mod;
                 break;
         }
-
         return priority;
     }
 

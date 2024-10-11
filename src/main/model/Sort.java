@@ -11,7 +11,7 @@ public class Sort {
 
     // REQUIRES: sort is one of "Name", "Type", "Value", "Weight"
     // EFFECT: constructs a sort with given sort and order
-    public Sort(String sort, Boolean order){
+    public Sort(String sort, Boolean order) {
         this.sort = sort;
         this.order = order;
     }

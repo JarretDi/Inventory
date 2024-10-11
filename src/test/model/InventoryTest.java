@@ -67,8 +67,8 @@ public class InventoryTest {
         testInventory.addItem(testItem);
         testInventory.addItem(testWeapon);
         assertEquals(3, testInventory.getNumItems());
-        assertEquals(2, testInventory.getItemCount(testItem));
-        assertEquals(1, testInventory.getItemCount(testWeapon));
+        assertEquals(2, testInventory.getCount(testItem));
+        assertEquals(1, testInventory.getCount(testWeapon));
 
         assertEquals(emptySort.getSort(), testInventory.getSort().getSort());
         assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
@@ -280,6 +280,14 @@ public class InventoryTest {
 
         assertEquals(testSortInventory.getSort().getSort(), "Name");
         assertEquals(testSortInventory.getSort().getOrder(), true);
+    }
+
+    @Test
+    void testAddItemSortedToUnsorted() {
+        testInventory.addItemSorted(testItem);
+
+        assertEquals(testInventory.getNumItems(), 1);
+        assertEquals(testInventory.getItem(0), testItem);
     }
 
     @Test

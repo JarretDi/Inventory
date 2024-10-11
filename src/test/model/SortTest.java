@@ -16,13 +16,13 @@ public class SortTest {
     }
 
     @Test
-    void testConstructor(){
+    void testConstructor() {
         assertEquals(testSort.getSort(), "Name");
         assertEquals(testSort.getOrder(), true);
     }
 
     @Test
-    void testEmptyConstructor(){
+    void testEmptyConstructor() {
         assertEquals(testUnsort.getSort(), null);
         assertEquals(testUnsort.getOrder(), null);
     }

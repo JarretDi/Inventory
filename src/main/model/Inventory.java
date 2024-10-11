@@ -74,7 +74,7 @@ public class Inventory {
             if (itemPriority < currentItemPriority) {
                 inventory.add(i, item);
                 break;
-            } else if (i+1 == len) {
+            } else if (i + 1 == len) {
                 inventory.add(item);
             } else if (itemPriority - currentItemPriority == 0) {
                 continue;
@@ -95,7 +95,7 @@ public class Inventory {
     }
 
     // EFFECT: returns number of times given item appears in Inventory
-    public int getItemCount(Item item) {
+    public int getCount(Item item) {
         int count = 0;
         for (Item i : inventory) {
             if (i.equals(item)) {
