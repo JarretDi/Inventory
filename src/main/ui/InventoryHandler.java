@@ -41,7 +41,7 @@ public class InventoryHandler {
     // FROM: flashcard lab
     // MODIFIES: this
     // EFFECTS: initializes the application with the starting values
-    public void init() {
+    private void init() {
         this.inventory = new Inventory();
         this.scanner = new Scanner(System.in);
         this.isProgramRunning = true;
@@ -49,7 +49,7 @@ public class InventoryHandler {
 
     // FROM: flashcard lab
     // EFFECTS: displays and processes inputs for the main menu
-    public void handleMenu() {
+    private void handleMenu() {
         displayMenu();
         String input = this.scanner.nextLine();
         processMenuCommands(input);
@@ -57,7 +57,7 @@ public class InventoryHandler {
 
     // FROM: flashcard lab
     // EFFECTS: displays a list of commands that can be used in the main menu
-    public void displayMenu() {
+    private void displayMenu() {
         System.out.println("Please select an option:\n");
         System.out.println("v: View all items");
         System.out.println("a: Add a new item");
@@ -67,7 +67,7 @@ public class InventoryHandler {
 
     // FROM: flashcard lab
     // EFFECTS: processes the user's input in the main menu
-    public void processMenuCommands(String input) {
+    private void processMenuCommands(String input) {
         printDivider();
         switch (input) {
             case "v":
@@ -86,7 +86,7 @@ public class InventoryHandler {
         printDivider();
     }
 
-    // MODIFIES: Inventory
+    // MODIFIES: this, Inventory
     // EFFECTS: handles input when viewing inventory
     private void viewInventory() {
         ArrayList<Item> items = processItems();
@@ -135,11 +135,14 @@ public class InventoryHandler {
         printDivider();
 
         for (Item item : items) {
-            System.out
-                    .println(i + ". " + item.getName() + " x " + inventory.getItemCount(item) + ": " + item.getType());
             if (item.isFavourite()) {
+                System.out
+                .println(i + ". <f> " + item.getName() + " x " + inventory.getCount(item) + ": " + item.getType());
                 System.out.println("Value: " + item.getValue() + " | Weight: " + item.getWeight());
                 System.out.println('"' + item.getDescription() + '"');
+            } else {
+                System.out
+                .println(i + ". " + item.getName() + " x " + inventory.getCount(item) + ": " + item.getType());
             }
             printDivider();
             i++;
@@ -149,26 +152,26 @@ public class InventoryHandler {
     // EFFECT: displays available inventory commands
     private void displayInventoryCommands() {
         System.out.println("Please select an item number or a command below:\n");
-        System.out.println("v: Expand all items");
-        System.out.println("c: Shrink all items");
+        System.out.println("z: Favourite all items");
+        System.out.println("x: Unfavourite all items");
         System.out.println("s: Sort your items");
         System.out.println("q: Exit this menu");
         printDivider();
     }
 
-    // MODIFIES: Inventory
+    // MODIFIES: this, Inventory
     // EFFECT: processes commands related to managing inventory including:
     //         favourite(expand) all items and its opposite
     //         sort items in an inventory by a category
     //         view an item by typing in its index
     private void processInventoryCommands(String input, ArrayList<Item> items) {
         switch (input) {
-            case "v":
+            case "z":
                 for (Item item : items) {
                     item.setFavourite();
                 }
                 break;
-            case "c":
+            case "x":
                 for (Item item : items) {
                     item.setUnfavourite();
                 }
@@ -186,7 +189,7 @@ public class InventoryHandler {
         viewInventory();
     }
 
-    // MODIFIES: inventory
+    // MODIFIES: this, inventory
     // EFFECT: Identifies the sort the user inputs and then sorts the inventory according to that
     private void sortInventory() {
         Sort sort;
@@ -220,7 +223,7 @@ public class InventoryHandler {
         printDivider();
     }
 
-    // MODIFIES: Inventory, Item
+    // MODIFIES: this, Inventory, Item
     // EFFECT: given an individual item, displays possible user interactions such as:
     //         expand/shrink this item, increase/decrease the quantity of the item
     private void processItem(Item item) {
@@ -233,8 +236,14 @@ public class InventoryHandler {
 
     // EFFECT: prints all the  info of the expanded form of the item, even if it is not favourited
     private void printItem(Item item) {
+        String favouriteMark;
+        if (item.isFavourite()) {
+            favouriteMark = "<f> ";
+        } else {
+            favouriteMark = "";
+        }
         System.out
-                .println(item.getName() + " x " + inventory.getItemCount(item) + ": " + item.getType());
+                .println(favouriteMark + item.getName() + " x " + inventory.getCount(item) + ": " + item.getType());
         System.out.println("Value: " + item.getValue() + " | Weight: " + item.getWeight());
         System.out.println('"' + item.getDescription() + '"');
 
@@ -244,28 +253,30 @@ public class InventoryHandler {
     // EFFECT: prints out all available commands for this item
     private void displayItemCommands() {
         System.out.println("Please select an item number or a command below:\n");
-        System.out.println("e: Favourite this item");
-        System.out.println("s: Unfavourite this item");
+        System.out.println("z: Favourite this item");
+        System.out.println("x: Unfavourite this item");
         System.out.println("a: Increase the quantity of this item");
-        System.out.println("r: Decrease the quantity of this item");
+        System.out.println("s: Decrease the quantity of this item");
         System.out.println("q: Exit this menu");
     }
 
-    // MODIFIES: Inventory, Item
+    // MODIFIES: this, Inventory, Item
     // EFFECT: Processes user input for the items 
     //         can set/unset favourite and increase/decrease quantity of item
     private void processItemCommands(String input, Item item) {
         switch (input) {
-            case "e":
+            case "z":
                 item.setFavourite();
+                System.out.println(item + " has been set as favourite!");
                 break;
-            case "s":
+            case "x":
                 item.setUnfavourite();
+                System.out.println(item + " has been set as unfavourite...");
                 break;
             case "a":
                 increaseQuantity(item);
                 break;
-            case "r":
+            case "s":
                 decreaseQuantity(item);
                 break;
             case "q":
@@ -273,7 +284,7 @@ public class InventoryHandler {
         }
     }
 
-    // MODIFIES: inventory
+    // MODIFIES: this, inventory
     // EFFECT: given a user input, will add that number more to inventory
     private void increaseQuantity(Item item) {
         System.out.println("Please enter how much more you wish to add (default 1):");
@@ -291,7 +302,7 @@ public class InventoryHandler {
         System.out.println(input + " items were succesfully added!");
     }
 
-    // MODIFIES: inventory
+    // MODIFIES: this, inventory
     // EFFECT: given a user input, will add that number more to inventory
     private void decreaseQuantity(Item item) {
         System.out.println("Please enter how much more you wish to remove (default all):");
@@ -312,11 +323,11 @@ public class InventoryHandler {
     }
 
 
-    // MODIFIES: Inventory
+    // MODIFIES: this, Inventory
     // EFFECT: Creates and adds an item using user input
     // If the list is unsorted, adds item to end, otherwise puts in correct place
     @SuppressWarnings("methodlength")
-    public void addNewItem() {
+    private void addNewItem() {
         Item item;
 
         System.out.println("Please enter the name of the item:");
@@ -359,6 +370,7 @@ public class InventoryHandler {
         printDivider();
     }
 
+    // EFFECT: helper that creates and returns an item based on parameters
     private Item createItemFromInput(String name, String type, int itemValue, int itemWeight, String desc) {
         switch (type) {
             case "Weapon":
