@@ -1,8 +1,16 @@
 package ui;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import model.Inventory;
+import model.Sort;
+import model.items.Armour;
+import model.items.Consumable;
+import model.items.Currency;
+import model.items.Item;
+import model.items.Misc;
+import model.items.Weapon;
 
 // The UI for all of inventory and items
 // Can: view added items, add items, sort items, quit
@@ -51,9 +59,8 @@ public class InventoryHandler {
     // EFFECTS: displays a list of commands that can be used in the main menu
     public void displayMenu() {
         System.out.println("Please select an option:\n");
-        System.out.println("a: Add a new Item");
-        System.out.println("v: View all flashcards");
-        System.out.println("s: Sort your items");
+        System.out.println("v: View all items");
+        System.out.println("a: Add a new item");
         System.out.println("q: Exit the application");
         printDivider();
     }
@@ -63,14 +70,12 @@ public class InventoryHandler {
     public void processMenuCommands(String input) {
         printDivider();
         switch (input) {
-            case "a":
-                // addItem();
-                break;
             case "v":
-                // printInventory();
+                viewInventory();
                 break;
-            case "s":
-                // sortInventory();
+            case "a":
+                //addNewItem(); TODO
+                viewInventory();
                 break;
             case "q":
                 quitApplication();
@@ -81,6 +86,61 @@ public class InventoryHandler {
         printDivider();
     }
 
+    // MODIFIES: Inventory
+    // EFFECTS: handles input when viewing inventory
+    private void viewInventory() {
+        ArrayList<Item> items = processItems();
+        printInventory(items);
+    }
+
+    // EFFECTS: 
+    private ArrayList<Item> processItems() {
+        ArrayList<Item> favouriteItems = new ArrayList<>();
+        ArrayList<Item> nonFavouriteItems = new ArrayList<>();
+
+        for (Item item : inventory.getInventory()) {
+            if (item.isFavourite()) {
+                if (!favouriteItems.contains(item)) {
+                    favouriteItems.add(item);
+                } else {
+                    continue;
+                }
+            } else {
+                if (!nonFavouriteItems.contains(item)) {
+                    nonFavouriteItems.add(item);
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        favouriteItems.addAll(nonFavouriteItems);
+        return favouriteItems;
+    }
+
+    // EFFECTS: prints out all items in inventory, with quantity if duplicates
+    // favorited items get printed first
+    private void printInventory(ArrayList<Item> items) {
+        int i = 1;
+        if (inventory.getSort().isUnsorted()) {
+            System.out.println("Inventory:");
+        } else {
+            System.out.println("Inventory (sorted by " + inventory.getSort().getSort() + "):");
+        }
+        printDivider();
+
+        for (Item item : items) {
+            System.out
+                    .println(i + ". " + item.getName() + " x " + inventory.getItemCount(item) + ": " + item.getType());
+            if (item.isFavourite()) {
+                System.out.println("Value: " + item.getValue() + " | Weight: " + item.getWeight());
+                System.out.println('"' + item.getDescription() + '"');
+            }
+            printDivider();
+            i++;
+        }
+    }
+
     // FROM: flashcard lab
     // MODIFIES: this
     // EFFECTS: prints a closing message and marks the program as not running
@@ -89,6 +149,7 @@ public class InventoryHandler {
         System.out.println("Have a good day!");
         this.isProgramRunning = false;
     }
+
     private void printDivider() {
         System.out.println("_____________________");
     }
