@@ -174,7 +174,7 @@ public class InventoryHandler {
                 }
                 break;
             case "s":
-                // TODO: add method to sort inventory
+                sortInventory();
                 break;
             case "q":
                 return;
@@ -183,6 +183,40 @@ public class InventoryHandler {
         }
         printDivider();
         viewInventory();
+    }
+
+    // MODIFIES: inventory
+    // EFFECT: Identifies the sort the user inputs and then sorts the inventory according to that
+    private void sortInventory() {
+        Sort sort;
+        Boolean sortOrder;
+
+        System.out.println("Please enter the type of sort:");
+        System.out.println("Sort can be Name, Type, Value or Weight");
+        printDivider();
+
+        String sortType = this.scanner.nextLine();
+        // check if valid
+
+        System.out.println("Please enter order, asc or dec, default asc");
+
+        String order = this.scanner.nextLine();
+
+        if ((order.equals("asc")) || (order.equals(""))) {
+            sortOrder = true;
+        } else if (order.equals("des")) {
+            sortOrder = false;
+        } else {
+            // you shouldn't be here
+            sortOrder = null;
+        }
+
+        sort = new Sort(sortType, sortOrder);
+
+        inventory.sort(sort);
+
+        System.out.println("Inventory has been successfully sorted by " + sortType);
+        printDivider();
     }
 
     // MODIFIES: Inventory
