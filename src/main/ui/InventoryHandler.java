@@ -74,7 +74,7 @@ public class InventoryHandler {
                 viewInventory();
                 break;
             case "a":
-                //addNewItem(); TODO
+                addNewItem();
                 viewInventory();
                 break;
             case "q":
@@ -93,7 +93,7 @@ public class InventoryHandler {
         printInventory(items);
     }
 
-    // EFFECTS: 
+    // EFFECTS: processes an inventory into a more printable form
     private ArrayList<Item> processItems() {
         ArrayList<Item> favouriteItems = new ArrayList<>();
         ArrayList<Item> nonFavouriteItems = new ArrayList<>();
@@ -139,6 +139,108 @@ public class InventoryHandler {
             printDivider();
             i++;
         }
+    }
+
+    // MODIFIES: Inventory
+    // EFFECT: Creates and adds an item using user input
+    // If the list is unsorted, adds item to end, otherwise puts in correct place
+    public void addNewItem() {
+        Item item;
+
+        System.out.println("Please enter the name of the item:");
+        String name = this.scanner.nextLine();
+
+        System.out.println("Please enter the type of the item:");
+        System.out.println("Can be a Weapon, Armour, Consumable, Misc or Currency");
+
+        String type = this.scanner.nextLine();
+        if (!validtype(type)) {
+            System.out.println("Not a type");
+            return;
+        }
+
+        System.out.println("Please enter the value of the item, or default 0:");
+        String value = this.scanner.nextLine();
+        int itemValue;
+        if (value.equals("")) {
+            itemValue = 0;
+        } else {
+            itemValue = Integer.parseInt(value);
+        }
+
+        System.out.println("Please enter the value of the item, or default 0:");
+        String weight = this.scanner.nextLine();
+        int itemWeight;
+        if (weight.equals("")) {
+            itemWeight = 0;
+        } else {
+            itemWeight = Integer.parseInt(value);
+        }
+
+        System.out.println("Please enter the description of the item:");
+        String desc = this.scanner.nextLine();
+
+        switch (type) {
+            case "Weapon":
+                item = new Weapon(name, itemValue, itemWeight, desc);
+                break;
+            case "w":
+                item = new Weapon(name, itemValue, itemWeight, desc);
+                break;
+            case "Armour":
+                item = new Armour(name, itemValue, itemWeight, desc);
+                break;
+            case "a":
+                item = new Armour(name, itemValue, itemWeight, desc);
+                break;
+            case "Consumable":
+                item = new Consumable(name, itemValue, itemWeight, desc);
+                break;
+            case "Misc":
+                item = new Misc(name, itemValue, itemWeight, desc);
+                break;
+            case "m":
+                item = new Misc(name, itemValue, itemWeight, desc);
+                break;
+            case "":
+                item = new Misc(name, itemValue, itemWeight, desc);
+                break;
+            case "Currency":
+                item = new Currency(name, itemValue, itemWeight, desc);
+                break;
+            default:
+                System.out.println("You shouldn't get here");
+                item = new Weapon(name);
+        }
+
+        inventory.addItemSorted(item);
+
+        System.out.println(name + " has been successfully created!");
+        printDivider();
+    }
+
+    private boolean validtype(String type) {
+        switch (type) {
+            case "Weapon":
+                return true;
+            case "w":
+                return true;
+            case "Armour":
+                return true;
+            case "a":
+                return true;
+            case "Consumable":
+                return true;
+            case "Misc":
+                return true;
+            case "m":
+                return true;
+            case "":
+                return true;
+            case "Currency":
+                return true;
+        }
+        return false;
     }
 
     // FROM: flashcard lab
