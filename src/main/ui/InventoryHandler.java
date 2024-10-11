@@ -91,6 +91,11 @@ public class InventoryHandler {
     private void viewInventory() {
         ArrayList<Item> items = processItems();
         printInventory(items);
+
+        displayInventoryCommands();
+
+        String input = this.scanner.nextLine();
+        processInventoryCommands(input, items);
     }
 
     // EFFECTS: processes an inventory into a more printable form
@@ -141,9 +146,49 @@ public class InventoryHandler {
         }
     }
 
+    // EFFECT: displays available inventory commands
+    private void displayInventoryCommands() {
+        System.out.println("Please select an item number or a command below:\n");
+        System.out.println("v: Expand all items");
+        System.out.println("c: Shrink all items");
+        System.out.println("s: Sort your items");
+        System.out.println("q: Exit this menu");
+        printDivider();
+    }
+
+    // MODIFIES: Inventory
+    // EFFECT: processes commands related to managing inventory including:
+    //         favourite(expand) all items and its opposite
+    //         sort items in an inventory by a category
+    //         view an item by typing in its index
+    private void processInventoryCommands(String input, ArrayList<Item> items) {
+        switch (input) {
+            case "v":
+                for (Item item : items) {
+                    item.setFavourite();
+                }
+                break;
+            case "c":
+                for (Item item : items) {
+                    item.setUnfavourite();
+                }
+                break;
+            case "s":
+                // TODO: add method to sort inventory
+                break;
+            case "q":
+                return;
+            default:
+                // TODO: add way to interact with individual items when entering a number
+        }
+        printDivider();
+        viewInventory();
+    }
+
     // MODIFIES: Inventory
     // EFFECT: Creates and adds an item using user input
     // If the list is unsorted, adds item to end, otherwise puts in correct place
+    @SuppressWarnings("methodlength")
     public void addNewItem() {
         Item item;
 
@@ -152,7 +197,6 @@ public class InventoryHandler {
 
         System.out.println("Please enter the type of the item:");
         System.out.println("Can be a Weapon, Armour, Consumable, Misc or Currency");
-
         String type = this.scanner.nextLine();
         if (!validtype(type)) {
             System.out.println("Not a type");
@@ -180,38 +224,7 @@ public class InventoryHandler {
         System.out.println("Please enter the description of the item:");
         String desc = this.scanner.nextLine();
 
-        switch (type) {
-            case "Weapon":
-                item = new Weapon(name, itemValue, itemWeight, desc);
-                break;
-            case "w":
-                item = new Weapon(name, itemValue, itemWeight, desc);
-                break;
-            case "Armour":
-                item = new Armour(name, itemValue, itemWeight, desc);
-                break;
-            case "a":
-                item = new Armour(name, itemValue, itemWeight, desc);
-                break;
-            case "Consumable":
-                item = new Consumable(name, itemValue, itemWeight, desc);
-                break;
-            case "Misc":
-                item = new Misc(name, itemValue, itemWeight, desc);
-                break;
-            case "m":
-                item = new Misc(name, itemValue, itemWeight, desc);
-                break;
-            case "":
-                item = new Misc(name, itemValue, itemWeight, desc);
-                break;
-            case "Currency":
-                item = new Currency(name, itemValue, itemWeight, desc);
-                break;
-            default:
-                System.out.println("You shouldn't get here");
-                item = new Weapon(name);
-        }
+        item = createItemFromInput(name, type, itemValue, itemWeight, desc);
 
         inventory.addItemSorted(item);
 
@@ -219,22 +232,41 @@ public class InventoryHandler {
         printDivider();
     }
 
+    private Item createItemFromInput(String name, String type, int itemValue, int itemWeight, String desc) {
+        switch (type) {
+            case "Weapon":
+            case "w":
+                return new Weapon(name, itemValue, itemWeight, desc);
+            case "Armour":
+            case "a":
+                return new Armour(name, itemValue, itemWeight, desc);
+            case "Consumable":
+                return new Consumable(name, itemValue, itemWeight, desc);
+            case "Currency":
+                return new Currency(name, itemValue, itemWeight, desc);
+            case "Misc":
+            case "m":
+            case "":
+                return new Misc(name, itemValue, itemWeight, desc);
+            default:
+                System.out.println("You shouldn't get here");
+                return new Misc("Error"); // just so the method returns an Item for compiler
+        }
+    }
+
+    // EfFECT: Returns true if input is a valid type
     private boolean validtype(String type) {
         switch (type) {
             case "Weapon":
-                return true;
             case "w":
                 return true;
             case "Armour":
-                return true;
             case "a":
                 return true;
             case "Consumable":
                 return true;
             case "Misc":
-                return true;
             case "m":
-                return true;
             case "":
                 return true;
             case "Currency":
