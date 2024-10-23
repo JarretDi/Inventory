@@ -3,6 +3,7 @@ package ui;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Exceptions.InvalidOptionException;
 import Exceptions.InvalidSortException;
 import Exceptions.InvalidTypeException;
 import Exceptions.ItemCreationException;
@@ -55,8 +56,15 @@ public class InventoryHandler {
     // EFFECTS: displays and processes inputs for the main menu
     private void handleMenu() {
         displayMenu();
-        String input = this.scanner.nextLine();
-        processMenuCommands(input);
+        while (true) {
+            String input = this.scanner.nextLine();
+            try {
+                processMenuCommands(input);
+                break;
+            } catch (InvalidOptionException e) {
+                System.out.println("Invalid option inputted. Please try again.");
+            }
+        }
     }
 
     // FROM: flashcard lab
@@ -71,7 +79,7 @@ public class InventoryHandler {
 
     // FROM: flashcard lab
     // EFFECTS: processes the user's input in the main menu
-    private void processMenuCommands(String input) {
+    private void processMenuCommands(String input) throws InvalidOptionException {
         printDivider();
         switch (input) {
             case "v":
@@ -85,7 +93,7 @@ public class InventoryHandler {
                 quitApplication();
                 break;
             default:
-                System.out.println("Invalid option inputted. Please try again.");
+                throw new InvalidOptionException();
         }
         printDivider();
     }
@@ -141,12 +149,13 @@ public class InventoryHandler {
         for (Item item : items) {
             if (item.isFavourite()) {
                 System.out
-                .println(i + ". <f> " + item.getName() + " x " + inventory.getCount(item) + ": " + item.getType());
+                        .println(i + ". <f> " + item.getName() + " x " + inventory.getCount(item) + ": "
+                                + item.getType());
                 System.out.println("Value: " + item.getValue() + " | Weight: " + item.getWeight());
                 System.out.println('"' + item.getDescription() + '"');
             } else {
                 System.out
-                .println(i + ". " + item.getName() + " x " + inventory.getCount(item) + ": " + item.getType());
+                        .println(i + ". " + item.getName() + " x " + inventory.getCount(item) + ": " + item.getType());
             }
             printDivider();
             i++;
@@ -165,20 +174,16 @@ public class InventoryHandler {
 
     // MODIFIES: this, Inventory
     // EFFECT: processes commands related to managing inventory including:
-    //         favourite(expand) all items and its opposite
-    //         sort items in an inventory by a category
-    //         view an item by typing in its index
+    // favourite(expand) all items and its opposite
+    // sort items in an inventory by a category
+    // view an item by typing in its index
     private void processInventoryCommands(String input, ArrayList<Item> items) {
         switch (input) {
             case "z":
-                for (Item item : items) {
-                    item.setFavourite();
-                }
+                inventory.setAllFavourite();
                 break;
             case "x":
-                for (Item item : items) {
-                    item.setUnfavourite();
-                }
+                inventory.setAllUnfavourite();
                 break;
             case "s":
                 sortInventory();
@@ -189,9 +194,7 @@ public class InventoryHandler {
                 try {
                     int index = Integer.parseInt(input);
                     processItem(items.get(index - 1));
-                } catch (NumberFormatException ne) {
-                    System.out.println("Invalid option inputted. Please try again.");
-                } catch (IndexOutOfBoundsException oob) {
+                } catch (NumberFormatException | IndexOutOfBoundsException oob) {
                     System.out.println("Invalid option inputted. Please enter a valid index.");
                 }
         }
@@ -200,15 +203,16 @@ public class InventoryHandler {
     }
 
     // MODIFIES: this, inventory
-    // EFFECT: Identifies the sort the user inputs and then sorts the inventory according to that
+    // EFFECT: Identifies the sort the user inputs and then sorts the inventory
+    // according to that
     private void sortInventory() {
-        Sort sort;
         String sortType = null;
         Boolean sortOrder = null;
 
         System.out.println("Please enter the type of sort:");
         System.out.println("Sort can be Name, Type, Value or Weight");
         printDivider();
+
         while (sortType == null) {
             try {
                 sortType = processSort(this.scanner.nextLine());
@@ -221,32 +225,39 @@ public class InventoryHandler {
 
         while (sortOrder == null) {
             try {
-               sortOrder = processSortOrder(this.scanner.nextLine());
+                sortOrder = processSortOrder(this.scanner.nextLine());
             } catch (InvalidSortException e) {
                 System.out.println("Invalid option inputted. Please try again.");
             }
         }
 
-        sort = new Sort(sortType, sortOrder);
-
-        inventory.sort(sort);
+        inventory.sort(new Sort(sortType, sortOrder));
 
         System.out.println("Inventory has been successfully sorted by " + sortType);
         printDivider();
     }
 
     // MODIFIES: this, Inventory, Item
-    // EFFECT: given an individual item, displays possible user interactions such as:
-    //         expand/shrink this item, increase/decrease the quantity of the item
+    // EFFECT: given an individual item, displays possible user interactions such
+    // as:
+    // expand/shrink this item, increase/decrease the quantity of the item
     private void processItem(Item item) {
         printItem(item);
         displayItemCommands();
 
-        String input = this.scanner.nextLine();
-        processItemCommands(input, item);
+        while (true) {
+            String input = this.scanner.nextLine();
+            try {
+                processItemCommands(input, item);
+                break;
+            } catch (InvalidOptionException e) {
+                System.out.println("Invalid option inputted. Please try again.");
+            }
+        }
     }
 
-    // EFFECT: prints all the  info of the expanded form of the item, even if it is not favourited
+    // EFFECT: prints all the info of the expanded form of the item, even if it is
+    // not favourited
     private void printItem(Item item) {
         String favouriteMark;
         if (item.isFavourite()) {
@@ -273,9 +284,9 @@ public class InventoryHandler {
     }
 
     // MODIFIES: this, Inventory, Item
-    // EFFECT: Processes user input for the items 
-    //         can set/unset favourite and increase/decrease quantity of item
-    private void processItemCommands(String input, Item item) {
+    // EFFECT: Processes user input for the items
+    // can set/unset favourite and increase/decrease quantity of item
+    private void processItemCommands(String input, Item item) throws InvalidOptionException {
         switch (input) {
             case "z":
                 item.setFavourite();
@@ -293,6 +304,8 @@ public class InventoryHandler {
                 break;
             case "q":
                 return;
+            default:
+                throw new InvalidOptionException();
         }
     }
 
@@ -312,15 +325,14 @@ public class InventoryHandler {
                     if (intInput < 0) {
                         throw new NeedsPositiveNumberException();
                     }
-                    for (int i = 0; i < intInput; i++) {
-                        inventory.addItemSorted(item);
-                    }
-                } catch (NumberFormatException ne) {
-                    System.out.println("Invalid option inputted. Please enter a number.");
-                } catch (NeedsPositiveNumberException e) {
+                } catch (NumberFormatException | NeedsPositiveNumberException ne) {
                     System.out.println("Invalid option inputted. Please enter a non-negative number.");
                 }
             }
+        }
+
+        for (int i = 0; i < intInput; i++) {
+            inventory.addItemSorted(item);
         }
 
         System.out.println(intInput + " items were succesfully added!");
@@ -344,20 +356,18 @@ public class InventoryHandler {
                     if (intInput < 0) {
                         throw new NeedsPositiveNumberException();
                     }
-                    for (int i = 0; i < intInput; i++) {
-                        inventory.removeItem(item);
-                    }
-                } catch (NumberFormatException ne) {
-                    System.out.println("Invalid option inputted. Please enter a number.");
-                } catch (NeedsPositiveNumberException e) {
+                } catch (NumberFormatException | NeedsPositiveNumberException ne) {
                     System.out.println("Invalid option inputted. Please enter a non-negative number.");
                 }
             }
         }
 
+        for (int i = 0; i < intInput; i++) {
+            inventory.removeItem(item);
+        }
+
         System.out.println(intInput + " items were succesfully removed!");
     }
-
 
     // MODIFIES: this, Inventory
     // EFFECT: Creates and adds an item using user input
@@ -376,7 +386,7 @@ public class InventoryHandler {
             try {
                 type = processType(this.scanner.nextLine());
             } catch (InvalidTypeException te) {
-               System.out.println("Invalid option inputted. Please enter a type.");
+                System.out.println("Invalid option inputted. Please enter a type.");
             }
         }
 
@@ -439,7 +449,8 @@ public class InventoryHandler {
 
     // REQUIRES: all given inputs are valid parameters for an item
     // EFFECT: helper that creates and returns an item based on parameters
-    private Item createItemFromInput(String name, String type, int itemValue, int itemWeight, String desc) throws ItemCreationException {
+    private Item createItemFromInput(String name, String type, int itemValue, int itemWeight, String desc)
+            throws ItemCreationException {
         switch (type) {
             case "Weapon":
             case "w":

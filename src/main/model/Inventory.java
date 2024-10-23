@@ -82,6 +82,22 @@ public class Inventory {
         }
     }
 
+    // MODIFIES: this, Item
+    // EFFECT: sets all items in inventory to favourite
+    public void setAllFavourite() {
+        for (Item item:inventory) {
+            item.setFavourite();
+        }
+    }
+
+    // MODIFIES: this, Item
+    // EFFECT: sets all items in inventory to favourite
+    public void setAllUnfavourite() {
+        for (Item item:inventory) {
+            item.setUnfavourite();
+        }
+    }
+
     public Sort getSort() {
         return this.sort;
     }

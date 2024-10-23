@@ -1,6 +1,7 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -110,6 +111,27 @@ public class InventoryTest {
         testInventory.addItem(testWeapon);
         testInventory.clearInventory();
         assertEquals(0, testInventory.getNumItems());
+    }
+
+    @Test
+    void testSetAllFavourite() {
+        testSortInventory.setAllFavourite();
+
+        assertTrue(testSortInventory.getItem(0).isFavourite());
+        assertTrue(testSortInventory.getItem(1).isFavourite());
+        assertTrue(testSortInventory.getItem(2).isFavourite());
+        assertTrue(testSortInventory.getItem(3).isFavourite());
+    }
+
+    @Test
+    void testSetAllUnfavourite() {
+        testSortInventory.setAllFavourite();
+        testSortInventory.setAllUnfavourite();
+
+        assertFalse(testSortInventory.getItem(0).isFavourite());
+        assertFalse(testSortInventory.getItem(1).isFavourite());
+        assertFalse(testSortInventory.getItem(2).isFavourite());
+        assertFalse(testSortInventory.getItem(3).isFavourite());
     }
 
     @Test
