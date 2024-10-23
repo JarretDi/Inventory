@@ -3,6 +3,10 @@ package ui;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Exceptions.InvalidSortException;
+import Exceptions.InvalidTypeException;
+import Exceptions.ItemCreationException;
+import Exceptions.NeedsPositiveNumberException;
 import model.Inventory;
 import model.Sort;
 import model.items.Armour;
@@ -182,8 +186,14 @@ public class InventoryHandler {
             case "q":
                 return;
             default:
-                int index = Integer.parseInt(input);
-                processItem(items.get(index - 1));
+                try {
+                    int index = Integer.parseInt(input);
+                    processItem(items.get(index - 1));
+                } catch (NumberFormatException ne) {
+                    System.out.println("Invalid option inputted. Please try again.");
+                } catch (IndexOutOfBoundsException oob) {
+                    System.out.println("Invalid option inputted. Please enter a valid index.");
+                }
         }
         printDivider();
         viewInventory();
@@ -193,26 +203,28 @@ public class InventoryHandler {
     // EFFECT: Identifies the sort the user inputs and then sorts the inventory according to that
     private void sortInventory() {
         Sort sort;
-        Boolean sortOrder;
+        String sortType = null;
+        Boolean sortOrder = null;
 
         System.out.println("Please enter the type of sort:");
         System.out.println("Sort can be Name, Type, Value or Weight");
         printDivider();
+        while (sortType == null) {
+            try {
+                sortType = processSort(this.scanner.nextLine());
+            } catch (InvalidSortException e) {
+                System.out.println("Invalid option inputted. Please try again.");
+            }
+        }
 
-        String sortType = this.scanner.nextLine();
-        // check if valid
+        System.out.println("Please enter order, asc or dsc, default asc");
 
-        System.out.println("Please enter order, asc or dec, default asc");
-
-        String order = this.scanner.nextLine();
-
-        if ((order.equals("asc")) || (order.equals(""))) {
-            sortOrder = true;
-        } else if (order.equals("des")) {
-            sortOrder = false;
-        } else {
-            // you shouldn't be here
-            sortOrder = null;
+        while (sortOrder == null) {
+            try {
+               sortOrder = processSortOrder(this.scanner.nextLine());
+            } catch (InvalidSortException e) {
+                System.out.println("Invalid option inputted. Please try again.");
+            }
         }
 
         sort = new Sort(sortType, sortOrder);
@@ -287,39 +299,63 @@ public class InventoryHandler {
     // MODIFIES: this, inventory
     // EFFECT: given a user input, will add that number more to inventory
     private void increaseQuantity(Item item) {
+        int intInput = -1;
         System.out.println("Please enter how much more you wish to add (default 1):");
 
-        String input = scanner.nextLine();
-        if (input.equals("")) {
-            input = "1";
+        while (intInput < 0) {
+            String input = scanner.nextLine();
+            if (input.equals("")) {
+                intInput = 1;
+            } else {
+                try {
+                    intInput = Integer.parseInt(input);
+                    if (intInput < 0) {
+                        throw new NeedsPositiveNumberException();
+                    }
+                    for (int i = 0; i < intInput; i++) {
+                        inventory.addItemSorted(item);
+                    }
+                } catch (NumberFormatException ne) {
+                    System.out.println("Invalid option inputted. Please enter a number.");
+                } catch (NeedsPositiveNumberException e) {
+                    System.out.println("Invalid option inputted. Please enter a non-negative number.");
+                }
+            }
         }
 
-        int intInput = Integer.parseInt(input);
-        for (int i = 0; i < intInput; i++) {
-            inventory.addItemSorted(item);
-        }
-
-        System.out.println(input + " items were succesfully added!");
+        System.out.println(intInput + " items were succesfully added!");
     }
 
     // MODIFIES: this, inventory
     // EFFECT: given a user input, will add that number more to inventory
     private void decreaseQuantity(Item item) {
+        int intInput = -1;
         System.out.println("Please enter how much more you wish to remove (default all):");
 
-        String input = scanner.nextLine();
-        if (input.equals("")) {
-            inventory.removeAllItem(item);
-            System.out.println("All items were succesfully removed!");
-            return;
+        while (intInput < 0) {
+            String input = scanner.nextLine();
+            if (input.equals("")) {
+                inventory.removeAllItem(item);
+                System.out.println("All items were succesfully removed!");
+                return;
+            } else {
+                try {
+                    intInput = Integer.parseInt(input);
+                    if (intInput < 0) {
+                        throw new NeedsPositiveNumberException();
+                    }
+                    for (int i = 0; i < intInput; i++) {
+                        inventory.removeItem(item);
+                    }
+                } catch (NumberFormatException ne) {
+                    System.out.println("Invalid option inputted. Please enter a number.");
+                } catch (NeedsPositiveNumberException e) {
+                    System.out.println("Invalid option inputted. Please enter a non-negative number.");
+                }
+            }
         }
 
-        int intInput = Integer.parseInt(input);
-        for (int i = 0; i < intInput; i++) {
-            inventory.removeItem(item);
-        }
-
-        System.out.println(input + " items were succesfully removed!");
+        System.out.println(intInput + " items were succesfully removed!");
     }
 
 
@@ -335,34 +371,65 @@ public class InventoryHandler {
 
         System.out.println("Please enter the type of the item:");
         System.out.println("Can be a Weapon, Armour, Consumable, Misc or Currency");
-        String type = this.scanner.nextLine();
-        if (!validtype(type)) {
-            System.out.println("Not a type");
-            return;
+        String type = null;
+        while (type == null) {
+            try {
+                type = processType(this.scanner.nextLine());
+            } catch (InvalidTypeException te) {
+               System.out.println("Invalid option inputted. Please enter a type.");
+            }
         }
 
         System.out.println("Please enter the value of the item, or default 0:");
-        String value = this.scanner.nextLine();
-        int itemValue;
-        if (value.equals("")) {
-            itemValue = 0;
-        } else {
-            itemValue = Integer.parseInt(value);
+        int itemValue = -1;
+        while (itemValue < 0) {
+            String value = this.scanner.nextLine();
+            if (value.equals("") || (value == "0")) {
+                itemValue = 0;
+            } else {
+                try {
+                    itemValue = Integer.parseInt(value);
+                    if (itemValue < 0) {
+                        throw new NeedsPositiveNumberException();
+                    }
+                } catch (NumberFormatException ne) {
+                    System.out.println("Invalid option inputted. Please enter a number.");
+                } catch (NeedsPositiveNumberException e) {
+                    System.out.println("Invalid option inputted. Please enter a non-negative value.");
+                }
+            }
         }
 
         System.out.println("Please enter the weight of the item, or default 0:");
-        String weight = this.scanner.nextLine();
-        int itemWeight;
-        if (weight.equals("")) {
-            itemWeight = 0;
-        } else {
-            itemWeight = Integer.parseInt(value);
+        int itemWeight = -1;
+        while (itemWeight < 0) {
+            String weight = this.scanner.nextLine();
+            if (weight.equals("") || (weight == "0")) {
+                itemWeight = 0;
+            } else {
+                try {
+                    itemWeight = Integer.parseInt(weight);
+                    if (itemWeight < 0) {
+                        throw new NeedsPositiveNumberException();
+                    }
+                } catch (NumberFormatException ne) {
+                    System.out.println("Invalid option inputted. Please enter a number.");
+                } catch (NeedsPositiveNumberException e) {
+                    System.out.println("Invalid option inputted. Please enter a non-negative weight.");
+                }
+            }
         }
 
         System.out.println("Please enter the description of the item:");
         String desc = this.scanner.nextLine();
 
-        item = createItemFromInput(name, type, itemValue, itemWeight, desc);
+        item = null;
+        try {
+            item = createItemFromInput(name, type, itemValue, itemWeight, desc);
+        } catch (ItemCreationException e) {
+            System.out.println("Something went wrong. Please try creating the item again.");
+            return;
+        }
 
         inventory.addItemSorted(item);
 
@@ -370,8 +437,9 @@ public class InventoryHandler {
         printDivider();
     }
 
+    // REQUIRES: all given inputs are valid parameters for an item
     // EFFECT: helper that creates and returns an item based on parameters
-    private Item createItemFromInput(String name, String type, int itemValue, int itemWeight, String desc) {
+    private Item createItemFromInput(String name, String type, int itemValue, int itemWeight, String desc) throws ItemCreationException {
         switch (type) {
             case "Weapon":
             case "w":
@@ -388,30 +456,68 @@ public class InventoryHandler {
             case "":
                 return new Misc(name, itemValue, itemWeight, desc);
             default:
-                System.out.println("You shouldn't get here");
-                return new Misc("Error"); // just so the method returns an Item for compiler
+                throw new ItemCreationException();
         }
     }
 
-    // EfFECT: Returns true if input is a valid type
-    private boolean validtype(String type) {
+    // EFFECT: Returns the sort back if valid
+    // Throws an InvalidSortException if input is an invalid sort
+    private String processSort(String sort) throws InvalidSortException {
+        switch (sort) {
+            case "Name":
+            case "n":
+                return "Name";
+            case "Type":
+            case "t":
+                return "Type";
+            case "Value":
+            case "v":
+                return "Value";
+            case "Weight":
+            case "w":
+                return "Weight";
+            default:
+                throw new InvalidSortException();
+        }
+    }
+
+    // EFFECT: Returns the sort order as a boolean if valid
+    // Throws an InvalidSortException if input is an invalid sort order
+    private Boolean processSortOrder(String order) throws InvalidSortException {
+        switch (order) {
+            case "asc":
+            case "a":
+                return true;
+            case "des":
+            case "dec":
+            case "dsc":
+            case "d":
+                return false;
+            default:
+                throw new InvalidSortException();
+        }
+    }
+
+    // EfFECT: Throws an InvalidTypeException if input is an invalid type
+    private String processType(String type) throws InvalidTypeException {
         switch (type) {
             case "Weapon":
             case "w":
-                return true;
+                return "Weapon";
             case "Armour":
             case "a":
-                return true;
+                return "Armour";
             case "Consumable":
-                return true;
+                return "Consumable";
             case "Misc":
             case "m":
             case "":
-                return true;
+                return "Misc";
             case "Currency":
-                return true;
+                return "Currency";
+            default:
+                throw new InvalidTypeException();
         }
-        return false;
     }
 
     // FROM: flashcard lab
