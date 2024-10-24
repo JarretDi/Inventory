@@ -11,3 +11,5 @@ This application will provide an organized way to add, view and filter character
 - As a user, I want to be able to easily transfer items from one character to another
 - As a user, I want to be able to minimize long descriptions of items and being able to reopen them to save space on the screen
 - As a user, I want to be able to specify a quantity of identical items rather than having the same item be added in two separate instances
+- As a user, I want to be able to save my inventory under a 'character' as well as all items within it, preserving sort order
+- As a user, I want to be able to load data from different characters' inventories
