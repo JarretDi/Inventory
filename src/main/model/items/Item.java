@@ -1,10 +1,13 @@
 package model.items;
 
+import org.json.JSONObject;
+
 import model.Sort;
+import persistence.Writable;
 
 // Represents an item having a:
 // Name, type, value, weight, description
-public abstract class Item {
+public abstract class Item implements Writable{
     protected String name;
     protected int value;
     protected int weight;
@@ -83,5 +86,16 @@ public abstract class Item {
 
     public void setUnfavourite() {
         this.favourite = false;
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("type", getType());
+        json.put("value", value);
+        json.put("weight", weight);
+        json.put("desc", desc);
+
+        return json;
     }
 }

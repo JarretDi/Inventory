@@ -1,20 +1,20 @@
 {
+    "character": "Tester1",
+    "sort": "Unsorted",
     "items": [
         {
             "name": "test weapon",
+            "weight": 10,
             "type": "Weapon",
             "value": 15,
-            "weight": 10,
             "desc": "A test weapon."
         },
         {
             "name": "test armour",
+            "weight": 15,
             "type": "Armour",
             "value": 30,
-            "weight": 15,
             "desc": "Some test armour."
         }
-    ],
-    "character": "Tester1",
-    "sort": "Unsorted"
+    ]
 }

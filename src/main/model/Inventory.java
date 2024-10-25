@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import model.items.Item;
@@ -10,20 +11,20 @@ import persistence.Writable;
 // Represents the inventory of a character, consisting of an
 // arbitrary amount of items as well as the count of each identical element
 public class Inventory implements Writable {
-    private String name;
+    private String character;
     private ArrayList<Item> inventory;
     private Sort sort;
 
     // EFFECT: creates an unsorted Inventory with no items inside of it, given a character's name
-    public Inventory(String name) {
-        this.name = name;
+    public Inventory(String character) {
+        this.character = character;
         this.inventory = new ArrayList<>();
         this.sort = new Sort();
     }
 
     // EFFECT: creates an unsorted Inventory with no items inside of it, with a default name as "User"
     public Inventory() {
-        this.name = "User";
+        this.character = "User";
         this.inventory = new ArrayList<>();
         this.sort = new Sort();
     }
@@ -94,8 +95,8 @@ public class Inventory implements Writable {
         }
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCharacter(String character) {
+        this.character = character;
     }
 
     public void setSort(Sort sort) {
@@ -118,8 +119,8 @@ public class Inventory implements Writable {
         }
     }
 
-    public String getName() {
-        return this.name;
+    public String getCharacter() {
+        return this.character;
     }
 
     public Sort getSort() {
@@ -156,6 +157,32 @@ public class Inventory implements Writable {
     // EFFECTS: returns the current inventory converted to a Json object
     @Override
     public JSONObject toJson() {
-        return null;
+        JSONObject json = new JSONObject();
+        json.put("character", character);
+        json.put("items", itemsToJson());
+
+        String sortString;
+        if (sort.isUnsorted()) {
+            sortString = "Unsorted";
+        } else if (sort.getOrder()) {
+            sortString = sort.getSort() + " asc";
+        } else {
+            sortString = sort.getSort() + " dsc";
+        }
+
+        json.put("sort", sortString);
+
+        return json;
+    }
+
+    // EFFECTS: returns items in this workroom as a JSON array
+    private JSONArray itemsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Item item : inventory) {
+            jsonArray.put(item.toJson());
+        }
+
+        return jsonArray;
     }
 }

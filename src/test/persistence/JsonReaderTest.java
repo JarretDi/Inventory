@@ -34,7 +34,7 @@ public class JsonReaderTest {
         testReader = new JsonReader("./data/testReaderEmptyInventory.json");
         try {
             Inventory testInventory = testReader.read();
-            assertEquals("Tester", testInventory.getName());
+            assertEquals("Tester", testInventory.getCharacter());
             assertEquals(0, testInventory.getNumItems());
             assertEquals(null, testInventory.getSort().getSort());
             assertEquals(null, testInventory.getSort().getOrder());
@@ -51,7 +51,7 @@ public class JsonReaderTest {
 
         try {
             Inventory testInventory = testReader.read();
-            assertEquals("Tester1", testInventory.getName());
+            assertEquals("Tester1", testInventory.getCharacter());
             assertEquals(2, testInventory.getNumItems());
 
             Item item0 = testInventory.getItem(0);
@@ -84,7 +84,7 @@ public class JsonReaderTest {
 
         try {
             Inventory testInventory = testReader.read();
-            assertEquals("Tester2", testInventory.getName());
+            assertEquals("Tester2", testInventory.getCharacter());
             assertEquals(3, testInventory.getNumItems());
 
             Item item0 = testInventory.getItem(0);
