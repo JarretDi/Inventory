@@ -67,7 +67,7 @@ public class JsonWriterTest {
 
             JsonReader reader = new JsonReader("./data/testWriterInventory.json");
             testInventory = reader.read();
-            
+
             assertEquals("Tester1", testInventory.getName());
             assertEquals(2, testInventory.getNumItems());
             assertEquals(testWeapon, testInventory.getItem(0));
@@ -92,12 +92,12 @@ public class JsonWriterTest {
             testInventory.addItem(testCurrency);
             testInventory.sort(new Sort("Type", false));
 
-            testJsonWriter = new JsonWriter("./data/testWriterInventory.json");
+            testJsonWriter = new JsonWriter("./data/testWriterSortedInventory.json");
             testJsonWriter.open();
             testJsonWriter.write(testInventory);
             testJsonWriter.close();
 
-            JsonReader reader = new JsonReader("./data/testWriterInventory.json");
+            JsonReader reader = new JsonReader("./data/testWriterSortedInventory.json");
             testInventory = reader.read();
 
             assertEquals("Tester2", testInventory.getName());
