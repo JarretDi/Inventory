@@ -14,6 +14,7 @@ import model.items.Armour;
 import model.items.Consumable;
 import model.items.Currency;
 import model.items.Item;
+import model.items.ItemCreator;
 import model.items.Misc;
 import model.items.Weapon;
 
@@ -435,7 +436,7 @@ public class InventoryHandler {
 
         item = null;
         try {
-            item = createItemFromInput(name, type, itemValue, itemWeight, desc);
+            item = ItemCreator.createItemFromInput(name, type, itemValue, itemWeight, desc);
         } catch (ItemCreationException e) {
             System.out.println("Something went wrong. Please try creating the item again.");
             return;
@@ -445,30 +446,6 @@ public class InventoryHandler {
 
         System.out.println(name + " has been successfully created!");
         printDivider();
-    }
-
-    // REQUIRES: all given inputs are valid parameters for an item
-    // EFFECT: helper that creates and returns an item based on parameters
-    private Item createItemFromInput(String name, String type, int itemValue, int itemWeight, String desc)
-            throws ItemCreationException {
-        switch (type) {
-            case "Weapon":
-            case "w":
-                return new Weapon(name, itemValue, itemWeight, desc);
-            case "Armour":
-            case "a":
-                return new Armour(name, itemValue, itemWeight, desc);
-            case "Consumable":
-                return new Consumable(name, itemValue, itemWeight, desc);
-            case "Currency":
-                return new Currency(name, itemValue, itemWeight, desc);
-            case "Misc":
-            case "m":
-            case "":
-                return new Misc(name, itemValue, itemWeight, desc);
-            default:
-                throw new ItemCreationException();
-        }
     }
 
     // EFFECT: Returns the sort back if valid
