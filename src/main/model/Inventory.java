@@ -2,16 +2,28 @@ package model;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import model.items.Item;
+import persistence.Writable;
 
 // Represents the inventory of a character, consisting of an
 // arbitrary amount of items as well as the count of each identical element
-public class Inventory {
+public class Inventory implements Writable {
+    private String name;
     private ArrayList<Item> inventory;
     private Sort sort;
 
-    // EFFECT: creates an unsorted Inventory with no items inside of it
+    // EFFECT: creates an unsorted Inventory with no items inside of it, given a character's name
+    public Inventory(String name) {
+        this.name = name;
+        this.inventory = new ArrayList<>();
+        this.sort = new Sort();
+    }
+
+    // EFFECT: creates an unsorted Inventory with no items inside of it, with a default name as "User"
     public Inventory() {
+        this.name = "User";
         this.inventory = new ArrayList<>();
         this.sort = new Sort();
     }
@@ -82,6 +94,10 @@ public class Inventory {
         }
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     // MODIFIES: this, Item
     // EFFECT: sets all items in inventory to favourite
     public void setAllFavourite() {
@@ -91,11 +107,15 @@ public class Inventory {
     }
 
     // MODIFIES: this, Item
-    // EFFECT: sets all items in inventory to favourite
+    // EFFECT: sets all items in inventory to unfavourite
     public void setAllUnfavourite() {
         for (Item item:inventory) {
             item.setUnfavourite();
         }
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public Sort getSort() {
@@ -127,5 +147,11 @@ public class Inventory {
             count += 1;
         }
         return count;
+    }
+
+    // EFFECTS: returns the current inventory converted to a Json object
+    @Override
+    public JSONObject toJson() {
+        return null;
     }
 }
