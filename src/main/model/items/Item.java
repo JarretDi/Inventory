@@ -7,7 +7,7 @@ import persistence.Writable;
 
 // Represents an item having a:
 // Name, type, value, weight, description
-public abstract class Item implements Writable{
+public abstract class Item implements Writable {
     protected String name;
     protected int value;
     protected int weight;

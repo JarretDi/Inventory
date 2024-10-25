@@ -54,6 +54,28 @@ public class JsonWriterTest {
     }
 
     @Test
+    void testWriterEmptySortedInventory() {
+        try {
+            testInventory = new Inventory("Tester");
+            testInventory.sort(new Sort("Weight", true));
+            testJsonWriter = new JsonWriter("./data/testWriterEmptySortedInventory.json");
+            testJsonWriter.open();
+            testJsonWriter.write(testInventory);
+            testJsonWriter.close();
+
+            JsonReader reader = new JsonReader("./data/testWriterEmptySortedInventory.json");
+            testInventory = reader.read();
+            assertEquals("Tester", testInventory.getCharacter());
+            assertEquals(0, testInventory.getNumItems());
+
+            assertEquals("Weight", testInventory.getSort().getSort());
+            assertEquals(true, testInventory.getSort().getOrder());
+        } catch (IOException e) {
+            fail();
+        }
+    }
+
+    @Test
     void testWriterInventory() {
         try {
             testInventory = new Inventory("Tester1");
@@ -104,7 +126,7 @@ public class JsonWriterTest {
             testInventory.addItem(testArmour);
             testInventory.addItem(testMisc);
             testInventory.addItem(testCurrency);
-            testInventory.sort(new Sort("Type", true));
+            testInventory.sort(new Sort("Type", false));
 
             testJsonWriter = new JsonWriter("./data/testWriterSortedInventory.json");
             testJsonWriter.open();
@@ -118,11 +140,11 @@ public class JsonWriterTest {
             assertEquals(3, testInventory.getNumItems());
             
             Item item0 = testInventory.getItem(0);
-            assertEquals(testArmour.getName(), item0.getName());
-            assertEquals(testArmour.getType(), item0.getType());
-            assertEquals(testArmour.getValue(), item0.getValue());
-            assertEquals(testArmour.getWeight(), item0.getWeight());
-            assertEquals(testArmour.getDescription(), item0.getDescription());
+            assertEquals(testCurrency.getName(), item0.getName());
+            assertEquals(testCurrency.getType(), item0.getType());
+            assertEquals(testCurrency.getValue(), item0.getValue());
+            assertEquals(testCurrency.getWeight(), item0.getWeight());
+            assertEquals(testCurrency.getDescription(), item0.getDescription());
 
             Item item1 = testInventory.getItem(1);
             assertEquals(testMisc.getName(), item1.getName());
@@ -132,14 +154,14 @@ public class JsonWriterTest {
             assertEquals(testMisc.getDescription(), item1.getDescription());
             
             Item item2 = testInventory.getItem(2);
-            assertEquals(testCurrency.getName(), item2.getName());
-            assertEquals(testCurrency.getType(), item2.getType());
-            assertEquals(testCurrency.getValue(), item2.getValue());
-            assertEquals(testCurrency.getWeight(), item2.getWeight());
-            assertEquals(testCurrency.getDescription(), item2.getDescription());
+            assertEquals(testArmour.getName(), item2.getName());
+            assertEquals(testArmour.getType(), item2.getType());
+            assertEquals(testArmour.getValue(), item2.getValue());
+            assertEquals(testArmour.getWeight(), item2.getWeight());
+            assertEquals(testArmour.getDescription(), item2.getDescription());
 
             assertEquals(testInventory.getSort().getSort(), "Type");
-            assertEquals(testInventory.getSort().getOrder(), true);
+            assertEquals(testInventory.getSort().getOrder(), false);
         } catch (IOException e) {
             fail();
         }

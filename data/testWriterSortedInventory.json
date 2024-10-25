@@ -1,13 +1,13 @@
 {
     "character": "Tester2",
-    "sort": "Type asc",
+    "sort": "Type dsc",
     "items": [
         {
-            "name": "test armour",
-            "weight": 15,
-            "type": "Armour",
-            "value": 30,
-            "desc": "Some test armour."
+            "name": "test currency",
+            "weight": 5,
+            "type": "Currency",
+            "value": 100,
+            "desc": "Some test currency."
         },
         {
             "name": "test misc",
@@ -17,11 +17,11 @@
             "desc": "Some misc."
         },
         {
-            "name": "test currency",
-            "weight": 5,
-            "type": "Currency",
-            "value": 100,
-            "desc": "Some test currency."
+            "name": "test armour",
+            "weight": 15,
+            "type": "Armour",
+            "value": 30,
+            "desc": "Some test armour."
         }
     ]
 }

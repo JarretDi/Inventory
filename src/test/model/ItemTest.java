@@ -1,14 +1,17 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import Exceptions.ItemCreationException;
 import model.items.Armour;
 import model.items.Consumable;
 import model.items.Currency;
 import model.items.Item;
+import model.items.ItemCreator;
 import model.items.Misc;
 import model.items.Weapon;
 
@@ -43,6 +46,53 @@ public class ItemTest {
         assertEquals(testItem3.getType(), "Consumable");
         assertEquals(testItem4.getType(), "Misc");
         assertEquals(testItem5.getType(), "Currency");
+    }
+
+    @Test
+    void testInvalidItemCreator() {
+        ItemCreator itemCreator = new ItemCreator();
+        try {
+            Item testItem1 = ItemCreator.createItemFromInput("A", "Spell");
+            fail();
+        } catch (ItemCreationException e) {
+            //pass
+        }
+        try {
+            Item testItem2 = ItemCreator.createItemFromInput("A", "Attack", 15, 6, "Attack");
+            fail();
+        } catch (ItemCreationException e) {
+            //pass
+        }
+    }
+
+    @Test
+    void testCorrectTypesItemCreator() {
+        ItemCreator itemCreator = new ItemCreator();
+        try {
+            Item testW1 = ItemCreator.createItemFromInput("A", "Weapon");
+            Item testW2 = ItemCreator.createItemFromInput("A", "Weapon", 5, 10, "t");
+            Item testA1 = ItemCreator.createItemFromInput("B", "Armour");
+            Item testA2 = ItemCreator.createItemFromInput("B", "Armour", 10, 5, "te");
+            Item testCo1 = ItemCreator.createItemFromInput("C", "Consumable");
+            Item testCo2 = ItemCreator.createItemFromInput("C", "Consumable", 20, 10, "tes");
+            Item testM1 = ItemCreator.createItemFromInput("D", "Misc");
+            Item testM2 = ItemCreator.createItemFromInput("D", "Misc", 10, 5, "test");
+            Item testCu1 = ItemCreator.createItemFromInput("E", "Currency");
+            Item testCu2 = ItemCreator.createItemFromInput("E", "Currency", 100, 20, "");
+
+            assertEquals(testW1.getType(), "Weapon");
+            assertEquals(testW2.getType(), "Weapon");
+            assertEquals(testA1.getType(), "Armour");
+            assertEquals(testA2.getType(), "Armour");
+            assertEquals(testCo1.getType(), "Consumable");
+            assertEquals(testCo2.getType(), "Consumable");
+            assertEquals(testM1.getType(), "Misc");
+            assertEquals(testM2.getType(), "Misc");
+            assertEquals(testCu1.getType(), "Currency");
+            assertEquals(testCu2.getType(), "Currency");
+        } catch (ItemCreationException e) {
+            fail();
+        }
     }
 
     @Test

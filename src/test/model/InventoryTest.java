@@ -29,7 +29,7 @@ public class InventoryTest {
     
     @BeforeEach
     void runBefore() {
-        testInventory = new Inventory();
+        testInventory = new Inventory("Tester");
         testItem = new Misc("Test Item", 1, 5, "A test item.");
         testWeapon = new Weapon("Test Weapon", 10, 15, "A test weapon.");
 
@@ -47,11 +47,19 @@ public class InventoryTest {
 
     @Test
     void testConstructor() {
+        assertEquals("Tester", testInventory.getCharacter());
         assertEquals(0, testInventory.getNumItems());
         assertEquals(emptySort.getSort(), testInventory.getSort().getSort());
         assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
 
         assertEquals(testInventory.getInventory().size(), 0);
+    }
+
+    @Test
+    void testCharacter() {
+        assertEquals("Tester", testInventory.getCharacter());
+        testInventory.setCharacter("Tess ter");
+        assertEquals("Tess ter", testInventory.getCharacter());
     }
 
     @Test
