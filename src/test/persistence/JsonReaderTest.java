@@ -11,6 +11,7 @@ import model.Inventory;
 import model.Sort;
 import model.items.Armour;
 import model.items.Currency;
+import model.items.Item;
 import model.items.Misc;
 import model.items.Weapon;
 
@@ -35,7 +36,8 @@ public class JsonReaderTest {
             Inventory testInventory = testReader.read();
             assertEquals("Tester", testInventory.getName());
             assertEquals(0, testInventory.getNumItems());
-            assertEquals(new Sort(), testInventory.getSort());
+            assertEquals(null, testInventory.getSort().getSort());
+            assertEquals(null, testInventory.getSort().getOrder());
         } catch (IOException e) {
             fail();
         }
@@ -51,8 +53,21 @@ public class JsonReaderTest {
             Inventory testInventory = testReader.read();
             assertEquals("Tester1", testInventory.getName());
             assertEquals(2, testInventory.getNumItems());
-            assertEquals(testWeapon, testInventory.getItem(0));
-            assertEquals(testArmour, testInventory.getItem(1));
+
+            Item item0 = testInventory.getItem(0);
+            assertEquals(testWeapon.getName(), item0.getName());
+            assertEquals(testWeapon.getType(), item0.getType());
+            assertEquals(testWeapon.getValue(), item0.getValue());
+            assertEquals(testWeapon.getWeight(), item0.getWeight());
+            assertEquals(testWeapon.getDescription(), item0.getDescription());
+
+            Item item1 = testInventory.getItem(1);
+            assertEquals(testArmour.getName(), item1.getName());
+            assertEquals(testArmour.getType(), item1.getType());
+            assertEquals(testArmour.getValue(), item1.getValue());
+            assertEquals(testArmour.getWeight(), item1.getWeight());
+            assertEquals(testArmour.getDescription(), item1.getDescription());
+
             assertEquals(null, testInventory.getSort().getSort());
             assertEquals(null, testInventory.getSort().getOrder());
         } catch (IOException e) {
@@ -62,7 +77,7 @@ public class JsonReaderTest {
 
     @Test
     void testReaderSortedInventory() {
-        testReader = new JsonReader("./data/testReaderInventory.json");
+        testReader = new JsonReader("./data/testReaderSortedInventory.json");
         Misc testMisc = new Misc("test misc", 1, 3, "Some misc.");
         Armour testArmour = new Armour("test armour", 30, 15, "Some test armour.");
         Currency testCurrency = new Currency("test currency", 100, 5, "Some test currency.");
@@ -71,10 +86,30 @@ public class JsonReaderTest {
             Inventory testInventory = testReader.read();
             assertEquals("Tester2", testInventory.getName());
             assertEquals(3, testInventory.getNumItems());
-            assertEquals(testMisc, testInventory.getItem(0));
-            assertEquals(testArmour, testInventory.getItem(1));
-            assertEquals(testCurrency, testInventory.getItem(3));
-            assertEquals(new Sort("Value", true), testInventory.getSort());
+
+            Item item0 = testInventory.getItem(0);
+            assertEquals(testMisc.getName(), item0.getName());
+            assertEquals(testMisc.getType(), item0.getType());
+            assertEquals(testMisc.getValue(), item0.getValue());
+            assertEquals(testMisc.getWeight(), item0.getWeight());
+            assertEquals(testMisc.getDescription(), item0.getDescription());
+
+            Item item1 = testInventory.getItem(1);
+            assertEquals(testArmour.getName(), item1.getName());
+            assertEquals(testArmour.getType(), item1.getType());
+            assertEquals(testArmour.getValue(), item1.getValue());
+            assertEquals(testArmour.getWeight(), item1.getWeight());
+            assertEquals(testArmour.getDescription(), item1.getDescription());
+
+            Item item2 = testInventory.getItem(2);
+            assertEquals(testCurrency.getName(), item2.getName());
+            assertEquals(testCurrency.getType(), item2.getType());
+            assertEquals(testCurrency.getValue(), item2.getValue());
+            assertEquals(testCurrency.getWeight(), item2.getWeight());
+            assertEquals(testCurrency.getDescription(), item2.getDescription());
+
+            assertEquals("Value", testInventory.getSort().getSort());
+            assertEquals(true, testInventory.getSort().getOrder());
         } catch (IOException e) {
             fail();
         }

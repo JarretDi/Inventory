@@ -65,7 +65,7 @@ public class Inventory implements Writable {
         inventory.sort((item1, item2) -> {
             return item1.getPriority(sort) - item2.getPriority(sort);
         });
-        this.sort = sort;
+        setSort(sort);
     }
 
     // MODIFIES: this
@@ -96,6 +96,10 @@ public class Inventory implements Writable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setSort(Sort sort) {
+        this.sort = sort;
     }
 
     // MODIFIES: this, Item
