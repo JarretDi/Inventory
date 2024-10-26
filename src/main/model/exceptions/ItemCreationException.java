@@ -1,5 +1,5 @@
 package model.exceptions;
 
-public class ItemCreationException extends Exception{
+public class ItemCreationException extends Exception {
 
 }

@@ -45,13 +45,13 @@ public class ItemTest {
     @Test
     void testInvalidItemCreator() {
         try {
-            Item testItem1 = ItemCreator.createItemFromInput("Spell", "Attack");
+            Item testW1 = ItemCreator.createItemFromInput("A", "Attck");
             fail();
         } catch (ItemCreationException e) {
             //pass
         }
         try {
-            Item testItem2 = ItemCreator.createItemFromInput("A", "Attack", 15, 6, "Attack");
+            Item testW2 = ItemCreator.createItemFromInput("A", "Spell", 5, 10, "t");
             fail();
         } catch (ItemCreationException e) {
             //pass
