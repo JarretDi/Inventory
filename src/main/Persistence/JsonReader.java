@@ -2,6 +2,7 @@ package persistence;
 
 import model.Inventory;
 import model.Sort;
+import model.exceptions.ItemCreationException;
 import model.items.Item;
 import model.items.ItemCreator;
 
@@ -12,8 +13,6 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import org.json.*;
-
-import Exceptions.ItemCreationException;
 
 // Represents a reader that reads inventory from JSON data stored in file
 // Method implementations mostly taken from workroom demo

@@ -1,22 +1,19 @@
 package ui;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Exceptions.InvalidOptionException;
-import Exceptions.InvalidSortException;
-import Exceptions.InvalidTypeException;
-import Exceptions.ItemCreationException;
-import Exceptions.NeedsPositiveNumberException;
 import model.Inventory;
 import model.Sort;
-import model.items.Armour;
-import model.items.Consumable;
-import model.items.Currency;
+import model.exceptions.ItemCreationException;
 import model.items.Item;
 import model.items.ItemCreator;
-import model.items.Misc;
-import model.items.Weapon;
+import persistence.JsonReader;
+import persistence.JsonWriter;
+import ui.exceptions.*;
 
 // The UI for all of inventory and items
 // Can: view added items, add items, sort items, quit
@@ -74,6 +71,8 @@ public class InventoryHandler {
         System.out.println("Please select an option:\n");
         System.out.println("v: View all items");
         System.out.println("a: Add a new item");
+        System.out.println("s: Save your inventory");
+        System.out.println("d: Load a character's inventory");
         System.out.println("q: Exit the application");
         printDivider();
     }
@@ -89,6 +88,12 @@ public class InventoryHandler {
             case "a":
                 addNewItem();
                 viewInventory();
+                break;
+            case "s":
+                saveInventory();
+                break;
+            case "d":
+                loadInventory();
                 break;
             case "q":
                 quitApplication();
@@ -136,14 +141,111 @@ public class InventoryHandler {
         return favouriteItems;
     }
 
+    // MODIFIES: this, inventory
+    // EFFECTS: if user hasn't entered a name, prompts a name, then saves data to a
+    // file
+    // with the given name (does check if valid)
+    private void saveInventory() {
+        while (inventory.getCharacter() == "User") {
+            System.out.println("Please enter whose inventory this is");
+            String character = scanner.nextLine();
+            if (validName(character)) {
+                inventory.setCharacter(character.strip());
+                break;
+            } else {
+                System.out.println("Invalid name, please try again.");
+            }
+        }
+
+        System.out.println("Saving to " + inventory.getCharacter() + "'s Inventory");
+
+        JsonWriter writer = new JsonWriter("./data/user/" + inventory.getCharacter() + ".json");
+        try {
+            writer.open();
+            writer.write(inventory);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Something went wrong, please try again.");
+        }
+
+        System.out.println("Inventory successfully saved under: " + inventory.getCharacter() + "!");
+
+    }
+
+    // EFFECT: returns true if the given character name only contains letters
+    private boolean validName(String character) {
+        char[] letters = character.toCharArray();
+        for (char c : letters) {
+            if (!Character.isLetter(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // MODIFIES: this
+    // EFFECT: finds a file to load and then loads it
+    @SuppressWarnings("methodlength")
+    private void loadInventory() {
+        if (inventory.getNumItems() > 0) {
+            System.out
+                    .println("Are you sure? Unsaved data will not be kept. Enter 'yes' if you would like to continue.");
+            String confirmation = scanner.nextLine();
+            if (!confirmation.equals("yes")) {
+                return;
+            }
+        }
+
+        File directory = new File("./data/user/");
+        File[] files = directory.listFiles();
+        if (files.length == 0) {
+            System.out.println("There are no files to load!");
+            return;
+        }
+
+        System.out.println("Please select a file to load:");
+        int i = 1;
+        for (File file : files) {
+            System.out.println(i + ". " + file.getName());
+            i++;
+        }
+
+        JsonReader reader;
+        int index = -1;
+
+        while (index < 0) {
+            String indexString = scanner.nextLine();
+            try {
+                int index0 = Integer.parseInt(indexString);
+                if (index0 <= 0 | index0 > files.length) {
+                    throw new InvalidNumberException();
+                }
+                index = index0;
+            } catch (NumberFormatException | InvalidNumberException ne) {
+                System.out.println("Please enter a valid index.");
+            }
+        }
+
+        try {
+            reader = new JsonReader(files[index - 1].getCanonicalPath());
+            inventory = reader.read();
+        } catch (IOException e) {
+            System.out.println("Something went wrong, please try again.");
+            return;
+        }
+
+        System.out.println(inventory.getCharacter() + "'s Inventory has been successfully loaded!");
+    }
+
     // EFFECTS: prints out all items in inventory, with quantity if duplicates
     // favorited items get printed first
     private void printInventory(ArrayList<Item> items) {
+        String name = inventory.getCharacter();
         int i = 1;
         if (inventory.getSort().isUnsorted()) {
-            System.out.println("Inventory:");
+            System.out.println(name + "'s Inventory:");
         } else {
-            System.out.println("Inventory (sorted by " + inventory.getSort().getSort() + "):");
+            System.out.println(name + "'s Inventory (sorted by " + inventory.getSort().getSort() + "):");
         }
         printDivider();
 
@@ -324,9 +426,9 @@ public class InventoryHandler {
                 try {
                     intInput = Integer.parseInt(input);
                     if (intInput < 0) {
-                        throw new NeedsPositiveNumberException();
+                        throw new InvalidNumberException();
                     }
-                } catch (NumberFormatException | NeedsPositiveNumberException ne) {
+                } catch (NumberFormatException | InvalidNumberException ne) {
                     System.out.println("Invalid option inputted. Please enter a non-negative number.");
                 }
             }
@@ -355,9 +457,9 @@ public class InventoryHandler {
                 try {
                     intInput = Integer.parseInt(input);
                     if (intInput < 0) {
-                        throw new NeedsPositiveNumberException();
+                        throw new InvalidNumberException();
                     }
-                } catch (NumberFormatException | NeedsPositiveNumberException ne) {
+                } catch (NumberFormatException | InvalidNumberException ne) {
                     System.out.println("Invalid option inputted. Please enter a non-negative number.");
                 }
             }
@@ -401,11 +503,11 @@ public class InventoryHandler {
                 try {
                     itemValue = Integer.parseInt(value);
                     if (itemValue < 0) {
-                        throw new NeedsPositiveNumberException();
+                        throw new InvalidNumberException();
                     }
                 } catch (NumberFormatException ne) {
                     System.out.println("Invalid option inputted. Please enter a number.");
-                } catch (NeedsPositiveNumberException e) {
+                } catch (InvalidNumberException e) {
                     System.out.println("Invalid option inputted. Please enter a non-negative value.");
                 }
             }
@@ -421,11 +523,11 @@ public class InventoryHandler {
                 try {
                     itemWeight = Integer.parseInt(weight);
                     if (itemWeight < 0) {
-                        throw new NeedsPositiveNumberException();
+                        throw new InvalidNumberException();
                     }
                 } catch (NumberFormatException ne) {
                     System.out.println("Invalid option inputted. Please enter a number.");
-                } catch (NeedsPositiveNumberException e) {
+                } catch (InvalidNumberException e) {
                     System.out.println("Invalid option inputted. Please enter a non-negative weight.");
                 }
             }

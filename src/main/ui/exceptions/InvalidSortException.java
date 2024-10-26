@@ -1,4 +1,4 @@
-package Exceptions;
+package ui.exceptions;
 
 public class InvalidSortException extends Exception {
 

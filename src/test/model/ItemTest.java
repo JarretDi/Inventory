@@ -6,14 +6,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import Exceptions.ItemCreationException;
-import model.items.Armour;
-import model.items.Consumable;
-import model.items.Currency;
-import model.items.Item;
-import model.items.ItemCreator;
-import model.items.Misc;
-import model.items.Weapon;
+import model.exceptions.ItemCreationException;
+import model.items.*;
 
 public class ItemTest {
     Item testItem;
@@ -50,9 +44,8 @@ public class ItemTest {
 
     @Test
     void testInvalidItemCreator() {
-        ItemCreator itemCreator = new ItemCreator();
         try {
-            Item testItem1 = ItemCreator.createItemFromInput("A", "Spell");
+            Item testItem1 = ItemCreator.createItemFromInput("Spell", "Attack");
             fail();
         } catch (ItemCreationException e) {
             //pass
