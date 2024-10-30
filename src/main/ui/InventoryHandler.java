@@ -68,6 +68,7 @@ public class InventoryHandler {
     // FROM: flashcard lab
     // EFFECTS: displays a list of commands that can be used in the main menu
     private void displayMenu() {
+        printDivider();
         System.out.println("Please select an option:\n");
         System.out.println("v: View all items");
         System.out.println("a: Add a new item");
@@ -80,7 +81,6 @@ public class InventoryHandler {
     // FROM: flashcard lab
     // EFFECTS: processes the user's input in the main menu
     private void processMenuCommands(String input) throws InvalidOptionException {
-        printDivider();
         switch (input) {
             case "v":
                 viewInventory();
@@ -93,7 +93,9 @@ public class InventoryHandler {
                 saveInventory();
                 break;
             case "d":
-                loadInventory();
+                if (confirm()) {
+                    loadInventory();
+                }
                 break;
             case "q":
                 quitApplication();
@@ -185,17 +187,7 @@ public class InventoryHandler {
 
     // MODIFIES: this
     // EFFECT: finds a file to load and then loads it
-    @SuppressWarnings("methodlength")
     private void loadInventory() {
-        if (inventory.getNumItems() > 0) {
-            System.out
-                    .println("Are you sure? Unsaved data will not be kept. Enter 'yes' if you would like to continue.");
-            String confirmation = scanner.nextLine();
-            if (!confirmation.equals("yes")) {
-                return;
-            }
-        }
-
         File directory = new File("./data/user/");
         File[] files = directory.listFiles();
         if (files.length == 0) {
@@ -210,24 +202,11 @@ public class InventoryHandler {
             i++;
         }
 
-        JsonReader reader;
-        int index = -1;
-
-        while (index < 0) {
-            String indexString = scanner.nextLine();
-            try {
-                int index0 = Integer.parseInt(indexString);
-                if (index0 <= 0 | index0 > files.length) {
-                    throw new InvalidNumberException();
-                }
-                index = index0;
-            } catch (NumberFormatException | InvalidNumberException ne) {
-                System.out.println("Please enter a valid index.");
-            }
-        }
+        int index = processValidIndex(files.length);
 
         try {
-            reader = new JsonReader(files[index - 1].getCanonicalPath());
+            String path = files[index - 1].getPath();
+            JsonReader reader = new JsonReader(path);
             inventory = reader.read();
         } catch (IOException e) {
             System.out.println("Something went wrong, please try again.");
@@ -235,6 +214,31 @@ public class InventoryHandler {
         }
 
         System.out.println(inventory.getCharacter() + "'s Inventory has been successfully loaded!");
+    }
+
+    private Boolean confirm() {
+        System.out
+                .println("Are you sure? Unsaved data will not be kept. Enter 'yes' if you would like to continue.");
+        String confirmation = scanner.nextLine();
+        return confirmation.equals("yes");
+    }
+
+    // EFFECT: Given a length, looks for user input until input is within the length
+    private int processValidIndex(int length) {
+        int index = -1;
+        while (index < 0) {
+            String indexString = scanner.nextLine();
+            try {
+                int index0 = Integer.parseInt(indexString);
+                if (index0 <= 0 | index0 > length) {
+                    throw new InvalidNumberException();
+                }
+                index = index0;
+            } catch (NumberFormatException | InvalidNumberException ne) {
+                System.out.println("Please enter a valid index.");
+            }
+        }
+        return index;
     }
 
     // EFFECTS: prints out all items in inventory, with quantity if duplicates
@@ -475,68 +479,25 @@ public class InventoryHandler {
     // MODIFIES: this, Inventory
     // EFFECT: Creates and adds an item using user input
     // If the list is unsorted, adds item to end, otherwise puts in correct place
-    @SuppressWarnings("methodlength")
     private void addNewItem() {
-        Item item;
+        Item item = null;
 
         System.out.println("Please enter the name of the item:");
         String name = this.scanner.nextLine();
 
         System.out.println("Please enter the type of the item:");
         System.out.println("Can be a Weapon, Armour, Consumable, Misc or Currency");
-        String type = null;
-        while (type == null) {
-            try {
-                type = processType(this.scanner.nextLine());
-            } catch (InvalidTypeException te) {
-                System.out.println("Invalid option inputted. Please enter a type.");
-            }
-        }
+        String type = processType();
 
         System.out.println("Please enter the value of the item, or default 0:");
-        int itemValue = -1;
-        while (itemValue < 0) {
-            String value = this.scanner.nextLine();
-            if (value.equals("") || (value == "0")) {
-                itemValue = 0;
-            } else {
-                try {
-                    itemValue = Integer.parseInt(value);
-                    if (itemValue < 0) {
-                        throw new InvalidNumberException();
-                    }
-                } catch (NumberFormatException ne) {
-                    System.out.println("Invalid option inputted. Please enter a number.");
-                } catch (InvalidNumberException e) {
-                    System.out.println("Invalid option inputted. Please enter a non-negative value.");
-                }
-            }
-        }
+        int itemValue = processValidInt();
 
         System.out.println("Please enter the weight of the item, or default 0:");
-        int itemWeight = -1;
-        while (itemWeight < 0) {
-            String weight = this.scanner.nextLine();
-            if (weight.equals("") || (weight == "0")) {
-                itemWeight = 0;
-            } else {
-                try {
-                    itemWeight = Integer.parseInt(weight);
-                    if (itemWeight < 0) {
-                        throw new InvalidNumberException();
-                    }
-                } catch (NumberFormatException ne) {
-                    System.out.println("Invalid option inputted. Please enter a number.");
-                } catch (InvalidNumberException e) {
-                    System.out.println("Invalid option inputted. Please enter a non-negative weight.");
-                }
-            }
-        }
+        int itemWeight = processValidInt();
 
         System.out.println("Please enter the description of the item:");
         String desc = this.scanner.nextLine();
 
-        item = null;
         try {
             item = ItemCreator.createItemFromInput(name, type, itemValue, itemWeight, desc);
         } catch (ItemCreationException e) {
@@ -548,6 +509,26 @@ public class InventoryHandler {
 
         System.out.println(name + " has been successfully created!");
         printDivider();
+    }
+
+    private int processValidInt() {
+        int num = -1;
+        while (num < 0) {
+            String value = this.scanner.nextLine();
+            if (value.equals("")) {
+                num = 0;
+            } else {
+                try {
+                    num = Integer.parseInt(value);
+                    if (num < 0) {
+                        throw new InvalidNumberException();
+                    }
+                } catch (NumberFormatException | InvalidNumberException ne) {
+                    System.out.println("Invalid option inputted. Please enter a valid value.");
+                }
+            }
+        }
+        return num;
     }
 
     // EFFECT: Returns the sort back if valid
@@ -589,7 +570,19 @@ public class InventoryHandler {
     }
 
     // EfFECT: Throws an InvalidTypeException if input is an invalid type
-    private String processType(String type) throws InvalidTypeException {
+    private String processType() {
+        String type = null;
+        while (type == null) {
+            try {
+                type = processTypes(this.scanner.nextLine());
+            } catch (InvalidTypeException te) {
+                System.out.println("Invalid option inputted. Please enter a type.");
+            }
+        }
+        return type;
+    }
+
+    private String processTypes(String type) throws InvalidTypeException {
         switch (type) {
             case "Weapon":
             case "w":
