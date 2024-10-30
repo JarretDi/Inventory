@@ -47,7 +47,9 @@ public class JsonReaderTest {
     void testReaderInventory() {
         testReader = new JsonReader("./data/testReaderInventory.json");
         Weapon testWeapon = new Weapon("test weapon", 15, 10, "A test weapon.");
+        testWeapon.setFavourite();
         Armour testArmour = new Armour("test armour", 30, 15, "Some test armour.");
+        testArmour.setFavourite();
 
         try {
             Inventory testInventory = testReader.read();
@@ -60,6 +62,7 @@ public class JsonReaderTest {
             assertEquals(testWeapon.getValue(), item0.getValue());
             assertEquals(testWeapon.getWeight(), item0.getWeight());
             assertEquals(testWeapon.getDescription(), item0.getDescription());
+            assertEquals(testWeapon.isFavourite(), item0.isFavourite());
 
             Item item1 = testInventory.getItem(1);
             assertEquals(testArmour.getName(), item1.getName());
@@ -67,6 +70,7 @@ public class JsonReaderTest {
             assertEquals(testArmour.getValue(), item1.getValue());
             assertEquals(testArmour.getWeight(), item1.getWeight());
             assertEquals(testArmour.getDescription(), item1.getDescription());
+            assertEquals(testArmour.isFavourite(), item1.isFavourite());
 
             assertEquals(null, testInventory.getSort().getSort());
             assertEquals(null, testInventory.getSort().getOrder());
@@ -93,6 +97,7 @@ public class JsonReaderTest {
             assertEquals(testMisc.getValue(), item0.getValue());
             assertEquals(testMisc.getWeight(), item0.getWeight());
             assertEquals(testMisc.getDescription(), item0.getDescription());
+            assertEquals(testMisc.isFavourite(), item0.isFavourite());
 
             Item item1 = testInventory.getItem(1);
             assertEquals(testArmour.getName(), item1.getName());
@@ -100,6 +105,7 @@ public class JsonReaderTest {
             assertEquals(testArmour.getValue(), item1.getValue());
             assertEquals(testArmour.getWeight(), item1.getWeight());
             assertEquals(testArmour.getDescription(), item1.getDescription());
+            assertEquals(testMisc.isFavourite(), item1.isFavourite());
 
             Item item2 = testInventory.getItem(2);
             assertEquals(testCurrency.getName(), item2.getName());
@@ -107,6 +113,7 @@ public class JsonReaderTest {
             assertEquals(testCurrency.getValue(), item2.getValue());
             assertEquals(testCurrency.getWeight(), item2.getWeight());
             assertEquals(testCurrency.getDescription(), item2.getDescription());
+            assertEquals(testMisc.isFavourite(), item2.isFavourite());
 
             assertEquals("Value", testInventory.getSort().getSort());
             assertEquals(true, testInventory.getSort().getOrder());

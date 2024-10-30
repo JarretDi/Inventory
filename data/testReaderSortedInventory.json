@@ -5,21 +5,24 @@
             "type": "Misc",
             "value": 1,
             "weight": 3,
-            "desc": "Some misc."
+            "desc": "Some misc.",
+            "favourite": false
         },
         {
             "name": "test armour",
             "type": "Armour",
             "value": 30,
             "weight": 15,
-            "desc": "Some test armour."
+            "desc": "Some test armour.",
+            "favourite": false
         },
         {
             "name": "test currency",
             "type": "Currency",
             "value": 100,
             "weight": 5,
-            "desc": "Some test currency."
+            "desc": "Some test currency.",
+            "favourite": false
         }
     ],
     "character": "Tester2",

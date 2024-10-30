@@ -6,6 +6,7 @@
             "name": "test weapon",
             "weight": 10,
             "type": "Weapon",
+            "favourite": true,
             "value": 15,
             "desc": "A test weapon."
         },
@@ -13,6 +14,7 @@
             "name": "test armour",
             "weight": 15,
             "type": "Armour",
+            "favourite": true,
             "value": 30,
             "desc": "Some test armour."
         }

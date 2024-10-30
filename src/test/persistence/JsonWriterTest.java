@@ -81,6 +81,8 @@ public class JsonWriterTest {
             testInventory = new Inventory("Tester1");
             Weapon testWeapon = new Weapon("test weapon", 15, 10, "A test weapon.");
             Armour testArmour = new Armour("test armour", 30, 15, "Some test armour.");
+            testWeapon.setFavourite();
+            testArmour.setFavourite();
             testInventory.addItem(testWeapon);
             testInventory.addItem(testArmour);
 
@@ -101,6 +103,7 @@ public class JsonWriterTest {
             assertEquals(testWeapon.getValue(), item0.getValue());
             assertEquals(testWeapon.getWeight(), item0.getWeight());
             assertEquals(testWeapon.getDescription(), item0.getDescription());
+            assertEquals(testWeapon.isFavourite(), item0.isFavourite());
 
             Item item1 = testInventory.getItem(1);
             assertEquals(testArmour.getName(), item1.getName());
@@ -108,6 +111,7 @@ public class JsonWriterTest {
             assertEquals(testArmour.getValue(), item1.getValue());
             assertEquals(testArmour.getWeight(), item1.getWeight());
             assertEquals(testArmour.getDescription(), item1.getDescription());
+            assertEquals(testArmour.isFavourite(), item0.isFavourite());
 
             assertTrue(testInventory.getSort().isUnsorted());
         } catch (IOException e) {
@@ -145,6 +149,7 @@ public class JsonWriterTest {
             assertEquals(testCurrency.getValue(), item0.getValue());
             assertEquals(testCurrency.getWeight(), item0.getWeight());
             assertEquals(testCurrency.getDescription(), item0.getDescription());
+            assertEquals(testCurrency.isFavourite(), item0.isFavourite());
 
             Item item1 = testInventory.getItem(1);
             assertEquals(testMisc.getName(), item1.getName());
@@ -152,6 +157,7 @@ public class JsonWriterTest {
             assertEquals(testMisc.getValue(), item1.getValue());
             assertEquals(testMisc.getWeight(), item1.getWeight());
             assertEquals(testMisc.getDescription(), item1.getDescription());
+            assertEquals(testMisc.isFavourite(), item1.isFavourite());
             
             Item item2 = testInventory.getItem(2);
             assertEquals(testArmour.getName(), item2.getName());
@@ -159,6 +165,7 @@ public class JsonWriterTest {
             assertEquals(testArmour.getValue(), item2.getValue());
             assertEquals(testArmour.getWeight(), item2.getWeight());
             assertEquals(testArmour.getDescription(), item2.getDescription());
+            assertEquals(testArmour.isFavourite(), item2.isFavourite());
 
             assertEquals(testInventory.getSort().getSort(), "Type");
             assertEquals(testInventory.getSort().getOrder(), false);

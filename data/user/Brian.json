@@ -1,0 +1,22 @@
+{
+    "character": "Brian",
+    "sort": "Name dsc",
+    "items": [
+        {
+            "name": "shield",
+            "weight": 500,
+            "type": "Armour",
+            "value": 500,
+            "desc": "good armour",
+            "favourite": true
+        },
+        {
+            "name": "Sword",
+            "weight": 5000,
+            "type": "Weapon",
+            "value": 5000,
+            "desc": "aaskdfja",
+            "favourite": false
+        }
+    ]
+}

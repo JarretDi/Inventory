@@ -92,8 +92,12 @@ public class JsonReader {
         int value = jsonObject.getInt("value");
         int weight = jsonObject.getInt("weight");
         String desc = jsonObject.getString("desc");
+        Boolean favourite = jsonObject.getBoolean("favourite");
 
         Item item = ItemCreator.createItemFromInput(name, type, value, weight, desc);
+        if (favourite) {
+            item.setFavourite();
+        }
         inventory.addItem(item);
     }
 }

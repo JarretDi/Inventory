@@ -95,6 +95,7 @@ public abstract class Item implements Writable {
         json.put("value", value);
         json.put("weight", weight);
         json.put("desc", desc);
+        json.put("favourite", favourite);
 
         return json;
     }
