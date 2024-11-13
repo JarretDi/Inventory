@@ -1,7 +1,11 @@
 package ui;
 
+import model.Inventory;
+
 public class Main {
     public static void main(String[] args) throws Exception {
-        InventoryHandler inventoryHandler = new InventoryHandler();
+        Inventory inventory = new Inventory();
+        InventoryGUI inventoryGUI = new InventoryGUI(inventory);
+        InventoryHandler inventoryHandler = new InventoryHandler(inventory);
     }
 }

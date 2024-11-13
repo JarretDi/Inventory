@@ -29,8 +29,8 @@ public class InventoryHandler {
 
     // FROM: flashcard lab
     // EFFECTS: creates inventory object and initializes main loop
-    public InventoryHandler() {
-        init();
+    public InventoryHandler(Inventory inventory) {
+        init(inventory);
 
         printDivider();
         System.out.println("Welcome to the Inventory Manager app!");
@@ -44,8 +44,8 @@ public class InventoryHandler {
     // FROM: flashcard lab
     // MODIFIES: this
     // EFFECTS: initializes the application with the starting values
-    private void init() {
-        this.inventory = new Inventory();
+    private void init(Inventory inventory) {
+        this.inventory = inventory;
         this.scanner = new Scanner(System.in);
         this.isProgramRunning = true;
     }
