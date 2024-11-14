@@ -18,11 +18,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import model.Inventory;
+import model.Sort;
 
 public class InventoryPanel extends JInternalFrame {
+    private static final int buttonDimensions = 15;
+    private int WIDTH;
+    private int HEIGHT;
+
     private Inventory inventory;
     private Component parent;
     private String layout;
+
+    private JButton nameButton;
+    private JButton typeButton;
+    private JButton valueButton;
+    private JButton weightButton;
 
     public InventoryPanel(Inventory inventory, Component parent) {
         super("Inventory", false, false, false, false);
@@ -30,10 +40,13 @@ public class InventoryPanel extends JInternalFrame {
         this.parent = parent;
         layout = "List";
 
+        WIDTH = parent.getWidth() / 2;
+        HEIGHT = parent.getHeight();
+
         setLayout(new BorderLayout());
 
         setPosition(parent);
-        setSize(parent.getWidth() / 2, parent.getHeight());
+        setSize(WIDTH, HEIGHT);
 
         addPanels();
 
@@ -45,7 +58,6 @@ public class InventoryPanel extends JInternalFrame {
      */
     private void addPanels() {
         addTopBar();
-
         addInventoryHandler();
     }
 
@@ -53,7 +65,7 @@ public class InventoryPanel extends JInternalFrame {
         JPanel topBar = new JPanel();
         topBar.setLayout(new BorderLayout());
 
-        topBar.add(new JLabel(inventory.getCharacter() + "'s Inventory:"), BorderLayout.WEST);
+        topBar.add(new JLabel("   " + inventory.getCharacter() + "'s Inventory:"), BorderLayout.WEST);
 
         JPanel layoutBar = createLayoutBar();
 
@@ -65,7 +77,8 @@ public class InventoryPanel extends JInternalFrame {
 
     private JPanel createLayoutBar() {
         JPanel layoutBar = new JPanel();
-        int buttonDimensions = 25;
+
+        layoutBar.setSize(parent.getWidth() / 2, buttonDimensions);
 
         ImageIcon gridIcon = new ImageIcon("./data/images/iconoir--view-grid.png");
         Image gridImage = gridIcon.getImage();
@@ -77,11 +90,15 @@ public class InventoryPanel extends JInternalFrame {
         Image scaledListImage = listImage.getScaledInstance(buttonDimensions, buttonDimensions,  java.awt.Image.SCALE_SMOOTH);
         listIcon = new ImageIcon(scaledListImage);
 
-        JButton gridButton = new JButton(new GridLayoutAction());
-        gridButton.setIcon(gridIcon);
+        LayoutAction layoutAction = new LayoutAction();
 
-        JButton listButton = new JButton(new ListLayoutAction());
+        JButton gridButton = new JButton(layoutAction);
+        gridButton.setIcon(gridIcon);
+        gridButton.setActionCommand("Grid");
+
+        JButton listButton = new JButton(layoutAction);
         listButton.setIcon(listIcon);
+        gridButton.setActionCommand("List");
 
         layoutBar.add(gridButton);
         layoutBar.add(listButton);
@@ -91,8 +108,69 @@ public class InventoryPanel extends JInternalFrame {
     }
 
     private void addInventoryHandler() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addInventoryHandler'");
+        JPanel inventoryHandler = new JPanel();
+        inventoryHandler.setSize(WIDTH, HEIGHT - buttonDimensions);
+        inventoryHandler.setLocation(WIDTH, HEIGHT + buttonDimensions);
+        inventoryHandler.setLayout(new BorderLayout());
+
+        addSortBar(inventoryHandler);
+        addItemPane(inventoryHandler);
+
+        inventoryHandler.setVisible(true);
+        add(inventoryHandler);
+    }
+
+    private void addSortBar(JPanel inventoryHandler) {
+        JPanel sortBar = new JPanel();
+
+        sortBar.setSize(WIDTH, buttonDimensions);
+        sortBar.setLocation(WIDTH, buttonDimensions);
+        sortBar.setLayout(new FlowLayout());
+
+        SortAction sortAction = new SortAction();
+
+        nameButton = new JButton(sortAction);
+        nameButton.setText("Name");
+        nameButton.setActionCommand("Name");
+
+        typeButton = new JButton(sortAction);
+        typeButton.setText("Type");
+        typeButton.setActionCommand("Type");
+
+        valueButton = new JButton(sortAction);
+        valueButton.setText("Value");
+        valueButton.setActionCommand("Value");
+
+        weightButton = new JButton(sortAction);
+        weightButton.setText("Weight");
+        weightButton.setActionCommand("Weight");
+
+        sortBar.add(nameButton);
+        sortBar.add(typeButton);
+        sortBar.add(valueButton);
+        sortBar.add(weightButton);
+        sortBar.setVisible(true);
+
+        inventoryHandler.add(sortBar, BorderLayout.NORTH);
+    }
+
+    private void addItemPane(JPanel inventoryPanel) {
+        JPanel itemPane = new JPanel();
+
+        if (layout.equals("List")) {
+            addItemPaneList(itemPane);
+        } else {
+            addItemPaneGrid(itemPane);
+        }
+
+        inventoryPanel.add(itemPane);
+    }
+
+    private void addItemPaneList(JPanel itemPane) {
+        // TODO
+    }
+    private void addItemPaneGrid(JPanel itemPane) {
+        // TODO
     }
 
     /**
@@ -100,28 +178,76 @@ public class InventoryPanel extends JInternalFrame {
 	 * @param parent   the parent component
 	 */
 	private void setPosition(Component parent) {
-		setLocation(parent.getWidth() / 2, 0);
+		setLocation(WIDTH, 0);
 	}
 
-    private class GridLayoutAction extends AbstractAction {
-        GridLayoutAction() {
-            super();
+    private void resolveSortIcons() {
+        ImageIcon sortIcon;
+        if (inventory.getSort().getOrder()) {
+            sortIcon = new ImageIcon("./data/images/iconoir--nav-arrow-down.png");
+        } else {
+            sortIcon = new ImageIcon("./data/images/iconoir--nav-arrow-up.png");
         }
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            layout = "Grid";
+        Image sortImage = sortIcon.getImage();
+        Image scaledListImage = sortImage.getScaledInstance(buttonDimensions, buttonDimensions,  java.awt.Image.SCALE_SMOOTH);
+        sortIcon = new ImageIcon(scaledListImage);
+
+        switch (inventory.getSort().getSort()) {
+            case "Name":
+                nameButton.setIcon(sortIcon);
+                typeButton.setIcon(null);
+                valueButton.setIcon(null);
+                weightButton.setIcon(null);
+                break;
+            case "Type":
+                nameButton.setIcon(null);
+                typeButton.setIcon(sortIcon);
+                valueButton.setIcon(null);
+                weightButton.setIcon(null);
+                break;
+            case "Value":
+                nameButton.setIcon(null);
+                typeButton.setIcon(null);
+                valueButton.setIcon(sortIcon);
+                weightButton.setIcon(null);
+                break;
+            case "Weight":
+                nameButton.setIcon(null);
+                typeButton.setIcon(null);
+                valueButton.setIcon(null);
+                weightButton.setIcon(sortIcon);
+                break;
         }
     }
 
-    private class ListLayoutAction extends AbstractAction {
-        ListLayoutAction() {
+    private class LayoutAction extends AbstractAction {
+        LayoutAction() {
             super();
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            layout = "List";
+            layout = e.getActionCommand();
+        }
+    }
+
+    private class SortAction extends AbstractAction {
+        SortAction() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String originalSort = inventory.getSort().getSort();
+            String sort = e.getActionCommand();
+            Boolean order = inventory.getSort().getOrder();
+
+            if (inventory.getSort().isUnsorted()) order = false;
+            if (!sort.equals(originalSort)) order = false;
+
+            inventory.sort(new Sort(sort, !order));
+            resolveSortIcons();
         }
     }
 }
