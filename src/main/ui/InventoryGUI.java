@@ -22,6 +22,7 @@ public class InventoryGUI extends JFrame {
     private JLabel statusLabel;
     private JDesktopPane desktop;
     private JInternalFrame controlPanel;
+    private InventoryPanel inventoryPanel;
 
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
@@ -46,8 +47,11 @@ public class InventoryGUI extends JFrame {
         addButtonPanel();
         controlPanel.pack();
         controlPanel.setVisible(true);
-
         desktop.add(controlPanel);
+
+        inventoryPanel = new InventoryPanel(inventory, this);
+        desktop.add(inventoryPanel);
+        
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
     }
