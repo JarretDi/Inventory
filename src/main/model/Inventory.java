@@ -136,7 +136,27 @@ public class Inventory implements Writable {
     // order within the two divisions is by current sort
     // duplicate items are removed
     public ArrayList<Item> getProcessedInventory() {
-        return null;
+        ArrayList<Item> favouriteItems = new ArrayList<>();
+        ArrayList<Item> nonFavouriteItems = new ArrayList<>();
+
+        for (Item item : inventory) {
+            if (item.isFavourite()) {
+                if (!favouriteItems.contains(item)) {
+                    favouriteItems.add(item);
+                } else {
+                    continue;
+                }
+            } else {
+                if (!nonFavouriteItems.contains(item)) {
+                    nonFavouriteItems.add(item);
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        favouriteItems.addAll(nonFavouriteItems);
+        return favouriteItems;
     }
 
     public Item getItem(int index) {

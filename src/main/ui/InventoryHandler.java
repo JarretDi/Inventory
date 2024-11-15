@@ -109,38 +109,13 @@ public class InventoryHandler {
     // MODIFIES: this, Inventory
     // EFFECTS: handles input when viewing inventory
     private void viewInventory() {
-        ArrayList<Item> items = processItems();
+        ArrayList<Item> items = inventory.getProcessedInventory();
         printInventory(items);
 
         displayInventoryCommands();
 
         String input = this.scanner.nextLine();
         processInventoryCommands(input, items);
-    }
-
-    // EFFECTS: processes an inventory into a more printable form
-    private ArrayList<Item> processItems() {
-        ArrayList<Item> favouriteItems = new ArrayList<>();
-        ArrayList<Item> nonFavouriteItems = new ArrayList<>();
-
-        for (Item item : inventory.getInventory()) {
-            if (item.isFavourite()) {
-                if (!favouriteItems.contains(item)) {
-                    favouriteItems.add(item);
-                } else {
-                    continue;
-                }
-            } else {
-                if (!nonFavouriteItems.contains(item)) {
-                    nonFavouriteItems.add(item);
-                } else {
-                    continue;
-                }
-            }
-        }
-
-        favouriteItems.addAll(nonFavouriteItems);
-        return favouriteItems;
     }
 
     // MODIFIES: this, inventory

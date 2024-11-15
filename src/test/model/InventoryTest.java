@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -364,5 +366,31 @@ public class InventoryTest {
         assertEquals(testSortInventory.getNumItems(), 6);
         assertEquals(testSortInventory.getItem(0), testAddItem);
         assertEquals(testSortInventory.getItem(5), testAddItem2);
+    }
+
+    @Test
+    void testGetProcessedInventory() {
+        testSortInventory.addItem(testSort3);
+        testSortInventory.addItem(testSort2);
+        testSort2.setFavourite();
+        testSort4.setFavourite();
+
+        testSortInventory.sort(new Sort("Name", true));
+        ArrayList<Item> processedInventory = testSortInventory.getProcessedInventory();
+
+        assertEquals(4, processedInventory.size());
+        assertEquals(testSort2, processedInventory.get(0));
+        assertEquals(testSort4, processedInventory.get(1));
+        assertEquals(testSort1, processedInventory.get(2));
+        assertEquals(testSort3, processedInventory.get(3));
+
+        testSortInventory.setAllFavourite();
+
+        processedInventory = testSortInventory.getProcessedInventory();
+        assertEquals(4, processedInventory.size());
+        assertEquals(testSort1, processedInventory.get(0));
+        assertEquals(testSort2, processedInventory.get(1));
+        assertEquals(testSort3, processedInventory.get(2));
+        assertEquals(testSort4, processedInventory.get(3));
     }
 }
