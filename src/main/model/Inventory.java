@@ -131,6 +131,14 @@ public class Inventory implements Writable {
         return this.inventory;
     }
 
+    // EFFECTS: returns a processed inventory in which:
+    // favourited items are put first
+    // order within the two divisions is by current sort
+    // duplicate items are removed
+    public ArrayList<Item> getProcessedInventory() {
+        return null;
+    }
+
     public Item getItem(int index) {
         return inventory.get(index);
     }
