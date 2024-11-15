@@ -3,7 +3,7 @@ package model;
 // Represents a sort with a sorting type and an order,
 // With a special case of null if there is no sort (inventory unsorted)
 // Order represents the order of sort
-// true is top down sort, i.e. A->Z, Weapon->Armor->Consumable->Misc->Currency, 0->100
+// true is descending sort, i.e. A->Z, Weapon->Armor->Consumable->Misc->Currency, 100->0
 
 public class Sort {
     String sort;

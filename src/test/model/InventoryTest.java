@@ -230,10 +230,10 @@ public class InventoryTest {
 
         assertEquals(testSortInventory.getNumItems(), 4);
 
-        assertEquals(testSortInventory.getItem(0), testSort4);
-        assertEquals(testSortInventory.getItem(1), testSort3);
-        assertEquals(testSortInventory.getItem(2), testSort2);
-        assertEquals(testSortInventory.getItem(3), testSort1);
+        assertEquals(testSortInventory.getItem(3), testSort4);
+        assertEquals(testSortInventory.getItem(2), testSort3);
+        assertEquals(testSortInventory.getItem(1), testSort2);
+        assertEquals(testSortInventory.getItem(0), testSort1);
 
         assertEquals(testSortInventory.getSort().getSort(), "Value");
         assertEquals(testSortInventory.getSort().getOrder(), true);
@@ -249,10 +249,10 @@ public class InventoryTest {
 
         assertEquals(testSortInventory.getNumItems(), 4);
 
-        assertEquals(testSortInventory.getItem(0), testSort1);
-        assertEquals(testSortInventory.getItem(1), testSort2);
-        assertEquals(testSortInventory.getItem(2), testSort3);
-        assertEquals(testSortInventory.getItem(3), testSort4);
+        assertEquals(testSortInventory.getItem(3), testSort1);
+        assertEquals(testSortInventory.getItem(2), testSort2);
+        assertEquals(testSortInventory.getItem(1), testSort3);
+        assertEquals(testSortInventory.getItem(0), testSort4);
 
         assertEquals(testSortInventory.getSort().getSort(), "Value");
         assertEquals(testSortInventory.getSort().getOrder(), false);
@@ -268,10 +268,10 @@ public class InventoryTest {
 
         assertEquals(testSortInventory.getNumItems(), 4);
 
-        assertEquals(testSortInventory.getItem(0), testSort2);
-        assertEquals(testSortInventory.getItem(1), testSort1);
-        assertEquals(testSortInventory.getItem(2), testSort3);
-        assertEquals(testSortInventory.getItem(3), testSort4);
+        assertEquals(testSortInventory.getItem(0), testSort4);
+        assertEquals(testSortInventory.getItem(1), testSort3);
+        assertEquals(testSortInventory.getItem(2), testSort2);
+        assertEquals(testSortInventory.getItem(3), testSort1);
 
         assertEquals(testSortInventory.getSort().getSort(), "Weight");
         assertEquals(testSortInventory.getSort().getOrder(), true);
@@ -287,10 +287,11 @@ public class InventoryTest {
 
         assertEquals(testSortInventory.getNumItems(), 4);
 
-        assertEquals(testSortInventory.getItem(0), testSort4);
-        assertEquals(testSortInventory.getItem(1), testSort3);
-        assertEquals(testSortInventory.getItem(2), testSort2);
-        assertEquals(testSortInventory.getItem(3), testSort1);
+        assertEquals(testSortInventory.getItem(0), testSort2);
+        assertEquals(testSortInventory.getItem(1), testSort1);
+        assertEquals(testSortInventory.getItem(2), testSort3);
+        assertEquals(testSortInventory.getItem(3), testSort4);
+        
 
         assertEquals(testSortInventory.getSort().getSort(), "Weight");
         assertEquals(testSortInventory.getSort().getOrder(), false);
@@ -352,7 +353,7 @@ public class InventoryTest {
         testSortInventory.addItemSorted(testAddItem);
 
         assertEquals(testSortInventory.getNumItems(), 5);
-        assertEquals(testSortInventory.getItem(3), testAddItem);
+        assertEquals(testSortInventory.getItem(1), testAddItem);
     }
 
     @Test
@@ -364,8 +365,8 @@ public class InventoryTest {
         testSortInventory.addItemSorted(testAddItem2);
 
         assertEquals(testSortInventory.getNumItems(), 6);
-        assertEquals(testSortInventory.getItem(0), testAddItem);
-        assertEquals(testSortInventory.getItem(5), testAddItem2);
+        assertEquals(testSortInventory.getItem(5), testAddItem);
+        assertEquals(testSortInventory.getItem(0), testAddItem2);
     }
 
     @Test
@@ -392,5 +393,17 @@ public class InventoryTest {
         assertEquals(testSort2, processedInventory.get(1));
         assertEquals(testSort3, processedInventory.get(2));
         assertEquals(testSort4, processedInventory.get(3));
+    }
+
+    @Test
+    void testSetInventory() {
+        testInventory.setInventory(testSortInventory);
+        assertEquals(testInventory, testSortInventory);
+    }
+
+    @Test
+    void testSetInventory2() {
+        testSortInventory.setInventory(testInventory);
+        assertEquals(testInventory, testSortInventory);
     }
 }

@@ -182,7 +182,8 @@ public class InventoryHandler {
         try {
             String path = files[index - 1].getPath();
             JsonReader reader = new JsonReader(path);
-            inventory = reader.read();
+            Inventory newInventory = reader.read();
+            inventory.setInventory(newInventory);
         } catch (IOException e) {
             System.out.println("Something went wrong, please try again.");
             return;
@@ -303,7 +304,7 @@ public class InventoryHandler {
             }
         }
 
-        System.out.println("Please enter order, asc or dsc, default asc");
+        System.out.println("Please enter order, dsc or asc, default dsc");
 
         while (sortOrder == null) {
             try {
@@ -533,12 +534,13 @@ public class InventoryHandler {
         switch (order) {
             case "asc":
             case "a":
-                return true;
+                return false;
             case "des":
             case "dec":
             case "dsc":
             case "d":
-                return false;
+            case "":
+                return true;
             default:
                 throw new InvalidSortException();
         }

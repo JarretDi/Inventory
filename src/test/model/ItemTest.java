@@ -111,11 +111,11 @@ public class ItemTest {
         assertEquals(testItem.getPriority(new Sort("Type", true)), 4);
         assertEquals(testItem.getPriority(new Sort("Type", false)), -4);
 
-        assertEquals(testItem.getPriority(new Sort("Value", true)), 20);
-        assertEquals(testItem.getPriority(new Sort("Value", false)), -20);
+        assertEquals(testItem.getPriority(new Sort("Value", true)), -20);
+        assertEquals(testItem.getPriority(new Sort("Value", false)), 20);
 
-        assertEquals(testItem.getPriority(new Sort("Weight", true)), 5);
-        assertEquals(testItem.getPriority(new Sort("Weight", false)), -5);
+        assertEquals(testItem.getPriority(new Sort("Weight", true)), -5);
+        assertEquals(testItem.getPriority(new Sort("Weight", false)), 5);
     }
 
     @Test

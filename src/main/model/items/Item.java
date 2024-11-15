@@ -51,10 +51,10 @@ public abstract class Item implements Writable {
                 priority = getTypePriority() * mod;
                 break;
             case "Value":
-                priority = this.value * mod;
+                priority = this.value * mod * -1;
                 break;
             case "Weight":
-                priority = this.weight * mod;
+                priority = this.weight * mod * -1;
                 break;
         }
         return priority;

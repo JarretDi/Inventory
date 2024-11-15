@@ -95,6 +95,17 @@ public class Inventory implements Writable {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: given a new inventory, modifies current inventory until it matches given one
+    public void setInventory(Inventory newInventory) {
+        inventory.clear();
+        setCharacter(newInventory.getCharacter());
+        for (Item item:newInventory.getInventory()) {
+            inventory.add(item);
+        }
+        setSort(newInventory.getSort());
+    }
+
     public void setCharacter(String character) {
         this.character = character;
     }
@@ -212,5 +223,42 @@ public class Inventory implements Writable {
         }
 
         return jsonArray;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((character == null) ? 0 : character.hashCode());
+        result = prime * result + ((inventory == null) ? 0 : inventory.hashCode());
+        result = prime * result + ((sort == null) ? 0 : sort.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Inventory other = (Inventory) obj;
+        if (character == null) {
+            if (other.character != null)
+                return false;
+        } else if (!character.equals(other.character))
+            return false;
+        if (inventory == null) {
+            if (other.inventory != null)
+                return false;
+        } else if (!inventory.equals(other.inventory))
+            return false;
+        if (sort == null) {
+            if (other.sort != null)
+                return false;
+        } else if (!sort.equals(other.sort))
+            return false;
+        return true;
     }
 }
