@@ -8,12 +8,15 @@ import java.util.Scanner;
 
 import model.Inventory;
 import model.Sort;
+import model.Sort.SortType;
+import model.exceptions.InvalidNumberException;
+import model.exceptions.InvalidSortException;
+import model.exceptions.InvalidTypeException;
 import model.exceptions.ItemCreationException;
 import model.items.Item;
 import model.items.ItemCreator;
 import persistence.JsonReader;
 import persistence.JsonWriter;
-import ui.exceptions.*;
 
 // The UI for all of inventory and items
 // Can: view added items, add items, sort items, quit
@@ -314,9 +317,12 @@ public class InventoryHandler {
             }
         }
 
-        inventory.sort(new Sort(sortType, sortOrder));
-
-        System.out.println("Inventory has been successfully sorted by " + sortType);
+        try {
+            inventory.sort(new Sort(SortType.valueOf(sortType), sortOrder));
+            System.out.println("Inventory has been successfully sorted by " + sortType);
+        } catch (InvalidSortException e) {
+            System.out.println("Something went wrong, please try again");
+        }
         printDivider();
     }
 
@@ -591,5 +597,9 @@ public class InventoryHandler {
 
     private void printDivider() {
         System.out.println("_____________________");
+    }
+
+    private class InvalidOptionException extends Exception {
+
     }
 }

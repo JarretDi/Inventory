@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import model.exceptions.InvalidSortException;
 import model.items.Item;
 import persistence.Writable;
 
@@ -57,12 +58,15 @@ public class Inventory implements Writable {
         inventory.clear();
     }
 
-    // REQUIRES: sort is not the Unsort (empty sort)
     // MODIFIES: this, Sort
-    // EFFECT: sorts an inventory according to sort, and order is whether
-    // ascending(true) or descending(false)
+    // EFFECT: if given sort is unsort, throws new InvalidSortException
+    // else sorts an inventory according to sort, and order is whether
+    // descending(true) or ascending(false)
     // additionally changes the sort type to given sort
-    public void sort(Sort sort) {
+    public void sort(Sort sort) throws InvalidSortException {
+        if (sort.isUnsorted()) {
+            throw new InvalidSortException();
+        }
         inventory.sort((item1, item2) -> {
             return item1.getPriority(sort) - item2.getPriority(sort);
         });
@@ -204,9 +208,9 @@ public class Inventory implements Writable {
         if (sort.isUnsorted()) {
             sortString = "Unsorted";
         } else if (sort.getOrder()) {
-            sortString = sort.getSort() + " asc";
-        } else {
             sortString = sort.getSort() + " dsc";
+        } else {
+            sortString = sort.getSort() + " asc";
         }
 
         json.put("sort", sortString);

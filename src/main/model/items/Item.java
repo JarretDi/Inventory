@@ -44,16 +44,16 @@ public abstract class Item implements Writable {
         }
 
         switch (currentSort.getSort()) {
-            case "Name":
+            case Name:
                 priority = this.name.compareTo(" ") * mod;
                 break;
-            case "Type":
+            case Type:
                 priority = getTypePriority() * mod;
                 break;
-            case "Value":
+            case Value:
                 priority = this.value * mod * -1;
                 break;
-            case "Weight":
+            case Weight:
                 priority = this.weight * mod * -1;
                 break;
         }

@@ -1,5 +1,5 @@
 {
     "character": "Tester",
-    "sort": "Weight asc",
+    "sort": "Weight dsc",
     "items": []
 }

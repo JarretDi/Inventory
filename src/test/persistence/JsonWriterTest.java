@@ -2,6 +2,7 @@ package persistence;
 
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileNotFoundException;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import model.Inventory;
 import model.Sort;
+import model.Sort.SortType;
+import model.exceptions.InvalidSortException;
 import model.items.Armour;
 import model.items.Currency;
 import model.items.Item;
@@ -57,7 +60,7 @@ public class JsonWriterTest {
     void testWriterEmptySortedInventory() {
         try {
             testInventory = new Inventory("Tester");
-            testInventory.sort(new Sort("Weight", true));
+            testInventory.sort(new Sort(SortType.Weight, true));
             testJsonWriter = new JsonWriter("./data/testWriterEmptySortedInventory.json");
             testJsonWriter.open();
             testJsonWriter.write(testInventory);
@@ -68,9 +71,11 @@ public class JsonWriterTest {
             assertEquals("Tester", testInventory.getCharacter());
             assertEquals(0, testInventory.getNumItems());
 
-            assertEquals("Weight", testInventory.getSort().getSort());
-            assertEquals(true, testInventory.getSort().getOrder());
+            assertEquals(SortType.Weight, testInventory.getSort().getSort());
+            assertTrue(testInventory.getSort().getOrder());
         } catch (IOException e) {
+            fail();
+        } catch (InvalidSortException e) {
             fail();
         }
     }
@@ -130,7 +135,11 @@ public class JsonWriterTest {
             testInventory.addItem(testArmour);
             testInventory.addItem(testMisc);
             testInventory.addItem(testCurrency);
-            testInventory.sort(new Sort("Type", false));
+            try {
+                testInventory.sort(new Sort(SortType.Type, false));
+            } catch (InvalidSortException e) {
+                fail();
+            }
 
             testJsonWriter = new JsonWriter("./data/testWriterSortedInventory.json");
             testJsonWriter.open();
@@ -167,8 +176,8 @@ public class JsonWriterTest {
             assertEquals(testArmour.getDescription(), item2.getDescription());
             assertEquals(testArmour.isFavourite(), item2.isFavourite());
 
-            assertEquals(testInventory.getSort().getSort(), "Type");
-            assertEquals(testInventory.getSort().getOrder(), false);
+            assertEquals(testInventory.getSort().getSort(), SortType.Type);
+            assertFalse(testInventory.getSort().getOrder());
         } catch (IOException e) {
             fail();
         }

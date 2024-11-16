@@ -5,19 +5,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import model.Sort.SortType;
+
 public class SortTest {
     Sort testSort;
     Sort testUnsort;
 
     @BeforeEach
     void setup() {
-        testSort = new Sort("Name", true);
+        testSort = new Sort(SortType.Name, true);
         testUnsort = new Sort();
     }
 
     @Test
     void testConstructor() {
-        assertEquals(testSort.getSort(), "Name");
+        assertEquals(testSort.getSort(), SortType.Name);
         assertEquals(testSort.getOrder(), true);
     }
 

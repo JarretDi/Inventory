@@ -2,6 +2,7 @@ package persistence;
 
 import model.Inventory;
 import model.Sort;
+import model.Sort.SortType;
 import model.exceptions.ItemCreationException;
 import model.items.Item;
 import model.items.ItemCreator;
@@ -61,12 +62,12 @@ public class JsonReader {
         } else {
             String[] splitString = string.split(" ");
             Boolean order;
-            if (splitString[1].equals("asc")) {
+            if (splitString[1].equals("dsc")) {
                 order = true;
             }  else {
                 order = false;
             }
-            return new Sort(splitString[0], order);
+            return new Sort(SortType.valueOf(splitString[0]), order);
         }
     }
 

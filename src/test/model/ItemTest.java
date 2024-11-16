@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import model.Sort.SortType;
+import model.exceptions.InvalidNumberException;
+import model.exceptions.InvalidTypeException;
 import model.exceptions.ItemCreationException;
 import model.items.*;
 
@@ -45,15 +48,33 @@ public class ItemTest {
     @Test
     void testInvalidItemCreator() {
         try {
-            Item testW1 = ItemCreator.createItemFromInput("A", "Attck");
+            ItemCreator.createItemFromInput("A", "Attck");
             fail();
         } catch (ItemCreationException e) {
             //pass
         }
         try {
-            Item testW2 = ItemCreator.createItemFromInput("A", "Spell", 5, 10, "t");
+            ItemCreator.createItemFromInput("A", "Spell", 5, 10, "t");
             fail();
-        } catch (ItemCreationException e) {
+        } catch (InvalidNumberException e) {
+            fail();
+        } catch (InvalidTypeException e) {
+            //pass
+        } 
+        try {
+            ItemCreator.createItemFromInput("B", "Sword", -3, 5, "");
+            fail();
+        } catch (InvalidTypeException e) {
+            fail();
+        } catch (InvalidNumberException e) {
+            //pass
+        }
+        try {
+            ItemCreator.createItemFromInput("B", "Sword", 10, -2, "");
+            fail();
+        } catch (InvalidTypeException e) {
+            fail();
+        } catch (InvalidNumberException e) {
             //pass
         }
     }
@@ -105,17 +126,17 @@ public class ItemTest {
 
     @Test
     void testGetPriority() {
-        assertEquals(testItem.getPriority(new Sort("Name", true)), testItem.getName().compareTo(" "));
-        assertEquals(testItem.getPriority(new Sort("Name", false)), -testItem.getName().compareTo(" "));
+        assertEquals(testItem.getPriority(new Sort(SortType.Name, true)), testItem.getName().compareTo(" "));
+        assertEquals(testItem.getPriority(new Sort(SortType.Name, false)), -testItem.getName().compareTo(" "));
 
-        assertEquals(testItem.getPriority(new Sort("Type", true)), 4);
-        assertEquals(testItem.getPriority(new Sort("Type", false)), -4);
+        assertEquals(testItem.getPriority(new Sort(SortType.Type, true)), 4);
+        assertEquals(testItem.getPriority(new Sort(SortType.Type, false)), -4);
 
-        assertEquals(testItem.getPriority(new Sort("Value", true)), -20);
-        assertEquals(testItem.getPriority(new Sort("Value", false)), 20);
+        assertEquals(testItem.getPriority(new Sort(SortType.Value, true)), -20);
+        assertEquals(testItem.getPriority(new Sort(SortType.Value, false)), 20);
 
-        assertEquals(testItem.getPriority(new Sort("Weight", true)), -5);
-        assertEquals(testItem.getPriority(new Sort("Weight", false)), 5);
+        assertEquals(testItem.getPriority(new Sort(SortType.Weight, true)), -5);
+        assertEquals(testItem.getPriority(new Sort(SortType.Weight, false)), 5);
     }
 
     @Test

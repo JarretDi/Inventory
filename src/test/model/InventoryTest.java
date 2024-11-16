@@ -1,5 +1,6 @@
 package model;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,6 +10,8 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import model.Sort.SortType;
+import model.exceptions.InvalidSortException;
 import model.items.Armour;
 import model.items.Consumable;
 import model.items.Currency;
@@ -145,12 +148,26 @@ public class InventoryTest {
     }
 
     @Test
+    void testUnsortedSort() {
+        try {
+            testSortInventory.sort(new Sort());
+            fail();
+        } catch (InvalidSortException e) {
+            assertTrue(testSortInventory.getSort().isUnsorted());
+        }
+    }
+
+    @Test
     void testSortAlphabetical() {
         assertEquals(emptySort.getSort(), testInventory.getSort().getSort());
         assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         assertEquals(testSortInventory.getNumItems(), 4);
 
-        testSortInventory.sort(new Sort("Name", true));
+        try {
+            testSortInventory.sort(new Sort(SortType.Name, true));
+        } catch (InvalidSortException e) {
+            fail();
+        }
 
         assertEquals(testSortInventory.getNumItems(), 4);
 
@@ -159,7 +176,7 @@ public class InventoryTest {
         assertEquals(testSortInventory.getItem(2), testSort3);
         assertEquals(testSortInventory.getItem(3), testSort4);
         
-        assertEquals(testSortInventory.getSort().getSort(), "Name");
+        assertEquals(testSortInventory.getSort().getSort(), SortType.Name);
         assertEquals(testSortInventory.getSort().getOrder(), true);
     }
 
@@ -169,7 +186,11 @@ public class InventoryTest {
         assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         assertEquals(testSortInventory.getNumItems(), 4);
 
-        testSortInventory.sort(new Sort("Name", false));
+        try {
+            testSortInventory.sort(new Sort(SortType.Name, false));
+        } catch (InvalidSortException e) {
+            fail();
+        }
 
         assertEquals(testSortInventory.getNumItems(), 4);
 
@@ -178,7 +199,7 @@ public class InventoryTest {
         assertEquals(testSortInventory.getItem(2), testSort2);
         assertEquals(testSortInventory.getItem(3), testSort1);
 
-        assertEquals(testSortInventory.getSort().getSort(), "Name");
+        assertEquals(testSortInventory.getSort().getSort(), SortType.Name);
         assertEquals(testSortInventory.getSort().getOrder(), false);
     }
 
@@ -188,7 +209,11 @@ public class InventoryTest {
         assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         assertEquals(testSortInventory.getNumItems(), 4);
 
-        testSortInventory.sort(new Sort("Type", true));
+        try {
+            testSortInventory.sort(new Sort(SortType.Type, true));
+        } catch (InvalidSortException e) {
+            fail();
+        }
 
         assertEquals(testSortInventory.getNumItems(), 4);
 
@@ -197,7 +222,7 @@ public class InventoryTest {
         assertEquals(testSortInventory.getItem(2), testSort2);
         assertEquals(testSortInventory.getItem(3), testSort4);
 
-        assertEquals(testSortInventory.getSort().getSort(), "Type");
+        assertEquals(testSortInventory.getSort().getSort(), SortType.Type);
         assertEquals(testSortInventory.getSort().getOrder(), true);
     }
 
@@ -207,7 +232,11 @@ public class InventoryTest {
         assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         assertEquals(testSortInventory.getNumItems(), 4);
 
-        testSortInventory.sort(new Sort("Type", false));
+        try {
+            testSortInventory.sort(new Sort(SortType.Type, false));
+        } catch (InvalidSortException e) {
+            fail();
+        }
 
         assertEquals(testSortInventory.getNumItems(), 4);
 
@@ -216,7 +245,7 @@ public class InventoryTest {
         assertEquals(testSortInventory.getItem(2), testSort3);
         assertEquals(testSortInventory.getItem(3), testSort1);
 
-        assertEquals(testSortInventory.getSort().getSort(), "Type");
+        assertEquals(testSortInventory.getSort().getSort(), SortType.Type);
         assertEquals(testSortInventory.getSort().getOrder(), false);
     }
 
@@ -226,7 +255,11 @@ public class InventoryTest {
         assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         assertEquals(testSortInventory.getNumItems(), 4);
 
-        testSortInventory.sort(new Sort("Value", true));
+        try {
+            testSortInventory.sort(new Sort(SortType.Value, true));
+        } catch (InvalidSortException e) {
+            fail();
+        }
 
         assertEquals(testSortInventory.getNumItems(), 4);
 
@@ -235,7 +268,7 @@ public class InventoryTest {
         assertEquals(testSortInventory.getItem(1), testSort2);
         assertEquals(testSortInventory.getItem(0), testSort1);
 
-        assertEquals(testSortInventory.getSort().getSort(), "Value");
+        assertEquals(testSortInventory.getSort().getSort(), SortType.Value);
         assertEquals(testSortInventory.getSort().getOrder(), true);
     }
 
@@ -245,7 +278,11 @@ public class InventoryTest {
         assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         assertEquals(testSortInventory.getNumItems(), 4);
 
-        testSortInventory.sort(new Sort("Value", false));
+        try {
+            testSortInventory.sort(new Sort(SortType.Value, false));
+        } catch (InvalidSortException e) {
+            fail();
+        }
 
         assertEquals(testSortInventory.getNumItems(), 4);
 
@@ -254,7 +291,7 @@ public class InventoryTest {
         assertEquals(testSortInventory.getItem(1), testSort3);
         assertEquals(testSortInventory.getItem(0), testSort4);
 
-        assertEquals(testSortInventory.getSort().getSort(), "Value");
+        assertEquals(testSortInventory.getSort().getSort(), SortType.Value);
         assertEquals(testSortInventory.getSort().getOrder(), false);
     }
 
@@ -264,7 +301,11 @@ public class InventoryTest {
         assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         assertEquals(testSortInventory.getNumItems(), 4);
 
-        testSortInventory.sort(new Sort("Weight", true));
+        try {
+            testSortInventory.sort(new Sort(SortType.Weight, true));
+        } catch (InvalidSortException e) {
+            fail();
+        }
 
         assertEquals(testSortInventory.getNumItems(), 4);
 
@@ -273,7 +314,7 @@ public class InventoryTest {
         assertEquals(testSortInventory.getItem(2), testSort2);
         assertEquals(testSortInventory.getItem(3), testSort1);
 
-        assertEquals(testSortInventory.getSort().getSort(), "Weight");
+        assertEquals(testSortInventory.getSort().getSort(), SortType.Weight);
         assertEquals(testSortInventory.getSort().getOrder(), true);
     }
 
@@ -283,7 +324,11 @@ public class InventoryTest {
         assertEquals(emptySort.getOrder(), testInventory.getSort().getOrder());
         assertEquals(testSortInventory.getNumItems(), 4);
 
-        testSortInventory.sort(new Sort("Weight", false));
+        try {
+            testSortInventory.sort(new Sort(SortType.Weight, false));
+        } catch (InvalidSortException e) {
+            fail();
+        }
 
         assertEquals(testSortInventory.getNumItems(), 4);
 
@@ -293,7 +338,7 @@ public class InventoryTest {
         assertEquals(testSortInventory.getItem(3), testSort4);
         
 
-        assertEquals(testSortInventory.getSort().getSort(), "Weight");
+        assertEquals(testSortInventory.getSort().getSort(), SortType.Weight);
         assertEquals(testSortInventory.getSort().getOrder(), false);
     }
 
@@ -301,8 +346,12 @@ public class InventoryTest {
     void testSortTwice() {
         assertEquals(testSortInventory.getNumItems(), 4);
 
-        testSortInventory.sort(new Sort("Weight", false));
-        testSortInventory.sort(new Sort("Name", true));
+        try {
+            testSortInventory.sort(new Sort(SortType.Weight, false));
+            testSortInventory.sort(new Sort(SortType.Name, true));
+        } catch (InvalidSortException e) {
+            fail();
+        }
 
         assertEquals(testSortInventory.getNumItems(), 4);
 
@@ -311,7 +360,7 @@ public class InventoryTest {
         assertEquals(testSortInventory.getItem(2), testSort3);
         assertEquals(testSortInventory.getItem(3), testSort4);
 
-        assertEquals(testSortInventory.getSort().getSort(), "Name");
+        assertEquals(testSortInventory.getSort().getSort(), SortType.Name);
         assertEquals(testSortInventory.getSort().getOrder(), true);
     }
 
@@ -326,7 +375,11 @@ public class InventoryTest {
     @Test
     void testAddItemSorted() {
         Item testAddItem = new Consumable("Bc", 9, 10, "");
-        testSortInventory.sort(new Sort("Name", true));
+        try {
+            testSortInventory.sort(new Sort(SortType.Name, true));
+        } catch (InvalidSortException e) {
+            fail();
+        }
         testSortInventory.addItemSorted(testAddItem);
 
         assertEquals(testSortInventory.getNumItems(), 5);
@@ -337,7 +390,11 @@ public class InventoryTest {
     void testAdd2ItemSorted() {
         Item testAddItem = new Weapon("Bc", 9, 10, "");
         Item testAddItem2 = new Currency("DC", 9, 10, "");
-        testSortInventory.sort(new Sort("Type", true));
+        try {
+            testSortInventory.sort(new Sort(SortType.Type, true));
+        } catch (InvalidSortException e) {
+            fail();
+        }
         testSortInventory.addItemSorted(testAddItem);
         testSortInventory.addItemSorted(testAddItem2);
 
@@ -349,7 +406,11 @@ public class InventoryTest {
     @Test
     void testAddItemReverseSorted() {
         Item testAddItem = new Consumable("Bc", 15, 10, "");
-        testSortInventory.sort(new Sort("Value", false));
+        try {
+            testSortInventory.sort(new Sort(SortType.Value, false));
+        } catch (InvalidSortException e) {
+            fail();
+        }
         testSortInventory.addItemSorted(testAddItem);
 
         assertEquals(testSortInventory.getNumItems(), 5);
@@ -360,7 +421,11 @@ public class InventoryTest {
     void testAdd2ItemReverseSorted() {
         Item testAddItem = new Weapon("Bc", 9, 100, "");
         Item testAddItem2 = new Currency("DC", 9, 0, "");
-        testSortInventory.sort(new Sort("Weight", false));
+        try {
+            testSortInventory.sort(new Sort(SortType.Weight, false));
+        } catch (InvalidSortException e) {
+            fail();
+        }
         testSortInventory.addItemSorted(testAddItem);
         testSortInventory.addItemSorted(testAddItem2);
 
@@ -376,7 +441,11 @@ public class InventoryTest {
         testSort2.setFavourite();
         testSort4.setFavourite();
 
-        testSortInventory.sort(new Sort("Name", true));
+        try {
+            testSortInventory.sort(new Sort(SortType.Name, true));
+        } catch (InvalidSortException e) {
+            fail();
+        }
         ArrayList<Item> processedInventory = testSortInventory.getProcessedInventory();
 
         assertEquals(4, processedInventory.size());

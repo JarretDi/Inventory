@@ -1,6 +1,6 @@
 {
     "character": "Tester2",
-    "sort": "Type dsc",
+    "sort": "Type asc",
     "items": [
         {
             "name": "test currency",

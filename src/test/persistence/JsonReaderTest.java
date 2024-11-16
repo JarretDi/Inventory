@@ -2,6 +2,7 @@ package persistence;
 
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.IOException;
 
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import model.Inventory;
 import model.Sort;
+import model.Sort.SortType;
 import model.items.Armour;
 import model.items.Currency;
 import model.items.Item;
@@ -115,8 +117,8 @@ public class JsonReaderTest {
             assertEquals(testCurrency.getDescription(), item2.getDescription());
             assertEquals(testMisc.isFavourite(), item2.isFavourite());
 
-            assertEquals("Value", testInventory.getSort().getSort());
-            assertEquals(true, testInventory.getSort().getOrder());
+            assertEquals(SortType.Value, testInventory.getSort().getSort());
+            assertFalse(testInventory.getSort().getOrder());
         } catch (IOException e) {
             fail();
         }
