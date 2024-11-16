@@ -10,24 +10,32 @@ import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import model.Inventory;
 import model.Sort;
+import model.Sort.SortType;
+import model.exceptions.InvalidSortException;
+import model.items.Item;
 
 public class InventoryPanel extends JInternalFrame {
     private static final int buttonDimensions = 15;
-    private int WIDTH;
-    private int HEIGHT;
+    private int width;
+    private int height;
 
     private Inventory inventory;
     private Component parent;
     private String layout;
+
+    private JPanel inventoryHandler;
+    private JPanel itemPane;
 
     private JButton nameButton;
     private JButton typeButton;
@@ -40,17 +48,17 @@ public class InventoryPanel extends JInternalFrame {
         this.parent = parent;
         layout = "List";
 
-        WIDTH = parent.getWidth() / 2;
-        HEIGHT = parent.getHeight();
+        width = parent.getWidth() / 2;
+        height = parent.getHeight();
 
         setLayout(new BorderLayout());
 
         setPosition(parent);
-        setSize(WIDTH, HEIGHT);
+        setSize(width, height);
 
         addPanels();
 
-		setVisible(true);
+        setVisible(true);
     }
 
     /**
@@ -69,9 +77,9 @@ public class InventoryPanel extends JInternalFrame {
 
         JPanel layoutBar = createLayoutBar();
 
-        topBar.add(layoutBar,BorderLayout.EAST);
+        topBar.add(layoutBar, BorderLayout.EAST);
         topBar.setVisible(true);
-        
+
         add(topBar, BorderLayout.NORTH);
     }
 
@@ -82,12 +90,14 @@ public class InventoryPanel extends JInternalFrame {
 
         ImageIcon gridIcon = new ImageIcon("./data/images/iconoir--view-grid.png");
         Image gridImage = gridIcon.getImage();
-        Image scaledGridImage = gridImage.getScaledInstance(buttonDimensions, buttonDimensions,  java.awt.Image.SCALE_SMOOTH);
+        Image scaledGridImage = gridImage.getScaledInstance(buttonDimensions, buttonDimensions,
+                java.awt.Image.SCALE_SMOOTH);
         gridIcon = new ImageIcon(scaledGridImage);
 
         ImageIcon listIcon = new ImageIcon("./data/images/iconoir--view-columns-2.png");
         Image listImage = listIcon.getImage();
-        Image scaledListImage = listImage.getScaledInstance(buttonDimensions, buttonDimensions,  java.awt.Image.SCALE_SMOOTH);
+        Image scaledListImage = listImage.getScaledInstance(buttonDimensions, buttonDimensions,
+                java.awt.Image.SCALE_SMOOTH);
         listIcon = new ImageIcon(scaledListImage);
 
         LayoutAction layoutAction = new LayoutAction();
@@ -98,7 +108,7 @@ public class InventoryPanel extends JInternalFrame {
 
         JButton listButton = new JButton(layoutAction);
         listButton.setIcon(listIcon);
-        gridButton.setActionCommand("List");
+        listButton.setActionCommand("List");
 
         layoutBar.add(gridButton);
         layoutBar.add(listButton);
@@ -108,13 +118,13 @@ public class InventoryPanel extends JInternalFrame {
     }
 
     private void addInventoryHandler() {
-        JPanel inventoryHandler = new JPanel();
-        inventoryHandler.setSize(WIDTH, HEIGHT - buttonDimensions);
-        inventoryHandler.setLocation(WIDTH, HEIGHT + buttonDimensions);
+        inventoryHandler = new JPanel();
+        inventoryHandler.setSize(width, height - buttonDimensions);
+        inventoryHandler.setLocation(width, height + buttonDimensions);
         inventoryHandler.setLayout(new BorderLayout());
 
         addSortBar(inventoryHandler);
-        addItemPane(inventoryHandler);
+        addItemPane();
 
         inventoryHandler.setVisible(true);
         add(inventoryHandler);
@@ -123,8 +133,8 @@ public class InventoryPanel extends JInternalFrame {
     private void addSortBar(JPanel inventoryHandler) {
         JPanel sortBar = new JPanel();
 
-        sortBar.setSize(WIDTH, buttonDimensions);
-        sortBar.setLocation(WIDTH, buttonDimensions);
+        sortBar.setSize(width, buttonDimensions);
+        sortBar.setLocation(width, buttonDimensions);
         sortBar.setLayout(new FlowLayout());
 
         SortAction sortAction = new SortAction();
@@ -154,32 +164,48 @@ public class InventoryPanel extends JInternalFrame {
         inventoryHandler.add(sortBar, BorderLayout.NORTH);
     }
 
-    private void addItemPane(JPanel inventoryPanel) {
-        JPanel itemPane = new JPanel();
+    private void addItemPane() {
+        itemPane = new JPanel();
+        itemPane.setLayout(new BoxLayout(itemPane, BoxLayout.Y_AXIS));
 
         if (layout.equals("List")) {
-            addItemPaneList(itemPane);
+            addItemPaneList();
         } else {
-            addItemPaneGrid(itemPane);
+            addItemPaneGrid();
         }
 
-        inventoryPanel.add(itemPane);
+        itemPane.setVisible(true);
+        inventoryHandler.add(itemPane, BorderLayout.CENTER);
     }
 
-    private void addItemPaneList(JPanel itemPane) {
-        // TODO
+    private void addItemPaneList() {
+        for (Item item : inventory.getProcessedInventory()) {
+            JPanel nextItem = new JPanel();
+            nextItem.setLayout(new FlowLayout());
+            nextItem.add(new JLabel(item.getName()));
+            nextItem.add(new JLabel(item.getType()));
+            nextItem.add(new JLabel(Integer.toString(item.getValue())));
+            nextItem.add(new JLabel(Integer.toString(item.getWeight())));
+            nextItem.add(new JLabel(Integer.toString(inventory.getCount(item))));
+            nextItem.setSize(width / 5, buttonDimensions);
+            nextItem.setVisible(true);
+
+            itemPane.add(nextItem);
+        }
     }
-    private void addItemPaneGrid(JPanel itemPane) {
+
+    private void addItemPaneGrid() {
         // TODO
     }
 
     /**
-	 * Sets the position of this remote control UI relative to parent component
-	 * @param parent   the parent component
-	 */
-	private void setPosition(Component parent) {
-		setLocation(WIDTH, 0);
-	}
+     * Sets the position of this remote control UI relative to parent component
+     * 
+     * @param parent the parent component
+     */
+    private void setPosition(Component parent) {
+        setLocation(width, 0);
+    }
 
     private void resolveSortIcons() {
         ImageIcon sortIcon;
@@ -190,32 +216,30 @@ public class InventoryPanel extends JInternalFrame {
         }
 
         Image sortImage = sortIcon.getImage();
-        Image scaledListImage = sortImage.getScaledInstance(buttonDimensions, buttonDimensions,  java.awt.Image.SCALE_SMOOTH);
+        Image scaledListImage = sortImage.getScaledInstance(buttonDimensions, buttonDimensions,
+                java.awt.Image.SCALE_SMOOTH);
         sortIcon = new ImageIcon(scaledListImage);
 
+        changeButtons(sortIcon);
+    }
+
+    private void changeButtons(ImageIcon sortIcon) {
+        nameButton.setIcon(null);
+        typeButton.setIcon(null);
+        valueButton.setIcon(null);
+        weightButton.setIcon(null);
+
         switch (inventory.getSort().getSort()) {
-            case "Name":
+            case Name:
                 nameButton.setIcon(sortIcon);
-                typeButton.setIcon(null);
-                valueButton.setIcon(null);
-                weightButton.setIcon(null);
                 break;
-            case "Type":
-                nameButton.setIcon(null);
+            case Type:
                 typeButton.setIcon(sortIcon);
-                valueButton.setIcon(null);
-                weightButton.setIcon(null);
                 break;
-            case "Value":
-                nameButton.setIcon(null);
-                typeButton.setIcon(null);
+            case Value:
                 valueButton.setIcon(sortIcon);
-                weightButton.setIcon(null);
                 break;
-            case "Weight":
-                nameButton.setIcon(null);
-                typeButton.setIcon(null);
-                valueButton.setIcon(null);
+            case Weight:
                 weightButton.setIcon(sortIcon);
                 break;
         }
@@ -239,16 +263,25 @@ public class InventoryPanel extends JInternalFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            String originalSort = inventory.getSort().getSort();
-            String sort = e.getActionCommand();
+            SortType originalSort = inventory.getSort().getSort();
+            SortType sort = SortType.valueOf(e.getActionCommand());
             Boolean order = inventory.getSort().getOrder();
 
-            if (inventory.getSort().isUnsorted()) order = false;
-            if (!sort.equals(originalSort)) order = false;
+            if (inventory.getSort().isUnsorted()) {
+                order = false;
+            }
+            if (!sort.equals(originalSort)) {
+                order = false;
+            }
 
-            inventory.sort(new Sort(sort, !order));
+            try {
+                inventory.sort(new Sort(sort, !order));
+            } catch (InvalidSortException e1) {
+                JOptionPane.showMessageDialog(null, "Something went wrong, please try again", "System Error",
+						JOptionPane.ERROR_MESSAGE);
+            }
             resolveSortIcons();
+            addItemPane();
         }
     }
 }
-

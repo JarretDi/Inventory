@@ -272,7 +272,11 @@ public class InventoryHandler {
                 inventory.setAllUnfavourite();
                 break;
             case "s":
-                sortInventory();
+                try {
+                    sortInventory();
+                } catch (InvalidSortException e) {
+                    System.out.println("Something went wrong, please try again");
+                }
                 break;
             case "q":
                 return;
@@ -291,7 +295,7 @@ public class InventoryHandler {
     // MODIFIES: this, inventory
     // EFFECT: Identifies the sort the user inputs and then sorts the inventory
     // according to that
-    private void sortInventory() {
+    private void sortInventory() throws InvalidSortException {
         String sortType = null;
         Boolean sortOrder = null;
 
@@ -317,12 +321,10 @@ public class InventoryHandler {
             }
         }
 
-        try {
-            inventory.sort(new Sort(SortType.valueOf(sortType), sortOrder));
-            System.out.println("Inventory has been successfully sorted by " + sortType);
-        } catch (InvalidSortException e) {
-            System.out.println("Something went wrong, please try again");
-        }
+        inventory.sort(new Sort(SortType.valueOf(sortType), sortOrder));
+        
+        System.out.println("Inventory has been successfully sorted by " + sortType);
+
         printDivider();
     }
 
