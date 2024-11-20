@@ -7,30 +7,40 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JCheckBox;
 
 import model.Inventory;
 import model.exceptions.InvalidNumberException;
 import model.exceptions.InvalidTypeException;
+import model.exceptions.ItemCreationException;
 import model.items.Item;
 import model.items.ItemCreator;
 
+/*
+Represents a class handling the GUI and functionality to customize items
+Intended to be created from two sources, either when creating a new item,
+or editing an existing one
+*/
 public class ItemEditorGUI extends JInternalFrame {
     private Inventory inventory;
-    private JDesktopPane desktop;
+    private InventoryPanelGUI inventoryPanel;
+    private Item initialItem;
 
-    private JInternalFrame addItemPane;
     private JButton addButton;
+
     private JTextField nameField;
     private JComboBox<String> typeBox;
     private JTextField valueField;
     private JTextField weightField;
     private JTextField quantityField;
     private JTextArea descArea;
+    private JCheckBox favouriteBox;
 
     private String name;
     private String type;
@@ -38,18 +48,24 @@ public class ItemEditorGUI extends JInternalFrame {
     private int weight;
     private String desc;
     private int quantity;
+    private Boolean favourite;
 
-    public ItemEditorGUI(Inventory inventory, JDesktopPane desktop) {
+    // EFFECTS: Constructs a new addItemMenu panel with an inventory and inventory
+    // panel to put it into
+    // this constructor creates an item from zero
+    public ItemEditorGUI(Inventory inventory, InventoryPanelGUI inventoryPanel) {
+        super("Item Creator", false, true, false, false);
+
         this.inventory = inventory;
-        this.desktop = desktop;
+        this.inventoryPanel = inventoryPanel;
+        this.initialItem = null;
         showMenu();
     }
 
     // EFFECTS: Helper to setup fields for item creation as well as lay it out nice
     // visually
+    // All fields are set to defaults
     private void showMenu() {
-        addItemPane = new JInternalFrame("Item Creator", false, true, false, false);
-
         nameField = new JTextField("Name", 10);
         String[] types = { "Type:", "Weapon", "Armour", "Consumable", "Currency", "Misc" };
         typeBox = new JComboBox<String>(types);
@@ -57,107 +73,142 @@ public class ItemEditorGUI extends JInternalFrame {
         weightField = new JTextField("Weight", 10);
         quantityField = new JTextField("Quantity", 10);
         descArea = new JTextArea("Description:", 8, 20);
-        descArea.setAutoscrolls(true);
+        favouriteBox = new JCheckBox("f?");
 
         addButton = new JButton("Add");
         addButton.addActionListener(new SubmitItemAction());
 
-        addItemPane.setLayout(new GridBagLayout());
+        setLayout(new GridBagLayout());
 
-        drawAddItemPane(new GridBagConstraints());
+        drawEditor(new GridBagConstraints());
 
-        addItemPane.setVisible(true);
-        desktop.add(addItemPane);
+        setVisible(true);
     }
 
-    private void drawAddItemPane(GridBagConstraints c) {
-        c.gridx = 0;
-        c.gridy = 0;
-        addItemPane.add(typeBox, c);
+    // EFFECTS: Constructs a new addItemMenu panel with an inventory and inventory
+    // panel to put it into
+    // this constructor starts with an initial item to edit
+    public ItemEditorGUI(Item initialItem, Inventory inventory, InventoryPanelGUI inventoryPanel) {
+        super("Item Editor", false, true, false, false);
+        this.inventory = inventory;
+        this.inventoryPanel = inventoryPanel;
+        this.initialItem = initialItem;
+        showMenu(initialItem);
+    }
 
-        c.gridx = 0;
+    // EFFECTS: Helper to setup fields for item creation as well as lay it out nice
+    // visually
+    // Fields are determined from initial item given
+    private void showMenu(Item initialItem) {
+        nameField = new JTextField(initialItem.getName(), 10);
+        String[] types = { initialItem.getType(), "Weapon", "Armour", "Consumable", "Currency", "Misc" };
+        typeBox = new JComboBox<String>(types);
+        valueField = new JTextField(Integer.toString(initialItem.getValue()), 10);
+        weightField = new JTextField(Integer.toString(initialItem.getWeight()), 10);
+        quantityField = new JTextField(Integer.toString(inventory.getCount(initialItem)), 10);
+        descArea = new JTextArea(initialItem.getDescription(), 8, 20);
+        favouriteBox = new JCheckBox("f?", initialItem.isFavourite());
+
+        addButton = new JButton("Edit");
+        addButton.addActionListener(new SubmitItemAction());
+
+        setLayout(new GridBagLayout());
+
+        drawEditor(new GridBagConstraints());
+
+        setVisible(true);
+    }
+
+    // EFFECTS: draws and packs the editor window using a somewhat confusing
+    // gridBagLayout
+    // Updating c adapted from https://www.geeksforgeeks.org/java-awt-gridbaglayout-class/
+    private void drawEditor(GridBagConstraints c) {
+        add(typeBox, c);
+
         c.gridy = 1;
-        addItemPane.add(nameField, c);
+        add(nameField, c);
 
-        c.gridx = 0;
         c.gridy = 2;
-        addItemPane.add(valueField, c);
+        add(valueField, c);
 
-        c.gridx = 0;
         c.gridy = 3;
-        addItemPane.add(weightField, c);
+        add(weightField, c);
 
-        c.gridx = 0;
         c.gridy = 4;
-        addItemPane.add(quantityField, c);
+        add(quantityField, c);
 
-        c.gridx = 0;
         c.gridy = 5;
-        addItemPane.add(addButton, c);
+        JPanel submitPanel = new JPanel();
+        submitPanel.add(addButton);
+        submitPanel.add(favouriteBox);
+        add(submitPanel, c);
 
         c.gridx = 1;
         c.gridy = 0;
         c.gridheight = 6;
-        addItemPane.add(descArea, c);
+        JScrollPane descScroll = new JScrollPane(descArea);
+        add(descScroll, c);
 
-        addItemPane.pack();
+        pack();
     }
 
-    public void acceptInput() {
-        name = nameField.getText();
-        type = typeBox.getSelectedItem() == "Type:" ? "Misc" : (String) typeBox.getSelectedItem();
-
-        String valueString = valueField.getText();
-        if (valueString.equals("Value") || valueString.equals("")) {
-            value = 0;
-        } else {
-            value = Integer.parseInt(valueString);
-        }
-
-        String weightString = weightField.getText();
-        if (weightString.equals("Weight") || weightString.equals("")) {
-            weight = 0;
-        } else {
-            weight = Integer.parseInt(weightString);
-        }
-
-        String quantityString = quantityField.getText();
-        if (quantityString.equals("Quantity") || quantityString.equals("")) {
-            quantity = 1;
-        } else {
-            quantity = Integer.parseInt(quantityString);
-        }
-
-        desc = descArea.getText();
-    }
-
+    // Handles submit functionality for when the item has finished being customized
     private class SubmitItemAction extends AbstractAction {
+        // EFFECTS: Constructs a SubmitItemAction
         public SubmitItemAction() {
-            super("Add");
+            super();
         }
 
+        // MODIFIES: inventoryPanel, inventory
+        // EFFECTS: When button is pressed:
+        // reads fields from text boxes,
+        // creates an item from given fields, adds it to inventory
+        // then calls for an update on inventoryPanel
         @Override
         public void actionPerformed(ActionEvent e) {
             acceptInput();
-
             try {
-                if (value < 0 || weight < 0 || quantity < 1) {
-                    throw new NumberFormatException();
+                if (quantity < 1) {
+                    throw new InvalidNumberException();
                 }
+                inventory.removeAllItem(initialItem);
                 Item item = ItemCreator.createItemFromInput(name, type, value, weight, desc);
-                for (int i = 0; i < quantity; i++) {
+                if (favourite) {
+                    item.setFavourite();
+                }
+                for (int i = 1; i <= quantity; i++) {
                     inventory.addItemSorted(item);
                 }
-            } catch (InvalidNumberException e1) {
-                JOptionPane.showMessageDialog(null, "Please enter valid inputs for value weight and quantity",
+            } catch (ItemCreationException e1) {
+                JOptionPane.showMessageDialog(null, "Please enter valid inputs for value, weight and quantity",
                         "System Error",
                         JOptionPane.ERROR_MESSAGE);
-            } catch (InvalidTypeException e1) {
-                JOptionPane.showMessageDialog(null, "Something went wrong, please try again", "System Error",
-                        JOptionPane.ERROR_MESSAGE);
             } finally {
-                addItemPane.dispose();
+                dispose();
+                inventoryPanel.redrawItemPane();
             }
+        }
+
+        // MODIFIES: this
+        // EFFECTS: helper for above method
+        // reads from user input and updates fields in accordance to it
+        public void acceptInput() {
+            name = nameField.getText();
+            type = typeBox.getSelectedItem() == "Type:" ? "Misc" : (String) typeBox.getSelectedItem();
+
+            String valueString = valueField.getText();
+            value = (valueString.equals("Value") || valueString.equals("")) ? 0 : Integer.parseInt(valueString);
+
+            String weightString = weightField.getText();
+            weight = (weightString.equals("Weight") || weightString.equals("")) ? 0 : Integer.parseInt(weightString);
+
+            String quantityString = quantityField.getText();
+            quantity = (quantityString.equals("Quantity") || quantityString.equals("")) ? 1
+                    : Integer.parseInt(quantityString);
+
+            favourite = favouriteBox.isSelected();
+
+            desc = descArea.getText();
         }
     }
 }

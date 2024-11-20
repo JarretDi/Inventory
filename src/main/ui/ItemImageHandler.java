@@ -1,0 +1,33 @@
+package ui;
+
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
+import model.exceptions.InvalidTypeException;
+import model.items.Item;
+
+public class ItemImageHandler {
+    public static ImageIcon getImageByType(Item item, int size) throws InvalidTypeException {
+        switch (item.getType()) {
+            case "Weapon":
+                return scaleToButtonDim(new ImageIcon("data/images/—Pngtree—sword_6045741.png"), size);
+            case "Armour":
+                return scaleToButtonDim(new ImageIcon("data/images/Shield1.png"), size);
+            case "Consumable":
+                return scaleToButtonDim(new ImageIcon("data/images/Potion1.png"), size);
+            case "Currency":
+                return scaleToButtonDim(new ImageIcon("data/images/currency-1590337_1280.png"), size);
+            case "Misc":
+                return scaleToButtonDim(new ImageIcon("data/images/Scroll1.png"), size);
+            default:
+                throw new InvalidTypeException();
+        }
+    }
+
+    public static ImageIcon scaleToButtonDim(ImageIcon icon, int buttonDimensions) {
+        Image image = icon.getImage();
+        Image scaledImage = image.getScaledInstance(buttonDimensions, buttonDimensions,
+                java.awt.Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
+    }
+}

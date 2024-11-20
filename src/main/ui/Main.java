@@ -6,6 +6,6 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Inventory inventory = new Inventory();
         InventoryGUI inventoryGUI = new InventoryGUI(inventory);
-        InventoryHandler inventoryHandler = new InventoryHandler(inventory);
+        InventoryHandlerUI inventoryHandler = new InventoryHandlerUI(inventory);
     }
 }

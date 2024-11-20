@@ -24,7 +24,7 @@ import persistence.JsonWriter;
 // and can remove and set favourites from there
 // Lots of the code are taken from the Flashcard Reviewer lab, will note it down
 
-public class InventoryHandler {
+public class InventoryHandlerUI {
     Inventory inventory;
     Scanner scanner;
 
@@ -32,7 +32,7 @@ public class InventoryHandler {
 
     // FROM: flashcard lab
     // EFFECTS: creates inventory object and initializes main loop
-    public InventoryHandler(Inventory inventory) {
+    public InventoryHandlerUI(Inventory inventory) {
         init(inventory);
 
         printDivider();

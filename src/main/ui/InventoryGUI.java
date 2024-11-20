@@ -3,26 +3,25 @@ package ui;
 import javax.swing.*;
 
 import model.Inventory;
-import model.exceptions.ItemCreationException;
-import model.items.Item;
-import model.items.ItemCreator;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
-// Represents a class handling the GUI of an Inventory
-// Structure adapted mainly from AlarmController
+/*
+Represents a class handling the GUI of an Inventory
+Structure adapted mainly from AlarmController
+Contains a control panel with functionality to add items, save and load
+Handles the creation of the main desktop, which all other elements are contained in
+*/
 public class InventoryGUI extends JFrame {
     private static final String STATUS_OK = "System OK";
     private Inventory inventory;
     private JLabel statusLabel;
     private JDesktopPane desktop;
     private JInternalFrame controlPanel;
-    private InventoryPanel inventoryPanel;
+    private InventoryPanelGUI inventoryPanel;
 
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
@@ -30,6 +29,8 @@ public class InventoryGUI extends JFrame {
     // Sets up the desktop and main control panels, adapted from alarm controller
     public InventoryGUI(Inventory inventory) {
         super("Inventory UI");
+        
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         this.inventory = inventory;
 
@@ -49,11 +50,14 @@ public class InventoryGUI extends JFrame {
         controlPanel.setVisible(true);
         desktop.add(controlPanel);
 
-        inventoryPanel = new InventoryPanel(inventory, this);
+        inventoryPanel = new InventoryPanelGUI(inventory, this);
         desktop.add(inventoryPanel);
-        
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
         setVisible(true);
+    }
+
+    public JDesktopPane getDesktop() {
+        return desktop;
     }
 
     /**
@@ -61,7 +65,6 @@ public class InventoryGUI extends JFrame {
      */
     private void addButtonPanel() {
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(4, 10));
         buttonPanel.add(new JButton(new AddItemAction()));
 
         controlPanel.add(buttonPanel, BorderLayout.WEST);
@@ -83,6 +86,7 @@ public class InventoryGUI extends JFrame {
      * to the inventory.
      */
     private class AddItemAction extends AbstractAction {
+        // EFFECTS: creates an instance of the AddItemAction
         AddItemAction() {
             super("Add Item");
         }
@@ -91,8 +95,7 @@ public class InventoryGUI extends JFrame {
         // EFFECTS: Setsup a new Item Creator window, and handles submit functionality 
         @Override
         public void actionPerformed(ActionEvent evt) {
-            new ItemEditorGUI(inventory, desktop);
+            desktop.add(new ItemEditorGUI(inventory, inventoryPanel));
         }
-
     }
 }
