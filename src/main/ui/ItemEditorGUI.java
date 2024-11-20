@@ -123,6 +123,7 @@ public class ItemEditorGUI extends JInternalFrame {
     // gridBagLayout
     // Updating c adapted from https://www.geeksforgeeks.org/java-awt-gridbaglayout-class/
     private void drawEditor(GridBagConstraints c) {
+        setLocation(0, inventoryPanel.getHeight() / 2);
         add(typeBox, c);
 
         c.gridy = 1;
@@ -168,11 +169,8 @@ public class ItemEditorGUI extends JInternalFrame {
         public void actionPerformed(ActionEvent e) {
             acceptInput();
             try {
-                if (quantity < 1) {
-                    throw new InvalidNumberException();
-                }
-                inventory.removeAllItem(initialItem);
                 Item item = ItemCreator.createItemFromInput(name, type, value, weight, desc);
+                inventory.removeAllItem(initialItem);
                 if (favourite) {
                     item.setFavourite();
                 }
@@ -180,7 +178,7 @@ public class ItemEditorGUI extends JInternalFrame {
                     inventory.addItemSorted(item);
                 }
             } catch (ItemCreationException e1) {
-                JOptionPane.showMessageDialog(null, "Please enter valid inputs for value, weight and quantity",
+                JOptionPane.showMessageDialog(null, "Please enter valid inputs for value and weight",
                         "System Error",
                         JOptionPane.ERROR_MESSAGE);
             } finally {

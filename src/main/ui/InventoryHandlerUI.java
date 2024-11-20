@@ -118,7 +118,11 @@ public class InventoryHandlerUI {
         displayInventoryCommands();
 
         String input = this.scanner.nextLine();
-        processInventoryCommands(input, items);
+        try {
+            processInventoryCommands(input, items);
+        } catch (InvalidSortException e) {
+            System.out.println("Something went wrong, please try again");
+        }
     }
 
     // MODIFIES: this, inventory
@@ -263,7 +267,7 @@ public class InventoryHandlerUI {
     // favourite(expand) all items and its opposite
     // sort items in an inventory by a category
     // view an item by typing in its index
-    private void processInventoryCommands(String input, ArrayList<Item> items) {
+    private void processInventoryCommands(String input, ArrayList<Item> items) throws InvalidSortException {
         switch (input) {
             case "z":
                 inventory.setAllFavourite();
@@ -272,11 +276,7 @@ public class InventoryHandlerUI {
                 inventory.setAllUnfavourite();
                 break;
             case "s":
-                try {
-                    sortInventory();
-                } catch (InvalidSortException e) {
-                    System.out.println("Something went wrong, please try again");
-                }
+                sortInventory();
                 break;
             case "q":
                 return;

@@ -16,13 +16,13 @@ import model.items.Item;
 Represents a class handling the GUI and functionality of an inventory
 */
 public class InventoryPanelGUI extends JInternalFrame {
-    private static final int buttonDimensions = 20;
     private static final int arrowDimensions = 15;
 
     private Inventory inventory;
     private JDesktopPane desktop;
     private String layout;
 
+    private int buttonDimensions;
     private int width;
     private int height;
 
@@ -36,13 +36,14 @@ public class InventoryPanelGUI extends JInternalFrame {
 
     // EFFECTS: Constructs an inventory given an inventory and parent to add it to
     public InventoryPanelGUI(Inventory inventory, InventoryGUI parent) {
-        super("Inventory", false, false, false, false);
+        super("Inventory", false, false, true, false);
         this.inventory = inventory;
         layout = "List";
 
         this.itemPane = new JPanel();
         this.itemScrollPane = new JScrollPane();
         this.desktop = parent.getDesktop();
+        this.buttonDimensions = parent.getButtonDimensions();
 
         width = parent.getWidth() / 2;
         height = parent.getHeight() - 30;
@@ -175,7 +176,7 @@ public class InventoryPanelGUI extends JInternalFrame {
     // MODIFIES: this
     // EFFECT: helper to iterate over an inventory to draw each unique item in a list
     private void addItemPaneList() throws InvalidTypeException {
-        itemPane.setLayout(new BoxLayout(itemPane, BoxLayout.PAGE_AXIS));
+        itemPane.setLayout(new BoxLayout(itemPane, BoxLayout.Y_AXIS));
 
         for (Item item : inventory.getProcessedInventory()) {
             JPanel nextItem = createItemListView(item);
