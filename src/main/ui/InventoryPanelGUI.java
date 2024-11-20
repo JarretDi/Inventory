@@ -156,7 +156,6 @@ public class InventoryPanelGUI extends JInternalFrame {
         itemPane.removeAll();
         try {
             if (layout.equals("List")) {
-                itemPane.setLayout(new BoxLayout(itemPane, BoxLayout.PAGE_AXIS));
                 addItemPaneList();
             } else {
                 addItemPaneGrid();
@@ -174,8 +173,10 @@ public class InventoryPanelGUI extends JInternalFrame {
 
     // REQUIRES: current layout is list
     // MODIFIES: this
-    // EFFECT: helper to iterate over an inventory to draw each unique item
+    // EFFECT: helper to iterate over an inventory to draw each unique item in a list
     private void addItemPaneList() throws InvalidTypeException {
+        itemPane.setLayout(new BoxLayout(itemPane, BoxLayout.PAGE_AXIS));
+
         for (Item item : inventory.getProcessedInventory()) {
             JPanel nextItem = createItemListView(item);
             itemPane.add(nextItem);
@@ -239,8 +240,69 @@ public class InventoryPanelGUI extends JInternalFrame {
         return rightPanel;
     }
 
-    private void addItemPaneGrid() {
-        // TODO
+    // REQUIRES: current layout is grid
+    // MODIFIES: this
+    // EFFECT: helper to iterate over an inventory to draw each unique item in a grid
+    private void addItemPaneGrid() throws InvalidTypeException {
+        itemPane.setLayout(new GridLayout(0, 3));
+        
+        for (Item item : inventory.getProcessedInventory()) {
+            JPanel nextItem = createItemGridView(item);
+            itemPane.add(nextItem);
+        }
+    }
+
+    // REQUIRES: current layout is grid
+    // MODIFIES: this
+    // EFFECT: helper to create a nice visual panel for each item 
+    private JPanel createItemGridView(Item item) throws InvalidTypeException {
+        JPanel nextItem = new JPanel();
+        nextItem.setLayout(new BorderLayout());
+        nextItem.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        createTopGridPanel(item, nextItem);
+
+        nextItem.add(new JLabel(ItemImageHandler.getImageByType(item, width / 4)), BorderLayout.CENTER);
+
+        createBottomGridPanel(item, nextItem);
+
+        return nextItem;
+    }
+
+    // REQUIRES: current layout is grid
+    // MODIFIES: this
+    // EFFECT: helper to create a top bar for grid layout, which includes:
+    // Name, quantity and edit button
+    private void createTopGridPanel(Item item, JPanel nextItem) {
+        JPanel topBar = new JPanel(new BorderLayout());
+        topBar.add(new JLabel("   " + item.getName() + " x" + inventory.getCount(item)), BorderLayout.CENTER);
+
+        JButton editButton = new JButton(ItemImageHandler
+                .scaleToButtonDim(new ImageIcon("data/images/iconoir--edit-pencil.png"), buttonDimensions));
+        editButton.addActionListener(new EditAction(item));
+        editButton.setPreferredSize(
+                new Dimension((int) Math.round(buttonDimensions), (int) Math.round(buttonDimensions)));
+        topBar.add(editButton, BorderLayout.EAST);
+
+        nextItem.add(topBar, BorderLayout.NORTH);
+    }
+
+    // REQUIRES: current layout is grid
+    // MODIFIES: this
+    // EFFECT: helper to create the bottom bar for grid layout, which includes:
+    // Value, weight and whether the item is favourited
+    private void createBottomGridPanel(Item item, JPanel nextItem) {
+        JPanel bottomBar = new JPanel(new BorderLayout());
+
+        bottomBar.add(new JLabel("   V: " + item.getValue() + "   W: " + item.getWeight()), BorderLayout.CENTER);
+
+        if (item.isFavourite()) {
+            bottomBar.add(new JLabel(ItemImageHandler
+                    .scaleToButtonDim(new ImageIcon("data/images/iconoir--star.png"),
+                            (int) Math.round(buttonDimensions * 1.5))), BorderLayout.EAST);
+        }
+        
+        nextItem.add(bottomBar, BorderLayout.SOUTH);
     }
 
     // MODIFIES: this
