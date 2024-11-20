@@ -78,10 +78,11 @@ public class Inventory implements Writable {
     // according to sort. If two are identical, inserts at the next point
     // where they aren't. If list is unsorted, simply adds to end
     public void addItemSorted(Item item) {
-        if (this.sort.isUnsorted()) {
+        if (this.sort.isUnsorted() || inventory.size() == 0) {
             addItem(item);
             return;
         }
+        
         int len = inventory.size();
         int itemPriority = item.getPriority(sort);
 
@@ -227,42 +228,5 @@ public class Inventory implements Writable {
         }
 
         return jsonArray;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((character == null) ? 0 : character.hashCode());
-        result = prime * result + ((inventory == null) ? 0 : inventory.hashCode());
-        result = prime * result + ((sort == null) ? 0 : sort.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Inventory other = (Inventory) obj;
-        if (character == null) {
-            if (other.character != null)
-                return false;
-        } else if (!character.equals(other.character))
-            return false;
-        if (inventory == null) {
-            if (other.inventory != null)
-                return false;
-        } else if (!inventory.equals(other.inventory))
-            return false;
-        if (sort == null) {
-            if (other.sort != null)
-                return false;
-        } else if (!sort.equals(other.sort))
-            return false;
-        return true;
     }
 }

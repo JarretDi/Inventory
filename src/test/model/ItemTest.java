@@ -1,6 +1,8 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -81,7 +83,6 @@ public class ItemTest {
 
     @Test
     void testCorrectTypesItemCreator() {
-        ItemCreator itemCreator = new ItemCreator();
         try {
             Item testW1 = ItemCreator.createItemFromInput("A", "Weapon");
             Item testW2 = ItemCreator.createItemFromInput("A", "Weapon", 5, 10, "t");
@@ -150,5 +151,16 @@ public class ItemTest {
         testItem.setFavourite();
         testItem.setUnfavourite();
         assertEquals(testItem.isFavourite(), false);
+    }
+
+    @Test
+    void testEquals() {
+        assertTrue(testItem.equals(new Misc("Test Item", 20, 5, "A test item.")));
+        assertFalse(testItem.equals(new Misc("Test Item1", 20, 5, "A test item.")));
+        assertFalse(testItem.equals(new Misc("Test Item", 25, 5, "A test item.")));
+        assertFalse(testItem.equals(new Misc("Test Item", 20, 10, "A test item.")));
+        assertFalse(testItem.equals(new Misc("Test Item", 20, 5, "Not a test item?")));
+        assertFalse(testItem.equals(new Sort()));
+        assertFalse(testItem.equals(null));
     }
 }

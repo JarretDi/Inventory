@@ -1,11 +1,10 @@
 package persistence;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,6 @@ import model.items.Currency;
 import model.items.Item;
 import model.items.Misc;
 import model.items.Weapon;
-import persistence.JsonWriter;
 
 public class JsonWriterTest {
     JsonWriter testJsonWriter;

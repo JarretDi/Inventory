@@ -2,7 +2,6 @@ package model.items;
 
 import model.exceptions.InvalidNumberException;
 import model.exceptions.InvalidTypeException;
-import model.exceptions.ItemCreationException;
 
 // Represents a class used to create a subtype of item when given a type as a String
 public class ItemCreator {

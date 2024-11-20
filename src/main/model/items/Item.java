@@ -53,7 +53,7 @@ public abstract class Item implements Writable {
             case Value:
                 priority = this.value * mod * -1;
                 break;
-            case Weight:
+            default:
                 priority = this.weight * mod * -1;
                 break;
         }

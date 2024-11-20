@@ -373,6 +373,19 @@ public class InventoryTest {
     }
 
     @Test
+    void testAddItemSortedToEmpty() {
+        try {
+            testInventory.sort(new Sort(SortType.Name, true));
+            testInventory.addItemSorted(testItem);
+        } catch (InvalidSortException e) {
+            fail();
+        }
+
+        assertEquals(testInventory.getNumItems(), 1);
+        assertEquals(testInventory.getItem(0), testItem);
+    }
+
+    @Test
     void testAddItemSorted() {
         Item testAddItem = new Consumable("Bc", 9, 10, "");
         try {
@@ -467,12 +480,22 @@ public class InventoryTest {
     @Test
     void testSetInventory() {
         testInventory.setInventory(testSortInventory);
-        assertEquals(testInventory, testSortInventory);
+        assertEquals(testInventory.getCharacter(), testSortInventory.getCharacter());
+        assertEquals(testInventory.getNumItems(), testSortInventory.getNumItems());
+        assertEquals(testInventory.getSort(), testSortInventory.getSort());
+
+        testInventory.addItem(testItem);
+        assertFalse(testSortInventory.getInventory().contains(testItem));
     }
 
     @Test
     void testSetInventory2() {
         testSortInventory.setInventory(testInventory);
-        assertEquals(testInventory, testSortInventory);
+        assertEquals(testInventory.getCharacter(), testSortInventory.getCharacter());
+        assertEquals(testInventory.getNumItems(), testSortInventory.getNumItems());
+        assertEquals(testInventory.getSort(), testSortInventory.getSort());
+
+        testInventory.addItem(testItem);
+        assertFalse(testSortInventory.getInventory().contains(testItem));
     }
 }
