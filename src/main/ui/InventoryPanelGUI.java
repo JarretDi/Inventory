@@ -26,6 +26,7 @@ public class InventoryPanelGUI extends JInternalFrame {
     private int width;
     private int height;
 
+    private JPanel topBar;
     private JPanel itemPane;
     private JScrollPane itemScrollPane;
 
@@ -72,7 +73,7 @@ public class InventoryPanelGUI extends JInternalFrame {
     // MODIFIES: this
     // EFFECTS: Helper to add top bar which includes title and layout bar
     private void addTopBar() {
-        JPanel topBar = new JPanel();
+        topBar = new JPanel();
         topBar.setLayout(new BorderLayout());
 
         topBar.add(new JLabel("   " + inventory.getCharacter() + "'s Inventory:"), BorderLayout.WEST);
@@ -83,6 +84,20 @@ public class InventoryPanelGUI extends JInternalFrame {
         topBar.setVisible(true);
 
         add(topBar, BorderLayout.NORTH);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: Called when an action is taken to change the name of the character (saving/loading)
+    // Updates the top bar
+    public void refreshNameOnCharacterChange() {
+        topBar.removeAll();
+
+        topBar.add(new JLabel("   " + inventory.getCharacter() + "'s Inventory:"), BorderLayout.WEST);
+
+        JPanel layoutBar = createLayoutBar();
+
+        topBar.add(layoutBar, BorderLayout.EAST);
+        topBar.setVisible(true);
     }
     
     // MODIFIES: this

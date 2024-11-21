@@ -6,17 +6,17 @@
             "name": "shield",
             "weight": 500,
             "type": "Armour",
+            "favourite": true,
             "value": 500,
-            "desc": "good armour",
-            "favourite": true
+            "desc": "good armour"
         },
         {
             "name": "Sword",
             "weight": 5000,
             "type": "Weapon",
+            "favourite": false,
             "value": 5000,
-            "desc": "aaskdfja",
-            "favourite": false
+            "desc": "aaskdfja"
         }
     ]
 }

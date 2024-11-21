@@ -16,10 +16,12 @@ import model.items.*;
 
 public class ItemTest {
     Item testItem;
+    ItemCreator itemCreator;
 
     @BeforeEach
     void setup() {
         testItem = new Misc("Test Item", 20, 5, "A test item.");
+        itemCreator = new ItemCreator();
     }
 
     @Test

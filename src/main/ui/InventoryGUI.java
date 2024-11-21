@@ -3,8 +3,11 @@ package ui;
 import javax.swing.*;
 
 import model.Inventory;
+import persistence.JsonReader;
 import persistence.JsonWriter;
+import java.io.IOException;
 
+import java.io.File;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -26,10 +29,11 @@ public class InventoryGUI extends JFrame {
     private JInternalFrame controlPanel;
     private InventoryPanelGUI inventoryPanel;
 
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 600;
+    private static final int WIDTH = 1366;
+    private static final int HEIGHT = 768;
 
-    // Sets up the desktop and main control panels, adapted from alarm controller
+    // EFFECTS: Sets up the desktop and main control panels, adapted from alarm
+    // controller
     public InventoryGUI(Inventory inventory) {
         super("Inventory UI");
 
@@ -44,6 +48,7 @@ public class InventoryGUI extends JFrame {
         setContentPane(desktop);
         setTitle("Inventory Handler");
         setSize(WIDTH, HEIGHT);
+        centreOnScreen();
         desktop.addMouseListener(new DesktopFocusAction());
 
         controlPanel = new JInternalFrame("Control Panel", true, false, false, false);
@@ -60,9 +65,7 @@ public class InventoryGUI extends JFrame {
         setVisible(true);
     }
 
-    /**
-     * Helper to add control buttons.
-     */
+    // EFFECTS: Helper to add button panels
     private void addButtonPanel() {
         JButton addButton = new JButton(new AddItemAction());
         addButton.setIcon(ItemImageHandler.scaleToButtonDim(new ImageIcon("data/images/iconoir--plus.png"),
@@ -77,6 +80,13 @@ public class InventoryGUI extends JFrame {
         controlPanel.add(addButton);
         controlPanel.add(saveButton);
         controlPanel.add(loadButton);
+    }
+
+    // EFFECTS: Helper to centre the window on screen
+    private void centreOnScreen() {
+        int width = Toolkit.getDefaultToolkit().getScreenSize().width;
+        int height = Toolkit.getDefaultToolkit().getScreenSize().height;
+        setLocation((width - getWidth()) / 2, (height - getHeight()) / 2);
     }
 
     /**
@@ -124,13 +134,13 @@ public class InventoryGUI extends JFrame {
      * Represents action to be taken when user wants to save their inventory.
      */
     private class SaveAction extends AbstractAction {
-        // EFFECTS: creates an instance of the AddItemAction
+        // EFFECTS: creates an instance of the SaveAction
         SaveAction() {
             super("Save");
         }
 
         // MODIFIES: inventory
-        // EFFECTS: Setsup a new Item Creator window, and handles submit functionality
+        // EFFECTS: Setsup a new save window, and handles save functionality
         @Override
         public void actionPerformed(ActionEvent evt) {
             String character = JOptionPane.showInputDialog("Who's inventory is this?", inventory.getCharacter());
@@ -144,8 +154,11 @@ public class InventoryGUI extends JFrame {
                 writer.open();
                 writer.write(inventory);
                 writer.close();
-                JOptionPane.showMessageDialog(null, inventory.getCharacter() + "'s inventory has been successfully saved!",
-                        "Success",
+                inventoryPanel.refreshNameOnCharacterChange();
+                inventoryPanel.revalidate();
+                JOptionPane.showMessageDialog(null,
+                        inventory.getCharacter() + "'s inventory has been successfully saved!",
+                        "Success!",
                         JOptionPane.PLAIN_MESSAGE);
             } catch (FileNotFoundException e) {
                 JOptionPane.showMessageDialog(null, "Something went wrong, please try entering a valid name",
@@ -159,16 +172,65 @@ public class InventoryGUI extends JFrame {
      * Represents action to be taken when user wants to save their inventory.
      */
     private class LoadAction extends AbstractAction {
-        // EFFECTS: creates an instance of the AddItemAction
+        // EFFECTS: creates an instance of the LoadAction
         LoadAction() {
             super("Load");
         }
 
         // MODIFIES: inventory
-        // EFFECTS: Setsup a new Item Creator window, and handles submit functionality
+        // EFFECTS: Setsup a a loading window, and handles loading functionality
         @Override
         public void actionPerformed(ActionEvent evt) {
-            // stub
+            if (inventory.getNumItems() != 0) {
+                JOptionPane.showConfirmDialog(null,
+                        "Unsaved data will not be kept. Are you sure you want to continue?", "Confirm",
+                        JOptionPane.YES_NO_OPTION);
+            }
+
+            String[] characterList = createCharacterList();
+            JComboBox<String> savedCharacters = new JComboBox<String>(characterList);
+
+            JOptionPane.showMessageDialog(null, savedCharacters, "Who's inventory would you like to load?",
+                    JOptionPane.QUESTION_MESSAGE);
+
+            tryLoading((String) savedCharacters.getSelectedItem());
+        }
+
+        // EFFECTS: Helper that returns the list of all possible characters to load
+        private String[] createCharacterList() {
+            File directory = new File("./data/user/");
+            File[] files = directory.listFiles();
+
+            String[] characterList = new String[files.length];
+
+            for (int i = 0; i < files.length; i++) {
+                characterList[i] = files[i].getName();
+            }
+            return characterList;
+        }
+
+        // MODIFIES: this
+        // EFFECT: Helper that attempts to load the inventory
+        // Additionally, calls for a refresh on things it should affect
+        private void tryLoading(String character) {
+            try {
+                String path = "./data/user/" + character;
+                JsonReader reader = new JsonReader(path);
+                Inventory newInventory = reader.read();
+                inventory.setInventory(newInventory);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Something went wrong, please try again.",
+                        "System Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+            inventoryPanel.refreshNameOnCharacterChange();
+            inventoryPanel.redrawItemPane();
+            inventoryPanel.revalidate();
+            JOptionPane.showMessageDialog(null,
+                    inventory.getCharacter() + "'s inventory has been successfully loaded!",
+                    "Success!",
+                    JOptionPane.PLAIN_MESSAGE);
         }
     }
 }

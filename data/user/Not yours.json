@@ -1,0 +1,12 @@
+{
+    "character": "Not yours",
+    "sort": "Unsorted",
+    "items": [{
+        "name": "Name",
+        "weight": 0,
+        "type": "Misc",
+        "favourite": false,
+        "value": 0,
+        "desc": "Description:"
+    }]
+}

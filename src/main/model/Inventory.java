@@ -82,7 +82,7 @@ public class Inventory implements Writable {
             addItem(item);
             return;
         }
-        
+
         int len = inventory.size();
         int itemPriority = item.getPriority(sort);
 
@@ -191,11 +191,7 @@ public class Inventory implements Writable {
     }
 
     public int getNumItems() {
-        int count = 0;
-        for (Item i : inventory) {
-            count += 1;
-        }
-        return count;
+        return inventory.size();
     }
 
     // EFFECTS: returns the current inventory converted to a Json object

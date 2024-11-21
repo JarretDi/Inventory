@@ -6,7 +6,12 @@ import javax.swing.ImageIcon;
 import model.exceptions.InvalidTypeException;
 import model.items.Item;
 
+/*
+Represents a helper class handling calls from the GUI to get certain items
+As well as a helper to scale those images
+*/
 public class ItemImageHandler {
+    // EFFECTS: returns the image that each item should have based on type
     public static ImageIcon getImageByType(Item item, int size) throws InvalidTypeException {
         switch (item.getType()) {
             case "Weapon":
@@ -24,6 +29,8 @@ public class ItemImageHandler {
         }
     }
 
+    // EFFECTS: helper to scale down any image to a reasonable size for use in the GUI
+    // Adapted from https://coderanch.com/t/331731/java/Resize-ImageIcon
     public static ImageIcon scaleToButtonDim(ImageIcon icon, int buttonDimensions) {
         Image image = icon.getImage();
         Image scaledImage = image.getScaledInstance(buttonDimensions, buttonDimensions,
