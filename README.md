@@ -14,6 +14,38 @@ This application will provide an organized way to add, view and filter character
 - As a user, I want to be able to save my inventory under a 'character' as well as all items within it, preserving sort order
 - As a user, I want to be able to load data from different characters' inventories
 
+# Instructions for End User
+
+- You can add an item into an inventory by:
+    - Clicking the "+Add" button in the left control panel, causing a new panel to be created
+    - Customize the item to your liking, including a Type, Name, Value, Weight, Quantity and Description
+    - Clicking the "Add" button on the newly created panel to add your finished item to the inventory panel on the right
+- You can generate the first required action related to the user story "adding multiple Xs to a Y" by sorting the list of items
+    - On the bottom of the right-hand panel are buttons that will change the sort of the inventory
+    - Currently, it includes name, type, value and weight
+    - Clicking one of those buttons will cause the inventory to be sorted by that parameter descending, and clicking it again will result in it sorting ascending
+    - Note that all starred items are shown first, regardless of the sort, but they are sorted within all the starred items
+- You can generate the second required action related to the user story "adding multiple Xs to a Y" by editing and viewing items
+    - Once an item has been created, you can see a pencil marker, generally to the right of each item
+    - Clicking that edit button results in the opening of the Item Editor window, in which you can change a previously added item
+    - Additionally, this is the menu used for viewing item descriptions, and can be moved off to the side in case one wants to keep the information opened
+    - Note that if quantity is set to a <1 value, it removes the item. This is intended behaviour
+    - Once you have finished viewing the item, you may either click the x on the window to not apply changes, or the edit button to keep them
+- You can locate my visual component by:
+    - Opening the program, there are icons for almost every button
+    - Additionally, when an inventory is sorted, an icon next to the sort buttons appears that describes the sort
+    - Additionally, when an item is added, it is displayed with an image with respect to its type
+    - Additionally, if an item is favourited, it will appear with a star next to it
+- You can save the state of my application by:
+    - Clicking the save button in the left hand control panel
+    - Entering a name to save it under
+    - Confirming the name
+- You can reload the state of my application by:
+    - Clicking the load button in the left hand control panel
+    - A confirmation may pop up to confirm if you want to continue
+    - Choosing a character out of the files in the combo box
+    - Confirming the inventory to load
+
 ## Credit for images used:
 
 Icons: Iconoir by Luca Burgio "https://icon-sets.iconify.design/iconoir/"
