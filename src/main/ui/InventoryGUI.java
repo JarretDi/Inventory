@@ -2,6 +2,7 @@ package ui;
 
 import javax.swing.*;
 
+import model.EventLog;
 import model.Inventory;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -9,9 +10,12 @@ import java.io.IOException;
 
 import java.io.File;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.io.FileNotFoundException;
 
 /*
@@ -20,7 +24,7 @@ Structure adapted mainly from AlarmController
 Contains a control panel with functionality to add items, save and load
 Handles the creation of the main desktop, which all other elements are contained in
 */
-public class InventoryGUI extends JFrame {
+public class InventoryGUI extends JFrame implements WindowListener {
     private static final String STATUS_OK = "System OK";
     private static final int buttonDimensions = 20;
     private Inventory inventory;
@@ -50,6 +54,7 @@ public class InventoryGUI extends JFrame {
         setSize(WIDTH, HEIGHT);
         centreOnScreen();
         desktop.addMouseListener(new DesktopFocusAction());
+        addWindowListener(this);
 
         controlPanel = new JInternalFrame("Control Panel", true, false, false, false);
         controlPanel.setLayout(new GridLayout(3, 1));
@@ -80,6 +85,18 @@ public class InventoryGUI extends JFrame {
         controlPanel.add(addButton);
         controlPanel.add(saveButton);
         controlPanel.add(loadButton);
+    }
+
+    // MODIFIES: this
+    // EFFECTS: removes all open item panes from desktop, and calls for a redraw
+    public void clearItemEditorPanes() {
+        for (Component c : desktop.getAllFrames()) {
+            if (c.getClass() == ItemEditorGUI.class) {
+                desktop.remove(c);
+            }
+        }
+        desktop.revalidate();
+        desktop.repaint();
     }
 
     // EFFECTS: Helper to centre the window on screen
@@ -224,6 +241,7 @@ public class InventoryGUI extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             }
 
+            clearItemEditorPanes();
             inventoryPanel.refreshNameOnCharacterChange();
             inventoryPanel.redrawItemPane();
             inventoryPanel.revalidate();
@@ -232,5 +250,42 @@ public class InventoryGUI extends JFrame {
                     "Success!",
                     JOptionPane.PLAIN_MESSAGE);
         }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        // No specific action
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        for (model.Event evt : EventLog.getInstance()) {
+            System.out.println(evt.toString());
+        }
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        // No specific action
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+        // No specific action
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+        // No specific action
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+        // No specific action
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+        // No specific action
     }
 }

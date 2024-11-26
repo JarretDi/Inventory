@@ -1,0 +1,30 @@
+{
+    "character": "Phase 4 test",
+    "sort": "Unsorted",
+    "items": [
+        {
+            "name": "Sword",
+            "weight": 0,
+            "type": "Weapon",
+            "favourite": false,
+            "value": 0,
+            "desc": "Description:"
+        },
+        {
+            "name": "Potion",
+            "weight": 0,
+            "type": "Consumable",
+            "favourite": false,
+            "value": 0,
+            "desc": "Description:"
+        },
+        {
+            "name": "Potion",
+            "weight": 0,
+            "type": "Consumable",
+            "favourite": false,
+            "value": 0,
+            "desc": "Description:"
+        }
+    ]
+}

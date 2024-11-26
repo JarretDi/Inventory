@@ -37,11 +37,7 @@ public abstract class Item implements Writable {
         int priority = 0;
         int mod;
 
-        if (currentSort.getOrder()) {
-            mod = 1;
-        } else {
-            mod = -1;
-        }
+        mod = currentSort.getOrder()? 1 : -1;
 
         switch (currentSort.getSort()) {
             case Name:

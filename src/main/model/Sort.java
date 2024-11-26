@@ -6,8 +6,8 @@ package model;
 // true is descending sort, i.e. A->Z, Weapon->Armor->Consumable->Misc->Currency, 100->0
 
 public class Sort {
-    SortType sort;
-    Boolean order;
+    private SortType sort;
+    private Boolean order;
 
     public enum SortType {
         Name, Type, Value, Weight

@@ -1,0 +1,62 @@
+{
+    "character": "Tester1",
+    "sort": "Name dsc",
+    "items": [
+        {
+            "name": "Misc2",
+            "weight": 0,
+            "type": "Misc",
+            "favourite": false,
+            "value": 0,
+            "desc": "Description:"
+        },
+        {
+            "name": "Misc2",
+            "weight": 0,
+            "type": "Misc",
+            "favourite": false,
+            "value": 0,
+            "desc": "Description:"
+        },
+        {
+            "name": "Misc2",
+            "weight": 0,
+            "type": "Misc",
+            "favourite": false,
+            "value": 0,
+            "desc": "Description:"
+        },
+        {
+            "name": "Misc2",
+            "weight": 0,
+            "type": "Misc",
+            "favourite": false,
+            "value": 0,
+            "desc": "Description:"
+        },
+        {
+            "name": "Misc2",
+            "weight": 0,
+            "type": "Misc",
+            "favourite": false,
+            "value": 0,
+            "desc": "Description:"
+        },
+        {
+            "name": "Sword2",
+            "weight": 0,
+            "type": "Weapon",
+            "favourite": true,
+            "value": 0,
+            "desc": "Description:"
+        },
+        {
+            "name": "Sword2",
+            "weight": 0,
+            "type": "Weapon",
+            "favourite": true,
+            "value": 0,
+            "desc": "Description:"
+        }
+    ]
+}

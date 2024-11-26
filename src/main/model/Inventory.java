@@ -16,14 +16,16 @@ public class Inventory implements Writable {
     private ArrayList<Item> inventory;
     private Sort sort;
 
-    // EFFECT: creates an unsorted Inventory with no items inside of it, given a character's name
+    // EFFECT: creates an unsorted Inventory with no items inside of it, given a
+    // character's name
     public Inventory(String character) {
         this.character = character;
         this.inventory = new ArrayList<>();
         this.sort = new Sort();
     }
 
-    // EFFECT: creates an unsorted Inventory with no items inside of it, with a default name as "User"
+    // EFFECT: creates an unsorted Inventory with no items inside of it, with a
+    // default name as "User"
     public Inventory() {
         this.character = "User";
         this.inventory = new ArrayList<>();
@@ -36,12 +38,17 @@ public class Inventory implements Writable {
     public void addItem(Item item) {
         this.inventory.add(item);
         this.sort.setUnsorted();
+        EventLog.getInstance().logEvent(new Event(item.getName() + " added unsorted to inventory."));
     }
 
     // MODIFIES: this
     // EFFECT: removes first instance of given item from the inventory
     public void removeItem(Item item) {
+        if (item == null) {
+            return;
+        }
         this.inventory.remove(item);
+        EventLog.getInstance().logEvent(new Event(item.getName() + " removed from inventory."));
     }
 
     // MODIFIES: this
@@ -50,12 +57,15 @@ public class Inventory implements Writable {
         while (inventory.contains(item)) {
             inventory.remove(item);
         }
+        EventLog.getInstance()
+                .logEvent(new Event("All " + item.getName() + " removed from " + character + "'s inventory."));
     }
 
     // MODIFIES: this
     // EFFECT: removes all items from inventory
     public void clearInventory() {
         inventory.clear();
+        EventLog.getInstance().logEvent(new Event(character + "'s inventory has been cleared"));
     }
 
     // MODIFIES: this, Sort
@@ -71,6 +81,8 @@ public class Inventory implements Writable {
             return item1.getPriority(sort) - item2.getPriority(sort);
         });
         setSort(sort);
+        EventLog.getInstance().logEvent(
+                new Event("Inventory sorted by " + sort.getSort() + ", " + (sort.getOrder() ? "dsc" : "asc")));
     }
 
     // MODIFIES: this
@@ -98,17 +110,37 @@ public class Inventory implements Writable {
                 continue;
             }
         }
+
+        EventLog.getInstance()
+                .logEvent(new Event(item.getName() + " added sorted by " + sort.getSort() + " to inventory."));
     }
 
     // MODIFIES: this
-    // EFFECTS: given a new inventory, modifies current inventory until it matches given one
+    // EFFECTS: removes all of given item, then adds in a number of new items equal
+    // to quantity
+    public void replaceAllWith(Item item, Item replacement, int quantity) {
+        removeAllItem(item);
+        for (int i = 1; i <= quantity; i++) {
+            addItemSorted(replacement);
+        }
+        EventLog.getInstance()
+                    .logEvent(new Event("All " + item.getName() + " has been changed to " + replacement.getName() + "."));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: given a new inventory, modifies current inventory until it matches
+    // given one
     public void setInventory(Inventory newInventory) {
+        String initialName = character;
         inventory.clear();
         setCharacter(newInventory.getCharacter());
-        for (Item item:newInventory.getInventory()) {
+        for (Item item : newInventory.getInventory()) {
             inventory.add(item);
         }
         setSort(newInventory.getSort());
+
+        EventLog.getInstance()
+                .logEvent(new Event(initialName + "'s inventory has been set to " + character + "'s inventory"));
     }
 
     public void setCharacter(String character) {
@@ -122,17 +154,19 @@ public class Inventory implements Writable {
     // MODIFIES: this, Item
     // EFFECT: sets all items in inventory to favourite
     public void setAllFavourite() {
-        for (Item item:inventory) {
+        for (Item item : inventory) {
             item.setFavourite();
         }
+        EventLog.getInstance().logEvent(new Event("All items have been set to favourite"));
     }
 
     // MODIFIES: this, Item
     // EFFECT: sets all items in inventory to unfavourite
     public void setAllUnfavourite() {
-        for (Item item:inventory) {
+        for (Item item : inventory) {
             item.setUnfavourite();
         }
+        EventLog.getInstance().logEvent(new Event("All items have been set to favourite"));
     }
 
     public String getCharacter() {

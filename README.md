@@ -46,6 +46,51 @@ This application will provide an organized way to add, view and filter character
     - Choosing a character out of the files in the combo box
     - Confirming the inventory to load
 
+# Phase 4 Taks 2:
+
+Mon Nov 25 20:04:33 PST 2024
+Sword1 added unsorted to inventory.
+Mon Nov 25 20:04:39 PST 2024
+Inventory sorted by Name, dsc
+Mon Nov 25 20:04:55 PST 2024
+Misc2 added sorted by Name to inventory.
+Mon Nov 25 20:04:55 PST 2024
+Misc2 added sorted by Name to inventory.
+Mon Nov 25 20:04:55 PST 2024
+Misc2 added sorted by Name to inventory.
+Mon Nov 25 20:04:55 PST 2024
+Misc2 added sorted by Name to inventory.
+Mon Nov 25 20:04:55 PST 2024
+Misc2 added sorted by Name to inventory.
+Mon Nov 25 20:05:18 PST 2024
+All Sword1 removed from User's inventory.
+Mon Nov 25 20:05:18 PST 2024
+Sword2 added sorted by Name to inventory.
+Mon Nov 25 20:05:18 PST 2024
+Sword2 added sorted by Name to inventory.
+Mon Nov 25 20:05:18 PST 2024
+All Sword1 has been changed to Sword2.
+Mon Nov 25 20:05:27 PST 2024
+Tester1's inventory is being saved...
+Mon Nov 25 20:05:27 PST 2024
+Tester1 has been successfully saved!
+Mon Nov 25 20:05:44 PST 2024
+Inventory is being loaded...
+Mon Nov 25 20:05:44 PST 2024
+test misc added unsorted to inventory.
+Mon Nov 25 20:05:44 PST 2024
+test armour added unsorted to inventory.
+Mon Nov 25 20:05:44 PST 2024
+test currency added unsorted to inventory.
+Mon Nov 25 20:05:44 PST 2024
+test weapon added unsorted to inventory.
+Mon Nov 25 20:05:44 PST 2024
+test armour added unsorted to inventory.
+Mon Nov 25 20:05:44 PST 2024
+Tester2's inventory has loaded!
+Mon Nov 25 20:05:44 PST 2024
+Tester1's inventory has been set to Tester2's inventory
+
 ## Credit for images used:
 
 Icons: Iconoir by Luca Burgio "https://icon-sets.iconify.design/iconoir/"

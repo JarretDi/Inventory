@@ -1,5 +1,7 @@
 package persistence;
 
+import model.Event;
+import model.EventLog;
 import model.Inventory;
 import model.Sort;
 import model.Sort.SortType;
@@ -28,6 +30,8 @@ public class JsonReader {
     // EFFECTS: reads inventory from file and returns it;
     // throws IOException if an error occurs reading data from file
     public Inventory read() throws IOException {
+        EventLog.getInstance().logEvent(new Event("Inventory is being loaded..."));
+        
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
         return parseInventory(jsonObject);
@@ -52,6 +56,8 @@ public class JsonReader {
         Inventory inventory = new Inventory(name);
         addItems(inventory, jsonObject);
         inventory.setSort(sort);
+
+        EventLog.getInstance().logEvent(new Event(inventory.getCharacter() + "'s inventory has loaded!"));
 
         return inventory;
     }

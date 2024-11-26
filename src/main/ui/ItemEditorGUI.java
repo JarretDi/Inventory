@@ -16,8 +16,6 @@ import javax.swing.JTextField;
 import javax.swing.JCheckBox;
 
 import model.Inventory;
-import model.exceptions.InvalidNumberException;
-import model.exceptions.InvalidTypeException;
 import model.exceptions.ItemCreationException;
 import model.items.Item;
 import model.items.ItemCreator;
@@ -121,9 +119,10 @@ public class ItemEditorGUI extends JInternalFrame {
 
     // EFFECTS: draws and packs the editor window using a somewhat confusing
     // gridBagLayout
-    // Updating c adapted from https://www.geeksforgeeks.org/java-awt-gridbaglayout-class/
+    // Updating c adapted from
+    // https://www.geeksforgeeks.org/java-awt-gridbaglayout-class/
     private void drawEditor(GridBagConstraints c) {
-        setLocation(0, inventoryPanel.getHeight() / 2);
+        setLocation(inventoryPanel.getWidth() / 2, 0);
         add(typeBox, c);
 
         c.gridy = 1;
@@ -170,12 +169,15 @@ public class ItemEditorGUI extends JInternalFrame {
             acceptInput();
             try {
                 Item item = ItemCreator.createItemFromInput(name, type, value, weight, desc);
-                inventory.removeAllItem(initialItem);
                 if (favourite) {
                     item.setFavourite();
                 }
-                for (int i = 1; i <= quantity; i++) {
-                    inventory.addItemSorted(item);
+                if (initialItem == null) {
+                    for (int i = 1; i <= quantity; i++) {
+                        inventory.addItemSorted(item);
+                    }
+                } else {
+                    inventory.replaceAllWith(initialItem, item, quantity);
                 }
             } catch (ItemCreationException e1) {
                 JOptionPane.showMessageDialog(null, "Please enter valid inputs for value and weight",
