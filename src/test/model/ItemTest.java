@@ -20,7 +20,7 @@ public class ItemTest {
 
     @BeforeEach
     void setup() {
-        testItem = new Misc("Test Item", 20, 5, "A test item.");
+        testItem = new Misc("Test Item", 20, 5, "A test item.", false);
         itemCreator = new ItemCreator();
     }
 
@@ -58,7 +58,7 @@ public class ItemTest {
             //pass
         }
         try {
-            ItemCreator.createItemFromInput("A", "Spell", 5, 10, "t");
+            ItemCreator.createItemFromInput("A", "Spell", 5, 10, "t", false);
             fail();
         } catch (InvalidNumberException e) {
             fail();
@@ -66,7 +66,7 @@ public class ItemTest {
             //pass
         } 
         try {
-            ItemCreator.createItemFromInput("B", "Sword", -3, 5, "");
+            ItemCreator.createItemFromInput("B", "Sword", -3, 5, "", false);
             fail();
         } catch (InvalidTypeException e) {
             fail();
@@ -74,7 +74,7 @@ public class ItemTest {
             //pass
         }
         try {
-            ItemCreator.createItemFromInput("B", "Sword", 10, -2, "");
+            ItemCreator.createItemFromInput("B", "Sword", 10, -2, "", false);
             fail();
         } catch (InvalidTypeException e) {
             fail();
@@ -87,15 +87,15 @@ public class ItemTest {
     void testCorrectTypesItemCreator() {
         try {
             Item testW1 = ItemCreator.createItemFromInput("A", "Weapon");
-            Item testW2 = ItemCreator.createItemFromInput("A", "Weapon", 5, 10, "t");
+            Item testW2 = ItemCreator.createItemFromInput("A", "Weapon", 5, 10, "t", false);
             Item testA1 = ItemCreator.createItemFromInput("B", "Armour");
-            Item testA2 = ItemCreator.createItemFromInput("B", "Armour", 10, 5, "te");
+            Item testA2 = ItemCreator.createItemFromInput("B", "Armour", 10, 5, "te", false);
             Item testCo1 = ItemCreator.createItemFromInput("C", "Consumable");
-            Item testCo2 = ItemCreator.createItemFromInput("C", "Consumable", 20, 10, "tes");
+            Item testCo2 = ItemCreator.createItemFromInput("C", "Consumable", 20, 10, "tes", false);
             Item testM1 = ItemCreator.createItemFromInput("D", "Misc");
-            Item testM2 = ItemCreator.createItemFromInput("D", "Misc", 10, 5, "test");
+            Item testM2 = ItemCreator.createItemFromInput("D", "Misc", 10, 5, "test", false);
             Item testCu1 = ItemCreator.createItemFromInput("E", "Currency");
-            Item testCu2 = ItemCreator.createItemFromInput("E", "Currency", 100, 20, "");
+            Item testCu2 = ItemCreator.createItemFromInput("E", "Currency", 100, 20, "", false);
 
             assertEquals(testW1.getType(), "Weapon");
             assertEquals(testW2.getType(), "Weapon");
@@ -157,11 +157,11 @@ public class ItemTest {
 
     @Test
     void testEquals() {
-        assertTrue(testItem.equals(new Misc("Test Item", 20, 5, "A test item.")));
-        assertFalse(testItem.equals(new Misc("Test Item1", 20, 5, "A test item.")));
-        assertFalse(testItem.equals(new Misc("Test Item", 25, 5, "A test item.")));
-        assertFalse(testItem.equals(new Misc("Test Item", 20, 10, "A test item.")));
-        assertFalse(testItem.equals(new Misc("Test Item", 20, 5, "Not a test item?")));
+        assertTrue(testItem.equals(new Misc("Test Item", 20, 5, "A test item.", false)));
+        assertFalse(testItem.equals(new Misc("Test Item1", 20, 5, "A test item.", false)));
+        assertFalse(testItem.equals(new Misc("Test Item", 25, 5, "A test item.", false)));
+        assertFalse(testItem.equals(new Misc("Test Item", 20, 10, "A test item.", false)));
+        assertFalse(testItem.equals(new Misc("Test Item", 20, 5, "Not a test item?", false)));
         assertFalse(testItem.equals(new Sort()));
         assertFalse(testItem.equals(null));
     }

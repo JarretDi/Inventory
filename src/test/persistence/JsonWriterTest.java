@@ -82,8 +82,8 @@ public class JsonWriterTest {
     void testWriterInventory() {
         try {
             testInventory = new Inventory("Tester1");
-            Weapon testWeapon = new Weapon("test weapon", 15, 10, "A test weapon.");
-            Armour testArmour = new Armour("test armour", 30, 15, "Some test armour.");
+            Weapon testWeapon = new Weapon("test weapon", 15, 10, "A test weapon.", false);
+            Armour testArmour = new Armour("test armour", 30, 15, "Some test armour.", false);
             testWeapon.setFavourite();
             testArmour.setFavourite();
             testInventory.addItem(testWeapon);
@@ -126,9 +126,9 @@ public class JsonWriterTest {
     void testWriterSortedInventory() {
         try {
             testInventory = new Inventory("Tester2");
-            Armour testArmour = new Armour("test armour", 30, 15, "Some test armour.");
-            Misc testMisc = new Misc("test misc", 1, 3, "Some misc.");
-            Currency testCurrency = new Currency("test currency", 100, 5, "Some test currency.");
+            Armour testArmour = new Armour("test armour", 30, 15, "Some test armour.", false);
+            Misc testMisc = new Misc("test misc", 1, 3, "Some misc.", false);
+            Currency testCurrency = new Currency("test currency", 100, 5, "Some test currency.", false);
             
             testInventory.addItem(testArmour);
             testInventory.addItem(testMisc);

@@ -65,7 +65,7 @@ public class Inventory implements Writable {
     // EFFECT: removes all items from inventory
     public void clearInventory() {
         inventory.clear();
-        EventLog.getInstance().logEvent(new Event(character + "'s inventory has been cleared"));
+        EventLog.getInstance().logEvent(new Event(character + "'s inventory has been cleared."));
     }
 
     // MODIFIES: this, Sort
@@ -82,7 +82,7 @@ public class Inventory implements Writable {
         });
         setSort(sort);
         EventLog.getInstance().logEvent(
-                new Event("Inventory sorted by " + sort.getSort() + ", " + (sort.getOrder() ? "dsc" : "asc")));
+                new Event("Inventory sorted by " + sort.getSort() + ", " + (sort.getOrder() ? "dsc." : "asc.")));
     }
 
     // MODIFIES: this
@@ -132,7 +132,7 @@ public class Inventory implements Writable {
     // given one
     public void setInventory(Inventory newInventory) {
         String initialName = character;
-        inventory.clear();
+        clearInventory();
         setCharacter(newInventory.getCharacter());
         for (Item item : newInventory.getInventory()) {
             inventory.add(item);
@@ -140,7 +140,7 @@ public class Inventory implements Writable {
         setSort(newInventory.getSort());
 
         EventLog.getInstance()
-                .logEvent(new Event(initialName + "'s inventory has been set to " + character + "'s inventory"));
+                .logEvent(new Event(initialName + "'s inventory has been set to " + character + "'s inventory."));
     }
 
     public void setCharacter(String character) {

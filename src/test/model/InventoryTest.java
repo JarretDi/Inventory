@@ -35,15 +35,15 @@ public class InventoryTest {
     @BeforeEach
     void runBefore() {
         testInventory = new Inventory("Tester");
-        testItem = new Misc("Test Item", 1, 5, "A test item.");
-        testWeapon = new Weapon("Test Weapon", 10, 15, "A test weapon.");
+        testItem = new Misc("Test Item", 1, 5, "A test item.", false);
+        testWeapon = new Weapon("Test Weapon", 10, 15, "A test weapon.", false);
 
         testSortInventory = new Inventory();
         emptySort = new Sort();
-        testSort1 = new Weapon("A", 40, 2, "A test item.");
-        testSort2 = new Consumable("B", 30, 2, "A test item.");
-        testSort3 = new Armour("C", 20, 3, "A test item.");
-        testSort4 = new Currency("D", 10, 4, "A test item.");
+        testSort1 = new Weapon("A", 40, 2, "A test item.", false);
+        testSort2 = new Consumable("B", 30, 2, "A test item.", false);
+        testSort3 = new Armour("C", 20, 3, "A test item.", false);
+        testSort4 = new Currency("D", 10, 4, "A test item.", false);
         testSortInventory.addItem(testSort2);
         testSortInventory.addItem(testSort4);
         testSortInventory.addItem(testSort1);
@@ -387,7 +387,7 @@ public class InventoryTest {
 
     @Test
     void testAddItemSorted() {
-        Item testAddItem = new Consumable("Bc", 9, 10, "");
+        Item testAddItem = new Consumable("Bc", 9, 10, "", false);
         try {
             testSortInventory.sort(new Sort(SortType.Name, true));
         } catch (InvalidSortException e) {
@@ -401,8 +401,8 @@ public class InventoryTest {
 
     @Test
     void testAdd2ItemSorted() {
-        Item testAddItem = new Weapon("Bc", 9, 10, "");
-        Item testAddItem2 = new Currency("DC", 9, 10, "");
+        Item testAddItem = new Weapon("Bc", 9, 10, "", false);
+        Item testAddItem2 = new Currency("DC", 9, 10, "", false);
         try {
             testSortInventory.sort(new Sort(SortType.Type, true));
         } catch (InvalidSortException e) {
@@ -418,7 +418,7 @@ public class InventoryTest {
 
     @Test
     void testAddItemReverseSorted() {
-        Item testAddItem = new Consumable("Bc", 15, 10, "");
+        Item testAddItem = new Consumable("Bc", 15, 10, "", false);
         try {
             testSortInventory.sort(new Sort(SortType.Value, false));
         } catch (InvalidSortException e) {
@@ -432,8 +432,8 @@ public class InventoryTest {
 
     @Test
     void testAdd2ItemReverseSorted() {
-        Item testAddItem = new Weapon("Bc", 9, 100, "");
-        Item testAddItem2 = new Currency("DC", 9, 0, "");
+        Item testAddItem = new Weapon("Bc", 9, 100, "", false);
+        Item testAddItem2 = new Currency("DC", 9, 0, "", false);
         try {
             testSortInventory.sort(new Sort(SortType.Weight, false));
         } catch (InvalidSortException e) {

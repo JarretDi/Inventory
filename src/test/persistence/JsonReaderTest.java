@@ -48,9 +48,9 @@ public class JsonReaderTest {
     @Test
     void testReaderInventory() {
         testReader = new JsonReader("./data/testReaderInventory.json");
-        Weapon testWeapon = new Weapon("test weapon", 15, 10, "A test weapon.");
+        Weapon testWeapon = new Weapon("test weapon", 15, 10, "A test weapon.", false);
         testWeapon.setFavourite();
-        Armour testArmour = new Armour("test armour", 30, 15, "Some test armour.");
+        Armour testArmour = new Armour("test armour", 30, 15, "Some test armour.", false);
         testArmour.setFavourite();
 
         try {
@@ -84,9 +84,9 @@ public class JsonReaderTest {
     @Test
     void testReaderSortedInventory() {
         testReader = new JsonReader("./data/testReaderSortedInventory.json");
-        Misc testMisc = new Misc("test misc", 1, 3, "Some misc.");
-        Armour testArmour = new Armour("test armour", 30, 15, "Some test armour.");
-        Currency testCurrency = new Currency("test currency", 100, 5, "Some test currency.");
+        Misc testMisc = new Misc("test misc", 1, 3, "Some misc.", false);
+        Armour testArmour = new Armour("test armour", 30, 15, "Some test armour.", false);
+        Currency testCurrency = new Currency("test currency", 100, 5, "Some test currency.", false);
 
         try {
             Inventory testInventory = testReader.read();

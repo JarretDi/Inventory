@@ -168,10 +168,7 @@ public class ItemEditorGUI extends JInternalFrame {
         public void actionPerformed(ActionEvent e) {
             acceptInput();
             try {
-                Item item = ItemCreator.createItemFromInput(name, type, value, weight, desc);
-                if (favourite) {
-                    item.setFavourite();
-                }
+                Item item = ItemCreator.createItemFromInput(name, type, value, weight, desc, favourite);
                 if (initialItem == null) {
                     for (int i = 1; i <= quantity; i++) {
                         inventory.addItemSorted(item);

@@ -15,12 +15,12 @@ public abstract class Item implements Writable {
     protected Boolean favourite;
 
     // EFFECT: creates an unfavourited item with given name, value and description
-    public Item(String name, int value, int weight, String desc) {
+    public Item(String name, int value, int weight, String desc, Boolean favourite) {
         this.name = name;
         this.value = value;
         this.weight = weight;
         this.desc = desc;
-        this.favourite = false;
+        this.favourite = favourite;
     }
 
     public abstract String getType();

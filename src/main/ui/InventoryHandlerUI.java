@@ -479,7 +479,7 @@ public class InventoryHandlerUI {
         String desc = this.scanner.nextLine();
 
         try {
-            item = ItemCreator.createItemFromInput(name, type, itemValue, itemWeight, desc);
+            item = ItemCreator.createItemFromInput(name, type, itemValue, itemWeight, desc, false);
         } catch (ItemCreationException e) {
             System.out.println("Something went wrong. Please try creating the item again.");
             return;
