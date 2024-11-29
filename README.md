@@ -14,7 +14,7 @@ This application will provide an organized way to add, view and filter character
 - As a user, I want to be able to save my inventory under a 'character' as well as all items within it, preserving sort order
 - As a user, I want to be able to load data from different characters' inventories
 
-# Instructions for End User
+## Instructions for End User
 
 - You can add an item into an inventory by:
     - Clicking the "+Add" button in the left control panel, causing a new panel to be created
@@ -46,12 +46,12 @@ This application will provide an organized way to add, view and filter character
     - Choosing a character out of the files in the combo box
     - Confirming the inventory to load
 
-# Phase 4 Taks 2:
+# Phase 4 Task 2:
 
 Mon Nov 25 20:04:33 PST 2024
 Sword1 added unsorted to inventory.
 Mon Nov 25 20:04:39 PST 2024
-Inventory sorted by Name, dsc
+Inventory sorted by Name, dsc.
 Mon Nov 25 20:04:55 PST 2024
 Misc2 added sorted by Name to inventory.
 Mon Nov 25 20:04:55 PST 2024
@@ -70,12 +70,8 @@ Mon Nov 25 20:05:18 PST 2024
 Sword2 added sorted by Name to inventory.
 Mon Nov 25 20:05:18 PST 2024
 All Sword1 has been changed to Sword2.
-Mon Nov 25 20:05:27 PST 2024
-Tester1's inventory is being saved...
-Mon Nov 25 20:05:27 PST 2024
-Tester1 has been successfully saved!
 Mon Nov 25 20:05:44 PST 2024
-Inventory is being loaded...
+Tester2's inventory has been cleared."
 Mon Nov 25 20:05:44 PST 2024
 test misc added unsorted to inventory.
 Mon Nov 25 20:05:44 PST 2024
@@ -87,9 +83,17 @@ test weapon added unsorted to inventory.
 Mon Nov 25 20:05:44 PST 2024
 test armour added unsorted to inventory.
 Mon Nov 25 20:05:44 PST 2024
-Tester2's inventory has loaded!
-Mon Nov 25 20:05:44 PST 2024
-Tester1's inventory has been set to Tester2's inventory
+Tester1's inventory has been set to Tester2's inventory.
+
+# Phase 4 Task 3:
+
+Throughout the phases, I have made multiple large refactorings across the code:
+1. Refactoring of items - Originally, the type was stored as a String paramater to an item, but was refactored to have each be a class that extends the abstract "Item" class. This made the code for each of the item subclasses that depend on the type much more concise, however it presented some annoyance when having to actually construct the items in ui/gui as there had to be a clunky switch statement everywhere an item was added. To remedy this, I created the "ItemCreator" class that takes in a String input for type then constructs the item - which I figured out later relates to the factory design pattern
+2. Refactoring of sort method - Originally was a large switch statement with clunky and repeated code, but was refactored out of inventory to put the burden of item sort order on the items instead. Rather than the inventory checking the priority of each item by using a switch statement on all the possible sorts, it calls a getPriority(Sort sort) method on every item that returns an int value based on where the item wants to be in the inventory given a sort. I was really happy with this refactoring, as before it was like a 70 line method for sort and addItemSorted methods, and looks incredibly clean now.
+3. Refactoring of favourite - This was recent, but I wanted to be able to directly construct a item to be favourited, as previously, when an item was created in ui code, it was created and then set favourite depending on whether it should be favourited rather than directly constructed as favourite. As a result, had to change every instance of when said method was called but should now be more consistent
+4. Future refactorings - The main thing I want to rework is how quantity is handled of each item in an inventory. Right now, the inventory is a massive ArrayList, and when multiple of the same items are added, its added multiple times to the inventory. While this behaviour works, it is kind of slow, as I realized whenever items are printed/viewed that I want the duplicate items in the same viewing thing next to its quantity. The problems are that 1. Every time the inventoryPanel is redrawn (which is a lot of times) it calls getProcessedInventory() which has to go through the entire ArrayList, and then calls getNumItem(Item i) on each which loops through the entire inventory again to find how much of that item is containted inside the inventory. This seems like a ridiculously slow and inefficient process, and if I had the time I would probably convert Inventory from an ArrayList to some sort of HashSet where the key is the item and the value is the quantity. Going with the Hash idea, that would involve changing everything about the code, including entering things into it, sorting it (don't even know how I'll be able to maintain that functionality if its a set), etc. Alternatively, I could add a field of type quantity to an item, but that would involve adding another parameter to item which has enough as it is, and would involve redoing all the tests. Additionally, the quantity of an item would be completely meaningless to the item itself, and having a parameter just for other classes to use seems redundant and inevitably increases coupling.
+Either way, something needs to change about how quantity is being handled.
+5. In terms of class structure, the main thing would be to remove the association between InventoryPanel and ItemEditorGUI, likely by introducing the observer pattern whenever an item is added to the inventory panel. Right now, it is passed the Panel object to call for a refresh directly on it, but that easily could be handled via the main GUI class instead to reduce the coupling.
 
 ## Credit for images used:
 
