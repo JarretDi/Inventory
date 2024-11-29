@@ -124,7 +124,7 @@ public class Inventory implements Writable {
             addItemSorted(replacement);
         }
         EventLog.getInstance()
-                    .logEvent(new Event("All " + item.getName() + " has been changed to " + replacement.getName() + "."));
+                .logEvent(new Event("All " + item.getName() + " has been changed to " + replacement.getName() + "."));
     }
 
     // MODIFIES: this

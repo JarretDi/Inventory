@@ -9,8 +9,10 @@ public class ItemCreator {
     // EFFECT: helper that creates and returns an, item based on parameters
     // throws: InvalidTypeException if given invalid type
     // InvalidNumberException if given values for value/weight are non-negative
-    public static Item createItemFromInput(String name, String type, int itemValue, int itemWeight, String desc, Boolean favourite)
+    public static Item createItemFromInput(
+            String name, String type, int itemValue, int itemWeight, String desc, Boolean favourite)
             throws InvalidNumberException, InvalidTypeException {
+                
         if (itemValue < 0 || itemWeight < 0) {
             throw new InvalidNumberException();
         }
